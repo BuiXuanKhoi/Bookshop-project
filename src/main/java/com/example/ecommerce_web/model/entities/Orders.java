@@ -1,13 +1,15 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.example.ecommerce_web.model.OrderState;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Order")
-public class Order {
+@Table(name = "orders")
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +21,12 @@ public class Order {
     private OrderState orderState;
 
     @Column(name = "price")
-    private float price;
+    private Float price;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
+
+    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderItems> orderItems;
 }

@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.example.ecommerce_web.model.UserState;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,7 +33,16 @@ public class Users {
     @Column(name = "lock_time")
     private Date lockTime;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "users")
-    private List<Order> order;
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Orders> orders;
+
+    @OneToMany(mappedBy = "users")
+    private List<Books> books;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
 
 }

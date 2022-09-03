@@ -1,8 +1,8 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.example.ecommerce_web.model.BookState;
 import lombok.Data;
 
-import javax.persistence.*;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +22,9 @@ public class Books {
     @Column(name = "book_price")
     private float bookPrice;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private List<Users> users;
+    private Users users;
 
     @Column(name = "rating")
     private float ratingPoint;
@@ -44,9 +44,9 @@ public class Books {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="author_id")
-    private List<Author> authors;
+    private Author authors;
 
     @Column(name = "quantity")
     private int quantity;
@@ -54,4 +54,16 @@ public class Books {
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
     private BookState bookState;
+
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Classify> classifies;
+
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks;
+
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderItems> orderItems;
 }

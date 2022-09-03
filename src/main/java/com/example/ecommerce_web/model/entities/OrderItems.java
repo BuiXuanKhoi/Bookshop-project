@@ -1,12 +1,12 @@
 package com.example.ecommerce_web.model.entities;
 
 import lombok.Data;
-import java.util.List;
+
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Order_item")
+@Table(name = "order_item")
 public class OrderItems {
 
     @Id
@@ -16,11 +16,11 @@ public class OrderItems {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
-    private Order order;
+    private Orders orders;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
-    private List<Books> books;
+    private Books books;
 
     @Column(name = "previous_price")
     private float previousPrice;

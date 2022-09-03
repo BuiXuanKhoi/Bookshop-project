@@ -3,10 +3,11 @@ package com.example.ecommerce_web.model.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name="Author")
+@Table(name="author")
 
 public class Author {
     @Id
@@ -16,4 +17,7 @@ public class Author {
 
     @Column(name = "author_name")
     private String authorName;
+
+    @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    private List<Books> books;
 }

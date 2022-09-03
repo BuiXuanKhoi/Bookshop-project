@@ -1,4 +1,4 @@
-package com.example.ecommerce_web.model.entities;
+package com.example.ecommerce_web.model;
 
 public enum UserState {
     BLOCK,

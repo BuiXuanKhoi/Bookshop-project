@@ -6,8 +6,9 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Cart_items")
-public class Cart_item {
+@Table(name = "cart_items")
+public class CartItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_item_id")
@@ -22,4 +23,8 @@ public class Cart_item {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private Users users;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Books books;
 }

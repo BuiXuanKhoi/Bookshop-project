@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Category")
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,6 @@ public class Category {
     @Column(name = "category_description")
     private String categoryDescription;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id")
-    private List<Books> books;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Classify> classifies;
 }
