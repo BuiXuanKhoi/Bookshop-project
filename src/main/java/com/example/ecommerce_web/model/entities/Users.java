@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-
+import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
@@ -32,7 +32,7 @@ public class Users {
     @Column(name = "lock_time")
     private Date lockTime;
 
-
-
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "users")
+    private List<Order> order;
 
 }
