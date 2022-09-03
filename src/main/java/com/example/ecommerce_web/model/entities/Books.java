@@ -1,13 +1,17 @@
 package com.example.ecommerce_web.model.entities;
 
 import com.example.ecommerce_web.model.BookState;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "books")
 public class Books {
@@ -33,7 +37,7 @@ public class Books {
     private String review;
 
     @Column(name = "image_link")
-    private String image_link;
+    private String imageLink;
 
     @Column(name = "create_day")
     private Date createDay;

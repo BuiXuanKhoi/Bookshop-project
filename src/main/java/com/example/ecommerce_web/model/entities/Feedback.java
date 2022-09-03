@@ -1,6 +1,8 @@
 package com.example.ecommerce_web.model.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.catalina.User;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "feedbacks")
 

@@ -4,5 +4,5 @@ public enum BookState {
        AVAILABLE,
        UNAVAILABLE,
        OUT_OF_STOCK,
-       EXPIRE
+       EXPIRED
 }

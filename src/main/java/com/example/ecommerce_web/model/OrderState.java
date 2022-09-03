@@ -1,8 +1,8 @@
 package com.example.ecommerce_web.model;
 
 public enum OrderState {
+        PREPARED,
         PACKAGED,
-        TRANSPORT,
         DELIVERED,
         RECEIVED
 

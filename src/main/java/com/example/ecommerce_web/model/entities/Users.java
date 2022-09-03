@@ -1,13 +1,17 @@
 package com.example.ecommerce_web.model.entities;
 
 import com.example.ecommerce_web.model.UserState;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class Users {
 

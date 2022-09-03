@@ -1,12 +1,16 @@
 package com.example.ecommerce_web.model.entities;
 
 import com.example.ecommerce_web.model.OrderState;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Orders {
