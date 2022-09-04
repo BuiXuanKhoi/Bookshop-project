@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -49,4 +50,11 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
+    public Users(String userName, String password, Role role, UserState userState, Date lockTime) {
+        this.userName = userName;
+        this.password = password;
+        this.role = role;
+        this.userState = userState;
+        this.lockTime = lockTime;
+    }
 }
