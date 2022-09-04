@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.CreateUserRequest;
@@ -54,8 +55,11 @@ public class AuthServiceImpl implements AuthService {
         Information information = createInformation(createUserRequest, users);
         this.userRepository.save(users);
         this.informationRepository.save(information);
-        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Create Account Successfully !!!!"));
+        return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
+
+
+
 
     public Users createUser(CreateUserRequest createUserRequest){
         String roleName = createUserRequest.getRole();
@@ -64,6 +68,12 @@ public class AuthServiceImpl implements AuthService {
         String password = generatePassword(userName, dateOfBirth);
         Role role = roleRepository.getRoleByRoleName(roleName);
         Date lockTime = new Date();
+
+        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
+
+        if(usersOptional.isPresent()){
+            throw new ConstraintViolateException("User name already exist !!!!");
+        }
         return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
     }
 
@@ -75,7 +85,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public String generatePassword(String userName, Date dateOfBirth){
-        System.out.println(dateOfBirth);
         String birth = myDateUtil.getStringDate(dateOfBirth);
         birth = birth.replaceAll("/", "");
 
