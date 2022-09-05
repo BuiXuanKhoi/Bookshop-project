@@ -23,7 +23,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = ex.getMessage();
         int statusCode = HttpStatus.NOT_FOUND.value();
 
-        return new ResponseEntity<>(new ErrorRespond(statusCode, message), HttpStatus.NOT_FOUND);
+        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({ConstraintViolateException.class})
@@ -31,11 +33,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         String message = ex.getMessage();
         int statusCode = HttpStatus.BAD_REQUEST.value();
-        return new ResponseEntity<>(new ErrorRespond(statusCode, message), HttpStatus.BAD_REQUEST);
+
+        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        return new ResponseEntity<>( errorRespond, HttpStatus.BAD_REQUEST);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return super.handleMethodArgumentNotValid(ex, headers, status, request);
+        String message = ex.getMessage();
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+
+        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
     }
+
+
 }

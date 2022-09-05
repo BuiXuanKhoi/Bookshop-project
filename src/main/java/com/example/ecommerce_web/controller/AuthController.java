@@ -1,6 +1,8 @@
 package com.example.ecommerce_web.controller;
 
 import com.example.ecommerce_web.model.dto.request.CreateUserRequest;
+import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
+import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
 import com.example.ecommerce_web.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +25,10 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody CreateUserRequest createUserRequest){
         return this.authService.signup(createUserRequest);
+    }
+
+    @PostMapping("/login")
+    public LoginRespondDTO login(@RequestBody LoginRequestDTO loginRequestDTO){
+        return this.authService.login(loginRequestDTO);
     }
 }

@@ -8,4 +8,5 @@ import javax.persistence.criteria.CriteriaBuilder;
 
 @Repository
 public interface ClassifyRepository extends JpaRepository<Classify, Integer> {
+
 }

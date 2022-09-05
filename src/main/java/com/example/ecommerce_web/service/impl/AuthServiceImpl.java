@@ -14,16 +14,25 @@ import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.InformationRepository;
 import com.example.ecommerce_web.repository.RoleRepository;
 import com.example.ecommerce_web.repository.UserRepository;
+import com.example.ecommerce_web.security.jwt.JwtUtils;
+import com.example.ecommerce_web.security.service.UserDetail;
 import com.example.ecommerce_web.service.AuthService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -33,20 +42,65 @@ public class AuthServiceImpl implements AuthService {
     InformationRepository informationRepository;
     MyDateUtil myDateUtil;
     ModelMapper modelMapper;
+    AuthenticationManager authenticationManager;
+    PasswordEncoder encoder;
+    JwtUtils jwtUtils;
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
-                           InformationRepository informationRepository, MyDateUtil myDateUtil, ModelMapper modelMapper) {
+                           InformationRepository informationRepository, MyDateUtil myDateUtil,
+                           ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.informationRepository = informationRepository;
         this.myDateUtil = myDateUtil;
         this.modelMapper = modelMapper;
+        this.jwtUtils = jwtUtils;
+        this.encoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
     public LoginRespondDTO login(LoginRequestDTO loginRequestDTO) {
-        return null;
+
+        Users users = this.userRepository.findUserByUserName(loginRequestDTO.getUserName()).get();
+
+        if(loginRequestDTO.getUserName().equals(users.getUserName())){
+            throw new ResourceNotFoundException("Account Not Exist !!!!");
+        }
+
+        if (!encoder.matches(loginRequestDTO.getPassword(), users.getPassword())){
+            throw new ResourceNotFoundException("Wrong password !!!");
+        }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
+        );
+
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateToken(authentication);
+
+        UserDetail userDetail = (UserDetail) authentication.getPrincipal();
+
+
+        if(!encoder.matches(loginRequestDTO.getPassword(), userDetail.getPassword())){
+            throw new ResourceNotFoundException("Password incorrect. Please try again !!!");
+        }
+
+
+        String roleName = userDetail.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toList()).get(0);
+
+        return new LoginRespondDTO(
+                userDetail.getUserId(),
+                userDetail.getUsername(),
+                roleName,
+                jwt,
+                "Bearer"
+        );
     }
 
     @Override
@@ -86,6 +140,6 @@ public class AuthServiceImpl implements AuthService {
         String birth = myDateUtil.getStringDate(dateOfBirth);
         birth = birth.replaceAll("/", "");
 
-        return userName + "@" + birth;
+        return encoder.encode(userName + "@" + birth);
     }
 }
