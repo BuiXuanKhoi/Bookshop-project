@@ -35,6 +35,7 @@ public class InformationServiceImpl implements InformationService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     public ResponseEntity<?> modifyInformation(ModifyUserRequestDTO modifyRequestDTO) {
 
         String userName = modifyRequestDTO.getUserName();

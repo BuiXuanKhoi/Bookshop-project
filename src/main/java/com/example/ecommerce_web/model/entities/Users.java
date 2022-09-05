@@ -42,7 +42,7 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Orders> orders;
 
-    @OneToOne(mappedBy="users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="users",fetch = FetchType.LAZY)
     private Information information;
 
     @OneToMany(mappedBy = "users")
