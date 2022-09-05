@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
         Users users = this.userRepository.findUserByUserName(loginRequestDTO.getUserName()).get();
 
-        if(loginRequestDTO.getUserName().equals(users.getUserName())){
+        if(!loginRequestDTO.getUserName().equals(users.getUserName())){
             throw new ResourceNotFoundException("Account Not Exist !!!!");
         }
 

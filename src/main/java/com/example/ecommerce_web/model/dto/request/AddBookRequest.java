@@ -20,7 +20,7 @@ public class AddBookRequest {
     private String imageLink;
     private String description;
     private int quantity;
-    private int listClassify[];
+    private int[] listCategory;
     private int authorId;
     private int creator;
 

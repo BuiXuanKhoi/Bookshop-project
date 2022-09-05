@@ -5,14 +5,9 @@ import com.example.ecommerce_web.model.BookState;
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
-import com.example.ecommerce_web.model.entities.Author;
-import com.example.ecommerce_web.model.entities.Books;
-import com.example.ecommerce_web.model.entities.Classify;
-import com.example.ecommerce_web.model.entities.Users;
-import com.example.ecommerce_web.repository.AuthorRepository;
-import com.example.ecommerce_web.repository.BookRepository;
-import com.example.ecommerce_web.repository.ClassifyRepository;
-import com.example.ecommerce_web.repository.UserRepository;
+import com.example.ecommerce_web.model.entities.*;
+import com.example.ecommerce_web.repository.*;
+import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
 import org.modelmapper.ModelMapper;
@@ -22,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +26,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class BookServiceImpl implements BookService {
 
     BookRepository bookRepository;
@@ -38,17 +35,21 @@ public class BookServiceImpl implements BookService {
     ClassifyRepository classifyRepository;
     AuthorRepository authorRepository;
     UserRepository userRepository;
+    UserLocal userLocal;
+    CategoryRepository categoryRepository;
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper
             , AuthorService authorService, ClassifyRepository classifyRepository
-            , AuthorRepository authorRepository, UserRepository userRepository) {
+            , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal, CategoryRepository categoryRepository) {
         this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
         this.authorService = authorService;
         this.classifyRepository = classifyRepository;
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
+        this.userLocal = userLocal;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -57,40 +58,54 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> addNewBook(AddBookRequest addBookRequest) {
 
-        int listClassifiesId[] = addBookRequest.getListClassify();
+        int listClassifiesId[] = addBookRequest.getListCategory();
         int authorId = addBookRequest.getAuthorId();
-        int creatorId = addBookRequest.getCreator();
+        String userName = userLocal.getLocalUserName();
 
         List<Classify> classifyList = Arrays.stream(listClassifiesId)
                 .boxed().map(id -> getClassification(id)).collect(Collectors.toList());
 
         Optional<Author> authorOptional = this.authorRepository.findById(authorId);
+        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
+
+
+        usersOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Creator Not Found !!!")
+        );
 
         authorOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Not Found Author !!!")
         );
 
-        Users creator = this.userRepository.findById(creatorId).get();
 
         Books books = modelMapper.map(addBookRequest, Books.class);
         books.setClassifies(classifyList);
         books.setAuthors(authorOptional.get());
         books.setBookState(BookState.AVAILABLE);
         books.setCreateDay(new Date());
-        books.setUsers(creator);
+        books.setUsers(usersOptional.get());
 
-        this.bookRepository.save(books);
+        Books savedBook = this.bookRepository.save(books);
+
+        classifyList.forEach(classify -> {
+            classify.setBooks(savedBook);
+            this.classifyRepository.save(classify);
+        });
+
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Add New Book Successfully !!!"));
     }
 
-   public Classify getClassification(int classifyId){
-       Optional<Classify> classifyOptional = this.classifyRepository.findById(classifyId);
+   public Classify getClassification(int categoryId){
+       Optional<Category> categoryOptional = this.categoryRepository.findById(categoryId);
 
-       classifyOptional.orElseThrow(
-               () -> new ResourceNotFoundException("Classify Not Exist !!!!")
+       categoryOptional.orElseThrow(
+               () -> new ResourceNotFoundException("Category Not Exist !!!!")
        );
-       return classifyOptional.get();
+
+       Classify classify = new Classify(0,null, categoryOptional.get());
+       return this.classifyRepository.save(classify) ;
    }
 }

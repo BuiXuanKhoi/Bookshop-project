@@ -6,6 +6,7 @@ import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.InformationRepository;
 import com.example.ecommerce_web.repository.UserRepository;
+import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
@@ -25,14 +26,16 @@ public class InformationServiceImpl implements InformationService {
     UserRepository userRepository;
     MyDateUtil myDateUtil;
     ModelMapper modelMapper;
+    UserLocal userLocal;
 
     @Autowired
     public InformationServiceImpl(InformationRepository informationRepository, UserRepository userRepository,
-                                  MyDateUtil myDateUtil, ModelMapper modelMapper) {
+                                  MyDateUtil myDateUtil, ModelMapper modelMapper, UserLocal userLocal) {
         this.informationRepository = informationRepository;
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
         this.modelMapper = modelMapper;
+        this.userLocal = userLocal;
     }
 
     @Override
