@@ -59,8 +59,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-
-
     public Users createUser(CreateUserRequest createUserRequest){
         String roleName = createUserRequest.getRole();
         Date dateOfBirth = createUserRequest.getDateOfBirth();

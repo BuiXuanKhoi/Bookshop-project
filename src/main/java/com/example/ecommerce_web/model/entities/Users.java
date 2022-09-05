@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -40,6 +41,9 @@ public class Users {
 
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Orders> orders;
+
+    @OneToOne(mappedBy="users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Information information;
 
     @OneToMany(mappedBy = "users")
     private List<Books> books;
