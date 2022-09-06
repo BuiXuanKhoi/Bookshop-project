@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,10 +18,11 @@ import java.util.List;
 @Entity
 @Table(name = "books")
 public class Books {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
-    private int book_id;
+    private int bookId;
 
     @Column(name = "book_name")
     private String bookName;
@@ -63,7 +66,8 @@ public class Books {
     @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Classify> classifies;
 
     @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

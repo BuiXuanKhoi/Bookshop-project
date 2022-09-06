@@ -12,6 +12,10 @@ import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,10 +56,34 @@ public class BookServiceImpl implements BookService {
         this.categoryRepository = categoryRepository;
     }
 
+
     @Override
-    public List<BookFeatureRespondDTO> getListBooks() {
-        return null;
+    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page) {
+        int[] listFilter;
+
+
+        if(filter.equals("0"))
+        {
+            listFilter = this.categoryRepository.findAll().stream()
+                    .mapToInt(Category::getCategoryId).toArray();
+        }else
+        {
+            listFilter = Arrays.stream(filter.split(","))
+                    .mapToInt(Integer::parseInt).toArray();
+        }
+
+        Pageable pageable = createPage(page, mode);
+
+
+        Page<BookFeatureRespondDTO> listBookFeature = this.bookRepository.getPageBook(pageable, searchCode, listFilter);
+
+        if (listBookFeature.hasContent()){
+            return listBookFeature;
+        }
+
+        throw new ResourceNotFoundException("This Page Is Empty !!!");
     }
+
 
     @Override
     @Transactional
@@ -108,4 +136,42 @@ public class BookServiceImpl implements BookService {
        Classify classify = new Classify(0,null, categoryOptional.get());
        return this.classifyRepository.save(classify) ;
    }
+
+    private Pageable createPage(int page, String sortBy){
+        Sort sort;
+        char field = sortBy.charAt(0);
+        char mode = sortBy.charAt(1);
+        String fieldSort;
+
+        switch (field){
+            case 'p':
+                fieldSort = "bookPrice";
+                break;
+            case 'r':
+                fieldSort = "ratingPoint";
+                break;
+            case 'n' :
+                fieldSort = "bookName";
+                break;
+            case 'i':
+                fieldSort = "bookId";
+                break;
+            default:
+                throw new ResourceNotFoundException("NOT FOUND FIELD SORT !!!");
+        }
+
+        switch (mode){
+            case 'a':
+                sort = Sort.by( Sort.Direction.ASC,fieldSort);
+                break;
+            case 'd':
+                sort = Sort.by( Sort.Direction.DESC,fieldSort);
+                break;
+            default:
+                throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
+        }
+
+        return PageRequest.of(page, 20, sort);
+    }
+
 }
