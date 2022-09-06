@@ -12,4 +12,9 @@ import java.util.Optional;
 @Repository
 public interface InformationRepository extends JpaRepository<Information, Integer> {
 
+    @Query(value = "select * from information where user_id = :userId", nativeQuery = true)
+    Information getInformationByUsers(int userId);
+
+
+
 }

@@ -67,11 +67,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/auth/**","/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/books").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/information").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.PUT,"api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/carts/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

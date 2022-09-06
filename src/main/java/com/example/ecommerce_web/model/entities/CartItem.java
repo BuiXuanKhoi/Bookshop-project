@@ -21,10 +21,7 @@ public class CartItem {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "price")
-    private float price;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private Users users;
 

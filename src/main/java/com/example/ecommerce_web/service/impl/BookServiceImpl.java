@@ -4,6 +4,7 @@ import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.BookState;
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.*;
 import com.example.ecommerce_web.repository.*;
@@ -126,7 +127,29 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Add New Book Successfully !!!"));
     }
 
-   public Classify getClassification(int categoryId){
+    @Override
+    public BookRespondDTO getBookDetail(int bookId) {
+        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
+
+        booksOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Not Found Book With ID: " + bookId)
+        );
+
+        Books books = booksOptional.get();
+        String authorName = books.getAuthors().getAuthorName();
+
+        List<Classify> classifyList = books.getClassifies();
+
+        List<String> categoryNameList = classifyList.stream()
+                .map(Classify::getCategory).map(Category::getCategoryName).collect(Collectors.toList());
+
+        BookRespondDTO bookRespondDTO = modelMapper.map(books, BookRespondDTO.class);
+        bookRespondDTO.setAuthorName(authorName);
+        bookRespondDTO.setCategoryName(categoryNameList);
+        return bookRespondDTO;
+    }
+
+    public Classify getClassification(int categoryId){
        Optional<Category> categoryOptional = this.categoryRepository.findById(categoryId);
 
        categoryOptional.orElseThrow(

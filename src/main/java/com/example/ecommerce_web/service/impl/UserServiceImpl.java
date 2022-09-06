@@ -7,10 +7,12 @@ import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserLocal;
+import com.example.ecommerce_web.service.EmailService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,16 +31,20 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
     UserLocal userLocal;
+    EmailService emailService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil, ModelMapper modelMapper,
-                           AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils, UserLocal userLocal) {
+                           AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils,
+                           UserLocal userLocal, @Qualifier("googleEmail") EmailService emailService
+                           ) {
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
         this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
         this.encoder = encoder;
         this.userLocal = userLocal;
+        this.emailService = emailService;
     }
 
     @Override

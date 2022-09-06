@@ -4,6 +4,7 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
 import com.example.ecommerce_web.model.dto.request.FeedbackRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.FeedbackService;
@@ -46,5 +47,10 @@ public class BookController {
             @RequestBody FeedbackRequestDTO feedbackRequestDTO
     ){
         return this.feedbackService.giveFeedback(feedbackRequestDTO, bookId);
+    }
+
+    @GetMapping("/{id}")
+    public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){
+        return this.bookService.getBookDetail(bookId);
     }
 }

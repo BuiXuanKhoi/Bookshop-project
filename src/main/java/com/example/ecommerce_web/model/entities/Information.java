@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.model.entities;
 
 
+import com.example.ecommerce_web.model.Location;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,8 +23,9 @@ public class Information {
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "address")
-    private String address;
+    private Location address;
 
     @Column(name = "email")
     private String email;
@@ -47,7 +49,7 @@ public class Information {
     @Column(name = "update_date")
     private Date updateDate;
 
-    public Information( String lastName, String firstName, Date dayOfBirth, String email, String address, String phoneNumber, Date createDate, Date updateDate){
+    public Information( String lastName, String firstName, Date dayOfBirth, String email, Location address, String phoneNumber, Date createDate, Date updateDate){
         this.lastName = lastName;
         this.firstName = firstName;
         this.dateOfBirth = dayOfBirth;

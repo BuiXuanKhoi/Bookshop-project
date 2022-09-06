@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
+import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.model.entities.Users;
@@ -66,5 +67,17 @@ public class InformationServiceImpl implements InformationService {
         this.informationRepository.save(information);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Account Successfully !!!!"));
+    }
+
+    @Override
+    public InformationRespondDTO getDetailInformation() {
+        String userName = userLocal.getLocalUserName();
+        Users users = this.userRepository.findUserByUserName(userName).get();
+
+        int userId = users.getUserId();
+
+        Information information = this.informationRepository.getInformationByUsers(userId);
+
+        return modelMapper.map(information, InformationRespondDTO.class);
     }
 }

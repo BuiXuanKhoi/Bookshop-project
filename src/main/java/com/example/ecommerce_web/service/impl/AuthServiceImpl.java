@@ -3,8 +3,10 @@ package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
+import com.example.ecommerce_web.model.Location;
 import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.CreateUserRequest;
+import com.example.ecommerce_web.model.dto.request.EmailDetail;
 import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
@@ -17,9 +19,11 @@ import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
 import com.example.ecommerce_web.service.AuthService;
+import com.example.ecommerce_web.service.EmailService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,12 +49,16 @@ public class AuthServiceImpl implements AuthService {
     AuthenticationManager authenticationManager;
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
+    EmailService emailService;
+
+    String password = "";
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            InformationRepository informationRepository, MyDateUtil myDateUtil,
                            ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager) {
+                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService
+                           ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.informationRepository = informationRepository;
@@ -59,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtils = jwtUtils;
         this.encoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
+        this.emailService = emailService;
     }
 
     @Override
@@ -107,9 +116,21 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> signup(CreateUserRequest createUserRequest) {
         Users users = createUser(createUserRequest);
         Information information = createInformation(createUserRequest, users);
+        String receiver = information.getEmail();
         this.userRepository.save(users);
         this.informationRepository.save(information);
+
+        sendEmail( receiver);
+
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
+    }
+
+    public void sendEmail( String receiver){
+        String message = "Thanks for join our E-commerce project. Your password here: " +  password +
+                ". Please change your password after login.";
+        String subject = "Welcome Join Us !";
+        EmailDetail emailDetail = new EmailDetail(receiver, message, subject);
+        emailService.sendEmail(emailDetail);
     }
 
 
@@ -133,13 +154,27 @@ public class AuthServiceImpl implements AuthService {
         Information information = modelMapper.map(createUserRequest, Information.class);
         information.setCreateDate(new Date());
         information.setUsers(users);
+
+        String location = createUserRequest.getAddress();
+
+        switch (location){
+            case "HN" :
+                information.setAddress(Location.HN);
+                break;
+            case "HCM" :
+                information.setAddress(Location.HCM);
+                break;
+            default:
+                throw new ResourceNotFoundException("That Location Not Available !!!");
+        }
+
         return information;
     }
 
     public String generatePassword(String userName, Date dateOfBirth){
         String birth = myDateUtil.getStringDate(dateOfBirth);
         birth = birth.replaceAll("/", "");
-
-        return encoder.encode(userName + "@" + birth);
+        password = userName + "@" + birth;
+        return encoder.encode(password);
     }
 }
