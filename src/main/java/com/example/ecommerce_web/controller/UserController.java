@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.controller;
 
 
+import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
@@ -15,6 +16,7 @@ public class UserController {
     UserService userService;
     InformationService informationService;
 
+
     @Autowired
     public UserController(UserService userService,   InformationService informationService) {
         this.userService = userService;
@@ -22,8 +24,12 @@ public class UserController {
     }
 
     @PutMapping ("/information" )
-    public ResponseEntity<?> modifyInformation(@RequestBody ModifyUserRequestDTO modifyRequestDTO){
+    public ResponseEntity<?> modifyInformation(@RequestBody  ModifyUserRequestDTO modifyRequestDTO){
         return this.informationService.modifyInformation(modifyRequestDTO);
     }
 
+    @PutMapping(value = "/password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequestDTO){
+        return this.userService.changePassword(changePasswordRequestDTO);
+    }
 }

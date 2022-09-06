@@ -31,7 +31,7 @@ public class Information {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id")
     private Users users;
 
