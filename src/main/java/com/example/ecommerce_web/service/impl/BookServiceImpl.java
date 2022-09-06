@@ -3,6 +3,7 @@ package com.example.ecommerce_web.service.impl;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.BookState;
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
+import com.example.ecommerce_web.model.dto.request.EditBookDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.*;
@@ -172,6 +173,53 @@ public class BookServiceImpl implements BookService {
         }
 
         return PageRequest.of(page, 20, sort);
+    }
+
+    @Override
+    public ResponseEntity<?> editBook(EditBookDTO editBookDTO){
+
+        int bookID = editBookDTO.getBookID();
+
+        String bookName = editBookDTO.getBookName();
+
+        float bookPrice = editBookDTO.getBookPrice();
+
+        int bookQuantity = editBookDTO.getBookQuantity();
+
+        String bookDescription = editBookDTO.getBookDescription();
+
+        String bookState = editBookDTO.getBookState();
+
+        Optional<Books> chosenBook = this.bookRepository.findById(bookID);
+
+        Books newBook = chosenBook.get();
+
+        newBook.setBookName(bookName);
+
+        newBook.setBookPrice(bookPrice);
+
+        newBook.setDescription(bookDescription);
+
+        newBook.setBookPrice(bookPrice);
+
+
+        switch(bookState){
+            case "UNAVAILABLE":
+                newBook.setBookState(BookState.UNAVAILABLE);
+                break;
+            case "AVAILABLE":
+                newBook.setBookState(BookState.AVAILABLE);
+                break;
+            case "OUT_OF_STOCK":
+                newBook.setBookState(BookState.OUT_OF_STOCK);
+                break;
+            case "EXPIRED":
+                newBook.setBookState(BookState.EXPIRED);
+                break;
+            default:
+                throw new ResourceNotFoundException("NOT FOUND ENUM VALUE !!!");
+        }
+        return  ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Book successfully !!!"));
     }
 
 }
