@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service;
 
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
+import com.example.ecommerce_web.model.dto.request.DeleteBookDTO;
 import com.example.ecommerce_web.model.dto.request.EditBookDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
@@ -23,4 +24,6 @@ public interface BookService {
     public ResponseEntity<?> addNewBook(AddBookRequest addBookRequest);
 
     public ResponseEntity<?> editBook(EditBookDTO editBookDTO);
+
+    public ResponseEntity<?> deleteBook(DeleteBookDTO deleteBookDTO);
 }

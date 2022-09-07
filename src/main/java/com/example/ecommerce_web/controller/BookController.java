@@ -1,13 +1,12 @@
 package com.example.ecommerce_web.controller;
 
 
-import com.example.ecommerce_web.model.dto.request.AddBookRequest;
-import com.example.ecommerce_web.model.dto.request.EditBookDTO;
-import com.example.ecommerce_web.model.dto.request.FeedbackRequestDTO;
+import com.example.ecommerce_web.model.dto.request.*;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
 import com.example.ecommerce_web.service.BookService;
+import com.example.ecommerce_web.service.CategoryService;
 import com.example.ecommerce_web.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,11 +19,13 @@ public class BookController {
 
     BookService bookService;
     FeedbackService feedbackService;
+    CategoryService categoryService;
 
     @Autowired
-    public BookController(BookService bookService, FeedbackService feedbackService) {
+    public BookController(BookService bookService, FeedbackService feedbackService,CategoryService categoryService) {
         this.bookService = bookService;
         this.feedbackService = feedbackService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping
@@ -35,6 +36,16 @@ public class BookController {
     @PutMapping
     public ResponseEntity<?> editBook(@RequestBody EditBookDTO editBookDTO){
         return this.bookService.editBook(editBookDTO);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteBook(@RequestBody DeleteBookDTO deleteBookDTO){
+        return this.bookService.deleteBook(deleteBookDTO);
+    }
+
+    @PostMapping("/category")
+    public ResponseEntity<?> addCategory(@RequestBody AddCategoryDTO addCategoryDTO){
+        return this.categoryService.addCategory(addCategoryDTO);
     }
 
     @GetMapping

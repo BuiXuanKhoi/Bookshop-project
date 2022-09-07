@@ -45,7 +45,7 @@ public class Users {
     @OneToOne(mappedBy="users",fetch = FetchType.LAZY)
     private Information information;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY)
     private List<Books> books;
 
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

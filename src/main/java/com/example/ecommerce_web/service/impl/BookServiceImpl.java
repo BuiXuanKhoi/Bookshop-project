@@ -4,6 +4,7 @@ import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.BookState;
 import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
+import com.example.ecommerce_web.model.dto.request.DeleteBookDTO;
 import com.example.ecommerce_web.model.dto.request.EditBookDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
@@ -226,6 +227,8 @@ public class BookServiceImpl implements BookService {
 
         newBook.setBookPrice(bookPrice);
 
+        newBook.setQuantity(bookQuantity);
+
         newBook.setDescription(bookDescription);
 
         newBook.setBookPrice(bookPrice);
@@ -248,6 +251,16 @@ public class BookServiceImpl implements BookService {
                 throw new ResourceNotFoundException("NOT FOUND ENUM VALUE !!!");
         }
         return  ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Book successfully !!!"));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteBook(DeleteBookDTO deleteBookDTO){
+        int bookID = deleteBookDTO.getBookID();
+
+        this.bookRepository.deleteById(bookID);
+
+        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Delete Book successfully !!!"));
     }
 
 }
