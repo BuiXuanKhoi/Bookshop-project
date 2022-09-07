@@ -2,6 +2,7 @@ package com.example.ecommerce_web.controller;
 
 
 import com.example.ecommerce_web.model.dto.request.AddBookRequest;
+import com.example.ecommerce_web.model.dto.request.EditBookDTO;
 import com.example.ecommerce_web.model.dto.request.FeedbackRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
@@ -29,6 +30,11 @@ public class BookController {
     @PostMapping
     public ResponseEntity<?> addNewBook(@RequestBody AddBookRequest addBookRequest){
         return this.bookService.addNewBook(addBookRequest);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> editBook(@RequestBody EditBookDTO editBookDTO){
+        return this.bookService.editBook(editBookDTO);
     }
 
     @GetMapping

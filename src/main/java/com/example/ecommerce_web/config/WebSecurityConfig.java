@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/order").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/carts/**").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers(HttpMethod.PUT,"api/books").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

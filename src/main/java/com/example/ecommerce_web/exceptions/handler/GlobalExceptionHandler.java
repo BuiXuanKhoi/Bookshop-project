@@ -1,15 +1,14 @@
 package com.example.ecommerce_web.exceptions.handler;
 
 
-import com.example.ecommerce_web.exceptions.ApiDeniedException;
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
+import com.fasterxml.jackson.databind.deser.impl.ErrorThrowingDeserializer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +31,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
 
         return new ResponseEntity<>(errorRespond, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({NoSuchElementException.class})
+    public ResponseEntity<?> handleNoSuchElementException(NoSuchElementException ex){
+        String message = "Enum constant not exists ";
+
+        int statusCode =  HttpStatus.BAD_REQUEST.value();
+
+        ErrorRespond errorRespond = new ErrorRespond(statusCode,message);
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler({ConstraintViolateException.class})
