@@ -38,4 +38,10 @@ public class UserController {
     public InformationRespondDTO getInformationDetail(){
         return this.informationService.getDetailInformation();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> blockUser(@PathVariable("id") int id){
+        return this.userService.blockUser(id);
+    }
+
 }

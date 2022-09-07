@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     ResponseEntity<?> changePassword(ChangePasswordRequestDTO changePasswordRequestDTO);
+
+    ResponseEntity<?> blockUser(int userId);
 }

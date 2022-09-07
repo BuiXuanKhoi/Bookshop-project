@@ -1,6 +1,8 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.exceptions.ApiDeniedException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
+import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Users;
@@ -19,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -76,6 +79,34 @@ public class UserServiceImpl implements UserService {
             }
         }
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Your password has been updated !!!"));
+    }
+
+    @Override
+    public ResponseEntity<?> blockUser(int userId) {
+        long THREE_DAY = 259200000;
+        Optional<Users> usersOptional = this.userRepository.findById(userId);
+
+        usersOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Not Found User With ID: " + userId)
+        );
+
+        Users users = usersOptional.get();
+
+        if(users.getRole().getRoleName().equals("ADMIN")){
+            throw new ApiDeniedException("Only admin can block users !!!");
+        }
+
+        Date now = new Date();
+
+        long lockUntil = now.getTime() + THREE_DAY;
+
+        users.setUserState(UserState.BLOCK);
+        users.setLockTime(new Date(lockUntil));
+
+        this.userRepository.save(users);
+
+        MessageRespond messageRespond = new MessageRespond( HttpStatus.OK.value(),"Block User Successfully !!!!");
+        return ResponseEntity.ok(messageRespond);
     }
 
 

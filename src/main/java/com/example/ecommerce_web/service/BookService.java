@@ -11,11 +11,13 @@ import java.util.List;
 
 public interface BookService {
 
-    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page);
+    Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page);
 
-    public ResponseEntity<?> addNewBook(AddBookRequest addBookRequest);
+    ResponseEntity<?> addNewBook(AddBookRequest addBookRequest);
 
     BookRespondDTO getBookDetail(int bookId);
+
+
 
 
 }

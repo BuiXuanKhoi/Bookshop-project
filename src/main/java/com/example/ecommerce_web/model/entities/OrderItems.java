@@ -18,16 +18,16 @@ public class OrderItems {
     @Column(name = "order_item_id")
     private int orderItemsID ;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Orders orders;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Books books;
 
     @Column(name = "previous_price")
-    private float previousPrice;
+    private float price;
 
     @Column(name = "quantity")
     private int quantity;

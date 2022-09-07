@@ -15,4 +15,9 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer>{
     @Query(value = "select * from cart_items where user_id = :userId and book_id = :bookId", nativeQuery = true)
     Optional<CartItem> getCartItemByBooksAndUsers(int userId, int bookId);
 
+
+    @Modifying
+    @Query(value = "delete from cart_items where user_id = :userId", nativeQuery = true)
+    void deleteCartItemByUsers(int userId);
+
 }

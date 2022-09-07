@@ -18,14 +18,11 @@ public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private int order_id;
+    private int orderId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_state")
     private OrderState orderState;
-
-    @Column(name = "price")
-    private Float price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

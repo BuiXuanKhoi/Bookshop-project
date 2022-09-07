@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.exceptions.handler;
 
 
+import com.example.ecommerce_web.exceptions.ApiDeniedException;
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
@@ -62,6 +63,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = "You don't have enough permission to access this api";
 
         ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    protected ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex){
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = "VALUE NOT AVAILABLE";
+
+        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
+    }
+
+    protected ResponseEntity<?> handleApiDeniedException(ApiDeniedException ex){
+        int statusCode = HttpStatus.FORBIDDEN.value();
+        String message = ex.getMessage();
+
+        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+
         return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
     }
 

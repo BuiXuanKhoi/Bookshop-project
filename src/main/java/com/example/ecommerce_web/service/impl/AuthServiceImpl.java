@@ -83,6 +83,10 @@ public class AuthServiceImpl implements AuthService {
             throw new ResourceNotFoundException("Wrong password !!!");
         }
 
+        if(users.getUserState().equals(UserState.BLOCK)){
+            throw new ConstraintViolateException("User has been blocked. Cannot login !!!");
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
         );
@@ -92,11 +96,6 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtUtils.generateToken(authentication);
 
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
-
-
-        if(!encoder.matches(loginRequestDTO.getPassword(), userDetail.getPassword())){
-            throw new ResourceNotFoundException("Password incorrect. Please try again !!!");
-        }
 
 
         String roleName = userDetail.getAuthorities().stream()

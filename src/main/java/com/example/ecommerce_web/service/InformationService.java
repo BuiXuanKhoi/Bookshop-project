@@ -8,4 +8,6 @@ public interface InformationService {
     ResponseEntity<?> modifyInformation(ModifyUserRequestDTO modifyRequestDTO);
 
     InformationRespondDTO getDetailInformation();
+
+
 }
