@@ -199,6 +199,8 @@ public class BookServiceImpl implements BookService {
 
         newBook.setBookPrice(bookPrice);
 
+        newBook.setQuantity(bookQuantity);
+
         newBook.setDescription(bookDescription);
 
         newBook.setBookPrice(bookPrice);

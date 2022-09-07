@@ -63,16 +63,16 @@ public class Books {
     @Column(name = "state")
     private BookState bookState;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "books",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "books",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @Fetch(FetchMode.SUBSELECT)
     private List<Classify> classifies;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<OrderItems> orderItems;
 }
