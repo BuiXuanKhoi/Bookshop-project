@@ -4,6 +4,7 @@ public enum OrderState {
         PREPARED,
         PACKAGED,
         DELIVERED,
-        RECEIVED
+        RECEIVED,
+        COMPLETED
 
 }

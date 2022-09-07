@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,6 +100,34 @@ public class OrdersServiceImpl implements OrdersService {
                                                           .collect(Collectors.toList());
 
         return listOrderRespond;
+    }
+
+    @Override
+    public ResponseEntity<?> updateOrderState(int orderId) {
+        Optional<Orders> ordersOptional = this.ordersRepository.findById(orderId);
+
+        ordersOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Order Not Found With ID: " + orderId)
+        );
+
+        Orders orders = ordersOptional.get();
+
+        OrderState orderState = orders.getOrderState();
+
+        switch (orderState)
+        {
+            case PREPARED -> orders.setOrderState(OrderState.PACKAGED);
+            case PACKAGED -> orders.setOrderState(OrderState.DELIVERED);
+            case DELIVERED -> orders.setOrderState(OrderState.RECEIVED);
+            case RECEIVED -> orders.setOrderState(OrderState.COMPLETED);
+            case COMPLETED -> throw new ResourceNotFoundException("Completed is the final state !!!");
+            default -> throw new ResourceNotFoundException("State Not Available !!!");
+        }
+
+        this.ordersRepository.save(orders);
+
+        MessageRespond messageRespond = new MessageRespond(HttpStatus.OK.value(), "Order State update successfully !!!");
+        return ResponseEntity.ok(messageRespond);
     }
 
     public List<OrderItems> transferFromCart(List<CartItem> listCartItem){

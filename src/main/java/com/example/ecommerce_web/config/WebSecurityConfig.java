@@ -74,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/api/users/information").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.PUT,"api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/order/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/books/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")

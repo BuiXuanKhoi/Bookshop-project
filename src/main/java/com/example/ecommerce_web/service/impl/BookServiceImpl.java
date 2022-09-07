@@ -143,7 +143,9 @@ public class BookServiceImpl implements BookService {
         List<Classify> classifyList = books.getClassifies();
 
         List<String> categoryNameList = classifyList.stream()
-                .map(Classify::getCategory).map(Category::getCategoryName).collect(Collectors.toList());
+                                                    .map(Classify::getCategory)
+                                                    .map(Category::getCategoryName)
+                                                    .collect(Collectors.toList());
 
         BookRespondDTO bookRespondDTO = modelMapper.map(books, BookRespondDTO.class);
         bookRespondDTO.setAuthorName(authorName);

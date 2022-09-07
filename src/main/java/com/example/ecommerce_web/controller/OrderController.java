@@ -3,6 +3,7 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.model.dto.respond.OrderRespondDTO;
 import com.example.ecommerce_web.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,5 +27,10 @@ public class OrderController {
     @GetMapping
     public List<OrderRespondDTO> getListOrder(){
         return this.ordersService.getListOrder();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateOrderState(@PathVariable int id){
+        return this.ordersService.updateOrderState(id);
     }
 }
