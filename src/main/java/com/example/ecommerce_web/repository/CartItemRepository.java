@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
+@Transactional
 public interface CartItemRepository extends JpaRepository<CartItem, Integer>{
 
     @Query(value = "select * from cart_items where user_id = :userId and book_id = :bookId", nativeQuery = true)

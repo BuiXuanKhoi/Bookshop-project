@@ -14,7 +14,6 @@ public interface BookService {
 
     Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page);
 
-    ResponseEntity<?> addNewBook(AddBookRequest addBookRequest);
 
     BookRespondDTO getBookDetail(int bookId);
 
