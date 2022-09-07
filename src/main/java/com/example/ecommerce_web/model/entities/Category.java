@@ -26,4 +26,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Classify> classifies;
+
+    public Category(String categoryName, String categoryDescription){
+        this.categoryName = categoryName;
+        this.categoryDescription = categoryDescription;
+    }
 }

@@ -30,7 +30,7 @@ public class Books {
     @Column(name = "book_price")
     private float bookPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
@@ -52,7 +52,7 @@ public class Books {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id")
     private Author authors;
 
@@ -63,16 +63,16 @@ public class Books {
     @Column(name = "state")
     private BookState bookState;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
     private List<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "books", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "books",fetch = FetchType.LAZY)
     @Fetch(FetchMode.SUBSELECT)
     private List<Classify> classifies;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
     private List<Feedback> feedbacks;
 
-    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "books", fetch = FetchType.LAZY)
     private List<OrderItems> orderItems;
 }

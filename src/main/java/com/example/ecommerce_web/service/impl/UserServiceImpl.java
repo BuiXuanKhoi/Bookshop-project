@@ -46,8 +46,6 @@ public class UserServiceImpl implements UserService {
 
         String newPassword = changePasswordRequestDTO.getNewPassword();
 
-        String newPasswordRetype = changePasswordRequestDTO.getNewPasswordRetype();
-
         String userName = userLocal.getLocalUserName();
 
         Optional<Users> users= this.userRepository.findUserByUserName(userName);
@@ -59,15 +57,9 @@ public class UserServiceImpl implements UserService {
            throw new ResourceNotFoundException("Password is wrong !!!!");
         }
         else {
-            if (changePasswordRequestDTO.getNewPassword().equals(changePasswordRequestDTO.getNewPasswordRetype())) {
-
                 newPassword = encoder.encode(newPassword);
                 optional_users.setPassword(newPassword);
                 this.userRepository.save(optional_users);
-
-            } else {
-                throw new ResourceNotFoundException("Your retyped password is different with new Password !!!");
-            }
         }
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Your password has been updated !!!"));
     }
