@@ -4,6 +4,7 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
+import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @PutMapping ("/information" )
-    public ResponseEntity<?> modifyInformation(@RequestBody  ModifyUserRequestDTO modifyRequestDTO){
-        return this.informationService.modifyInformation(modifyRequestDTO);
+    public ResponseEntity<?> modifyInformation(@RequestBody ModifyUserRequestDTO modifyUserRequestDTO){
+        return this.informationService.modifyInformation(modifyUserRequestDTO);
     }
 
     @PutMapping(value = "/password")

@@ -10,17 +10,15 @@ import javax.persistence.Enumerated;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditBookDTO {
-
-    private int bookID;
+public class ModifyBookRequestDTO {
 
     private String bookName;
 
     private float bookPrice;
 
-    private int bookQuantity;
+    private int quantity;
 
-    private String bookDescription;
+    private String description;
 
-    private String bookState;
+    private String state;
 }

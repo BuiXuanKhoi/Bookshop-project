@@ -1,7 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-import com.example.ecommerce_web.model.dto.request.AddCartItemRequest;
+import com.example.ecommerce_web.model.dto.request.CartItemRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.CartItemRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Books;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,11 +42,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemRespondDTO addToCart(AddCartItemRequest addCartItemRequest) {
-        int bookId = addCartItemRequest.getBookId();
+    public CartItemRespondDTO addToCart(CartItemRequestDTO cartItemRequestDTO) {
+        int bookId = cartItemRequestDTO.getBookId();
         String userName = userLocal.getLocalUserName();
 
-        CartItem cartItem = modelMapper.map(addCartItemRequest, CartItem.class);
+        CartItem cartItem = modelMapper.map(cartItemRequestDTO, CartItem.class);
         Users users = this.userRepository.findUserByUserName(userName).get();
         Optional<Books> booksOptional = this.bookRepository.findById(bookId);
 
@@ -60,7 +59,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         existedCartItem.ifPresent(existedItem ->{
                     int existedQuantity = existedCartItem.get().getQuantity();
-                    int addedQuantity = addCartItemRequest.getQuantity();
+                    int addedQuantity = cartItemRequestDTO.getQuantity();
                     int existedCartId = existedCartItem.get().getCartItemsID();
                     cartItem.setQuantity(existedQuantity + addedQuantity);
                     cartItem.setCartItemsID(existedCartId);

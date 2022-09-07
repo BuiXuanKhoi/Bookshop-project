@@ -1,6 +1,6 @@
 package com.example.ecommerce_web.controller;
 
-import com.example.ecommerce_web.model.dto.request.CreateUserRequest;
+import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
 import com.example.ecommerce_web.service.AuthService;
@@ -25,8 +25,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid CreateUserRequest createUserRequest){
-        return this.authService.signup(createUserRequest);
+    public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDTO userRequestDTO){
+        return this.authService.signup(userRequestDTO);
     }
 
     @PostMapping("/login")

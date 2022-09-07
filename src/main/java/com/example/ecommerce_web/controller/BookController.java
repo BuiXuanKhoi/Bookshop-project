@@ -5,6 +5,8 @@ import com.example.ecommerce_web.model.dto.request.*;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
+import com.example.ecommerce_web.model.entities.Books;
+import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.CategoryService;
 import com.example.ecommerce_web.service.FeedbackService;
@@ -29,23 +31,25 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewBook(@RequestBody AddBookRequest addBookRequest){
-        return this.bookService.addNewBook(addBookRequest);
+    public ResponseEntity<?> addNewBook(@RequestBody BookRequestDTO bookRequestDTO){
+        return this.bookService.addNewBook(bookRequestDTO);
     }
 
-    @PutMapping
-    public ResponseEntity<?> editBook(@RequestBody EditBookDTO editBookDTO){
-        return this.bookService.editBook(editBookDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editBook(
+            @PathVariable int id,
+            @RequestBody ModifyBookRequestDTO modifyBookRequestDTO){
+        return this.bookService.editBook(id, modifyBookRequestDTO);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteBook(@RequestBody DeleteBookDTO deleteBookDTO){
-        return this.bookService.deleteBook(deleteBookDTO);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable int bookId){
+        return this.bookService.deleteBook(bookId);
     }
 
     @PostMapping("/category")
-    public ResponseEntity<?> addCategory(@RequestBody AddCategoryDTO addCategoryDTO){
-        return this.categoryService.addCategory(addCategoryDTO);
+    public ResponseEntity<?> addCategory(@RequestBody Category category){
+        return this.categoryService.addCategory(category);
     }
 
     @GetMapping

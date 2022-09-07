@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserRequest {
+public class UserRequestDTO {
 
     @NotNull(message = "username cannot be null")
     @NotBlank(message = "username cannot be blank")

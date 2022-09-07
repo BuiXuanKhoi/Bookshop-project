@@ -1,6 +1,5 @@
 package com.example.ecommerce_web.service.impl;
 
-import com.example.ecommerce_web.model.dto.request.AddCategoryDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.repository.CategoryRepository;
@@ -21,13 +20,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<?> addCategory(AddCategoryDTO addCategoryDTO){
-
-        String categoryName = addCategoryDTO.getCategoryName();
-
-        String categoryDescription = addCategoryDTO.getCategoryDescription();
-
-        Category category = new Category(categoryName,categoryDescription);
+    public ResponseEntity<?> addCategory(Category category){
 
         this.categoryRepository.save(category);
 

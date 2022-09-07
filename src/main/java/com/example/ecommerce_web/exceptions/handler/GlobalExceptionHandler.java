@@ -6,10 +6,13 @@ import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
 import com.fasterxml.jackson.databind.deser.impl.ErrorThrowingDeserializer;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,7 +29,7 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ResourceNotFoundException.class})
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex){
+    protected ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex){
 
         String message = ex.getMessage();
         int statusCode = HttpStatus.NOT_FOUND.value();
@@ -36,20 +39,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorRespond, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NoSuchElementException.class})
-    public ResponseEntity<?> handleNoSuchElementException(NoSuchElementException ex){
-        String message = "Enum constant not exists ";
-
-        int statusCode =  HttpStatus.BAD_REQUEST.value();
-
-        ErrorRespond errorRespond = new ErrorRespond(statusCode,message);
-
-        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
-
-    }
 
     @ExceptionHandler({ConstraintViolateException.class})
-    public ResponseEntity<?> handleConstraintViolateException(ConstraintViolateException ex){
+    protected ResponseEntity<?> handleConstraintViolateException(ConstraintViolateException ex){
 
         String message = ex.getMessage();
         int statusCode = HttpStatus.BAD_REQUEST.value();
@@ -67,7 +59,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
             errors.put(fieldName, errorMessage);
         });
-        ErrorRespond error = new ErrorRespond(400, "Validation Error", errors);
+
+        int statusCode = HttpStatus.BAD_REQUEST.value();
+        String message = "Validation Error";
+        ErrorRespond error = new ErrorRespond(statusCode,message , errors);
         return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
     }
 
@@ -80,24 +75,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class})
-    protected ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex){
-        int statusCode = HttpStatus.BAD_REQUEST.value();
-        String message = "VALUE NOT AVAILABLE";
 
-        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
-        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({ApiDeniedException.class})
-    protected ResponseEntity<?> handleApiDeniedException(ApiDeniedException ex){
-        int statusCode = HttpStatus.FORBIDDEN.value();
-        String message = ex.getMessage();
+    @ExceptionHandler({DisabledException.class})
+    protected ResponseEntity<?> handleDisableException(DisabledException disabledException){
+        int statusCode = HttpStatus.UNAUTHORIZED.value();
+        String message = "Account has been disable !!!";
 
         ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
 
-        return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorRespond, HttpStatus.UNAUTHORIZED);
     }
-
-
 }

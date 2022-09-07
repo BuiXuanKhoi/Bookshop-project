@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddBookRequest {
+public class BookRequestDTO {
 
     @Pattern(regexp = "[A-Za-z]+")
     private String bookName;

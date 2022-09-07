@@ -5,7 +5,7 @@ import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.Location;
 import com.example.ecommerce_web.model.UserState;
-import com.example.ecommerce_web.model.dto.request.CreateUserRequest;
+import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.request.EmailDetail;
 import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
@@ -34,7 +34,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -74,17 +73,18 @@ public class AuthServiceImpl implements AuthService {
     public LoginRespondDTO login(LoginRequestDTO loginRequestDTO) {
 
         Users users = this.userRepository.findUserByUserName(loginRequestDTO.getUserName()).get();
+        String loginUserName = loginRequestDTO.getUserName();
+        String userName = users.getUserName();
+        String loginPassword = loginRequestDTO.getPassword();
+        String password = users.getPassword();
+        UserState userState = users.getUserState();
 
-        if(!loginRequestDTO.getUserName().equals(users.getUserName())){
+        if(!loginUserName.equals(userName)){
             throw new ResourceNotFoundException("Account Not Exist !!!!");
         }
 
-        if (!encoder.matches(loginRequestDTO.getPassword(), users.getPassword())){
+        if (!encoder.matches(loginPassword, password)){
             throw new ResourceNotFoundException("Wrong password !!!");
-        }
-
-        if(users.getUserState().equals(UserState.BLOCK)){
-            throw new ConstraintViolateException("User has been blocked. Cannot login !!!");
         }
 
         Authentication authentication = authenticationManager.authenticate(
@@ -112,19 +112,19 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> signup(CreateUserRequest createUserRequest) {
-        Users users = createUser(createUserRequest);
-        Information information = createInformation(createUserRequest, users);
+    public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
+        Users users = createUser(userRequestDTO);
+        Information information = createInformation(userRequestDTO, users);
         String receiver = information.getEmail();
         this.userRepository.save(users);
         this.informationRepository.save(information);
 
-        sendEmail( receiver);
+        sendEmail(receiver);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
 
-    public void sendEmail( String receiver){
+    public void sendEmail(String receiver){
         String message = "Thanks for join our E-commerce project. Your password here: " +  password +
                 ". Please change your password after login.";
         String subject = "Welcome Join Us !";
@@ -133,10 +133,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    public Users createUser(CreateUserRequest createUserRequest){
-        String roleName = createUserRequest.getRole();
-        Date dateOfBirth = createUserRequest.getDateOfBirth();
-        String userName = createUserRequest.getUserName();
+    public Users createUser(UserRequestDTO userRequestDTO){
+        String roleName = userRequestDTO.getRole();
+        Date dateOfBirth = userRequestDTO.getDateOfBirth();
+        String userName = userRequestDTO.getUserName();
         String password = generatePassword(userName, dateOfBirth);
         Role role = roleRepository.getRoleByRoleName(roleName);
         Date lockTime = new Date();
@@ -149,23 +149,14 @@ public class AuthServiceImpl implements AuthService {
         return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
     }
 
-    public Information createInformation(CreateUserRequest createUserRequest, Users users){
-        Information information = modelMapper.map(createUserRequest, Information.class);
+    public Information createInformation(UserRequestDTO userRequestDTO, Users users){
+        Information information = modelMapper.map(userRequestDTO, Information.class);
         information.setCreateDate(new Date());
         information.setUsers(users);
 
-        String location = createUserRequest.getAddress();
-
-        switch (location){
-            case "HN" :
-                information.setAddress(Location.HN);
-                break;
-            case "HCM" :
-                information.setAddress(Location.HCM);
-                break;
-            default:
-                throw new ResourceNotFoundException("That Location Not Available !!!");
-        }
+        String location = userRequestDTO.getAddress();
+        Location address = Location.getLocation(location);
+        information.setAddress(address);
 
         return information;
     }

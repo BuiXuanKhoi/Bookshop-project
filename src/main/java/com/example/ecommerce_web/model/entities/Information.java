@@ -48,15 +48,4 @@ public class Information {
 
     @Column(name = "update_date")
     private Date updateDate;
-
-    public Information( String lastName, String firstName, Date dayOfBirth, String email, Location address, String phoneNumber, Date createDate, Date updateDate){
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.dateOfBirth = dayOfBirth;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-    }
 }

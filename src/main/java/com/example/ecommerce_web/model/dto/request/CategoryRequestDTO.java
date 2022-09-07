@@ -10,7 +10,9 @@ import net.bytebuddy.implementation.bind.annotation.BindingPriority;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddCategoryDTO {
+public class CategoryRequestDTO {
+
+
     private String categoryName;
 
     private String categoryDescription;

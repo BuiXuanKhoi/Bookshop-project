@@ -2,10 +2,8 @@ package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.BookState;
-import com.example.ecommerce_web.model.UserState;
-import com.example.ecommerce_web.model.dto.request.AddBookRequest;
-import com.example.ecommerce_web.model.dto.request.DeleteBookDTO;
-import com.example.ecommerce_web.model.dto.request.EditBookDTO;
+import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
+import com.example.ecommerce_web.model.dto.request.ModifyBookRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
@@ -23,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
@@ -91,10 +88,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> addNewBook(AddBookRequest addBookRequest) {
+    public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO) {
 
-        int listClassifiesId[] = addBookRequest.getListCategory();
-        int authorId = addBookRequest.getAuthorId();
+        int listClassifiesId[] = bookRequestDTO.getListCategory();
+        int authorId = bookRequestDTO.getAuthorId();
         String userName = userLocal.getLocalUserName();
 
         List<Classify> classifyList = Arrays.stream(listClassifiesId)
@@ -113,7 +110,7 @@ public class BookServiceImpl implements BookService {
         );
 
 
-        Books books = modelMapper.map(addBookRequest, Books.class);
+        Books books = modelMapper.map(bookRequestDTO, Books.class);
         books.setClassifies(classifyList);
         books.setAuthors(authorOptional.get());
         books.setBookState(BookState.AVAILABLE);
@@ -205,60 +202,39 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public ResponseEntity<?> editBook(EditBookDTO editBookDTO){
+    public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO){
 
-        int bookID = editBookDTO.getBookID();
+        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
 
-        String bookName = editBookDTO.getBookName();
+        booksOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Book Not Found With ID: " + bookId)
+        );
 
-        float bookPrice = editBookDTO.getBookPrice();
+        Books books = booksOptional.get();
 
-        int bookQuantity = editBookDTO.getBookQuantity();
+        modelMapper.map(modifyBookRequestDTO, books);
 
-        String bookDescription = editBookDTO.getBookDescription();
+        String state = modifyBookRequestDTO.getState();
+        BookState bookState = BookState.getState(state);
+        books.setBookState(bookState);
 
-        String bookState = editBookDTO.getBookState();
-
-        Optional<Books> chosenBook = this.bookRepository.findById(bookID);
-
-        Books newBook = chosenBook.get();
-
-        newBook.setBookName(bookName);
-
-        newBook.setBookPrice(bookPrice);
-
-        newBook.setQuantity(bookQuantity);
-
-        newBook.setDescription(bookDescription);
-
-        newBook.setBookPrice(bookPrice);
-
-
-        switch(bookState){
-            case "UNAVAILABLE":
-                newBook.setBookState(BookState.UNAVAILABLE);
-                break;
-            case "AVAILABLE":
-                newBook.setBookState(BookState.AVAILABLE);
-                break;
-            case "OUT_OF_STOCK":
-                newBook.setBookState(BookState.OUT_OF_STOCK);
-                break;
-            case "EXPIRED":
-                newBook.setBookState(BookState.EXPIRED);
-                break;
-            default:
-                throw new ResourceNotFoundException("NOT FOUND ENUM VALUE !!!");
-        }
+        this.bookRepository.save(books);
         return  ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Book successfully !!!"));
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> deleteBook(DeleteBookDTO deleteBookDTO){
-        int bookID = deleteBookDTO.getBookID();
+    public ResponseEntity<?> deleteBook(int bookId){
 
-        this.bookRepository.deleteById(bookID);
+        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
+
+        booksOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Not Found Books With ID: " + bookId)
+        );
+
+        Books books = booksOptional.get();
+
+        this.bookRepository.delete(books);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Delete Book successfully !!!"));
     }

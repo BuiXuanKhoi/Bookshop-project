@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.security.service;
 
+import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.entities.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,24 +18,28 @@ public class UserDetail implements UserDetails {
     private String userName;
     private String userPassword;
     private Collection<? extends GrantedAuthority> authorities;
+    private UserState userState;
 
     public UserDetail(int userId, String userName,
-                      String userPassword, Collection<? extends GrantedAuthority> authorities) {
+                      String userPassword, Collection<? extends GrantedAuthority> authorities, UserState userState) {
         this.userId = userId;
         this.userName = userName;
         this.userPassword = userPassword;
         this.authorities = authorities;
+        this.userState = userState;
     }
 
     public static UserDetail init(Users users){
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(users.getRole().getRoleName()));
+        users.getUserState();
 
         return new UserDetail(
                 users.getUserId(),
                 users.getUserName(),
                 users.getPassword(),
-                authorities
+                authorities,
+                users.getUserState()
         );
     }
 
@@ -57,6 +62,10 @@ public class UserDetail implements UserDetails {
         return userId;
     }
 
+    public UserState getUserState() {
+        return userState;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -74,6 +83,6 @@ public class UserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return userState.equals(UserState.UNBLOCK);
     }
 }

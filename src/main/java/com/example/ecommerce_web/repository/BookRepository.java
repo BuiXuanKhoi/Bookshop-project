@@ -29,8 +29,6 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "and " +
             "cls.category.categoryId in :filter ")
     Page<BookFeatureRespondDTO> getPageBook(Pageable pageable, String searchCode, int[] filter);
-
-    int deleteByBookId(int bookID);
 }
 
 

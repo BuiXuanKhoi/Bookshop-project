@@ -1,15 +1,12 @@
 package com.example.ecommerce_web.service;
 
-import com.example.ecommerce_web.model.dto.request.AddBookRequest;
-import com.example.ecommerce_web.model.dto.request.DeleteBookDTO;
-import com.example.ecommerce_web.model.dto.request.EditBookDTO;
+import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
+import com.example.ecommerce_web.model.dto.request.ModifyBookRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
+import com.example.ecommerce_web.model.entities.Books;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 public interface BookService {
 
@@ -21,9 +18,9 @@ public interface BookService {
 
 
 
-    public ResponseEntity<?> addNewBook(AddBookRequest addBookRequest);
+    public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO);
 
-    public ResponseEntity<?> editBook(EditBookDTO editBookDTO);
+    public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
 
-    public ResponseEntity<?> deleteBook(DeleteBookDTO deleteBookDTO);
+    public ResponseEntity<?> deleteBook(int bookId);
 }

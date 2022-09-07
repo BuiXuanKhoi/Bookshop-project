@@ -84,10 +84,6 @@ public class UserServiceImpl implements UserService {
 
         Users users = usersOptional.get();
 
-        if(users.getRole().getRoleName().equals("ADMIN")){
-            throw new ApiDeniedException("Only admin can block users !!!");
-        }
-
         Date now = new Date();
 
         long lockUntil = now.getTime() + THREE_DAY;

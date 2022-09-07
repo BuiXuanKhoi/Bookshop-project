@@ -1,6 +1,6 @@
 package com.example.ecommerce_web.controller;
 
-import com.example.ecommerce_web.model.dto.request.AddCartItemRequest;
+import com.example.ecommerce_web.model.dto.request.CartItemRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.CartItemRespondDTO;
 import com.example.ecommerce_web.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +21,8 @@ public class CartController {
     }
 
     @PostMapping
-    public CartItemRespondDTO addToCart(@RequestBody AddCartItemRequest addCartItemRequest){
-        return this.cartItemService.addToCart(addCartItemRequest);
+    public CartItemRespondDTO addToCart(@RequestBody CartItemRequestDTO cartItemRequestDTO){
+        return this.cartItemService.addToCart(cartItemRequestDTO);
     }
 
     @GetMapping

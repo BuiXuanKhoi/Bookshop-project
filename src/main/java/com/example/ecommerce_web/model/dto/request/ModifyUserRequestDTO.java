@@ -30,11 +30,4 @@ public class ModifyUserRequestDTO {
 //    @Pattern(regexp = "[A-Za-z0-9]+@[a-zA-Z0-9]{6}", message = "Invalid Email Address")
     @Email(message = "Invalid Email Address")
     private String email;
-
-    @NotNull(message = "username cannot be null")
-    private String userName;
-
-    private Date createDate;
-
-    private Date updateDate;
 }

@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.model.Location;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
@@ -14,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -40,29 +42,17 @@ public class InformationServiceImpl implements InformationService {
     }
 
     @Override
-    public ResponseEntity<?> modifyInformation(ModifyUserRequestDTO modifyRequestDTO) {
+    public ResponseEntity<?> modifyInformation(ModifyUserRequestDTO modifyUserRequestDTO) {
 
-        String userName = modifyRequestDTO.getUserName();
+        String userName = userLocal.getLocalUserName();
+        Users users = this.userRepository.findUserByUserName(userName).get();
+        Information information = users.getInformation();
+        String address = modifyUserRequestDTO.getAddress();
+        Location location = Location.getLocation(address);
 
-        Information information = modelMapper.map(modifyRequestDTO,Information.class);
-
-        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
-
-        Users users = usersOptional.get();
-
-        Date createDate = users.getInformation().getCreateDate();
-
-        int informationGetID = users.getInformation().getInformationId();
-
-        Date updateDay = new Date();
-
-        information.setCreateDate(createDate);
-
-        information.setInformationId(informationGetID);
-
-        information.setUpdateDate(updateDay);
-
-        information.setUsers(users);
+        modelMapper.map(modifyUserRequestDTO, information);
+        information.setUpdateDate(new Date());
+        information.setAddress(location);
 
         this.informationRepository.save(information);
 
