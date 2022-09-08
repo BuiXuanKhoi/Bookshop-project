@@ -113,16 +113,9 @@ public class OrdersServiceImpl implements OrdersService {
         Orders orders = ordersOptional.get();
 
         OrderState orderState = orders.getOrderState();
+        OrderState nextOrderState = OrderState.nextState(orderState);
 
-        switch (orderState)
-        {
-            case PREPARED -> orders.setOrderState(OrderState.PACKAGED);
-            case PACKAGED -> orders.setOrderState(OrderState.DELIVERED);
-            case DELIVERED -> orders.setOrderState(OrderState.RECEIVED);
-            case RECEIVED -> orders.setOrderState(OrderState.COMPLETED);
-            case COMPLETED -> throw new ResourceNotFoundException("Completed is the final state !!!");
-            default -> throw new ResourceNotFoundException("State Not Available !!!");
-        }
+        orders.setOrderState(nextOrderState);
 
         this.ordersRepository.save(orders);
 
