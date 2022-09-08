@@ -30,7 +30,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public ResponseEntity<?> addAuthor(Author author){
-        author = new Author(author.getAuthorName());
 
         this.authorRepository.save(author);
 

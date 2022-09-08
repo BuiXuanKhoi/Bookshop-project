@@ -22,8 +22,8 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     @Query(value = "select NEW com.example.ecommerce_web.model.dto.respond.UserRespondDTO( " +
             "usa.userId, usa.userName, inf.email, inf.address, inf.createDate, inf.updateDate," +
             "inf.firstName, inf.lastName,inf.phoneNumber, usa.role.roleName) " +
-            "from Users usa" +
-            " join usa.information inf"
+            "from Users usa " +
+            "join usa.information inf"
             )
     Page<UserRespondDTO> getPageUser(Pageable pageable);
 

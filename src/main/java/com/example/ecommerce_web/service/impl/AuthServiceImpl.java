@@ -92,9 +92,14 @@ public class AuthServiceImpl implements AuthService {
             throw new ResourceNotFoundException("Wrong password !!!");
         }
 
-        if(lockTime.getTime() < now.getTime()){
-            this.userService.unblockUser(users.getUserId());
+        if (lockTime != null)
+        {
+            if(lockTime.getTime() < now.getTime())
+            {
+                this.userService.unblockUser(users.getUserId());
+            }
         }
+
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())

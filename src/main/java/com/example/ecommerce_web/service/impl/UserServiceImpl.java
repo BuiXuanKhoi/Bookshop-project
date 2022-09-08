@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> blockUser(int userId) {
-        long THREE_DAY = 259200000;
+        long THREE_MINUTES = 180000; // You can waiting for 3 minutes and log in again, the account will be available.
         Optional<Users> usersOptional = this.userRepository.findById(userId);
 
         usersOptional.orElseThrow(
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
         Date now = new Date();
 
-        long lockUntil = now.getTime() + THREE_DAY;
+        long lockUntil = now.getTime() + THREE_MINUTES;
 
         users.setUserState(UserState.BLOCK);
         users.setLockTime(new Date(lockUntil));
