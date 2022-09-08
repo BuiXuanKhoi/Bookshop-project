@@ -16,8 +16,6 @@ public interface BookService {
     BookRespondDTO getBookDetail(int bookId);
 
 
-
-
     public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO);
 
     public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);

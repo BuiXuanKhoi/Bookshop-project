@@ -42,11 +42,14 @@ public class BookServiceImpl implements BookService {
     UserRepository userRepository;
     UserLocal userLocal;
     CategoryRepository categoryRepository;
+    FeedbackRepository feedbackRepository;
+
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper
             , AuthorService authorService, ClassifyRepository classifyRepository
-            , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal, CategoryRepository categoryRepository) {
+            , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal,
+                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository) {
         this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
         this.authorService = authorService;
@@ -55,6 +58,7 @@ public class BookServiceImpl implements BookService {
         this.userRepository = userRepository;
         this.userLocal = userLocal;
         this.categoryRepository = categoryRepository;
+        this.feedbackRepository = feedbackRepository;
     }
 
 
@@ -90,6 +94,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO) {
 
+
         int listClassifiesId[] = bookRequestDTO.getListCategory();
         int authorId = bookRequestDTO.getAuthorId();
         String userName = userLocal.getLocalUserName();
@@ -110,12 +115,18 @@ public class BookServiceImpl implements BookService {
         );
 
 
+
         Books books = modelMapper.map(bookRequestDTO, Books.class);
         books.setClassifies(classifyList);
         books.setAuthors(authorOptional.get());
         books.setBookState(BookState.AVAILABLE);
         books.setCreateDay(new Date());
         books.setUsers(usersOptional.get());
+
+
+        Date createDay = new Date();
+
+        books.setCreateDay(createDay);
 
         Books savedBook = this.bookRepository.save(books);
 

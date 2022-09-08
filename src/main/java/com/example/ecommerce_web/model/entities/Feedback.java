@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.apache.catalina.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.awt.print.Book;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ public class Feedback {
 
     @Column(name = "create_day")
     private Date createDay;
+
 
     @Column(name =  "rating_points")
     private float ratingPoint;

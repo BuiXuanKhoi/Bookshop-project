@@ -4,12 +4,16 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
-import com.example.ecommerce_web.model.entities.Information;
+import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,6 +39,13 @@ public class UserController {
         return this.userService.changePassword(changePasswordRequestDTO);
     }
 
+    @GetMapping("/listuser")
+    public Page<UserRespondDTO> getUserList(
+            @RequestParam(name = "page",required = false,defaultValue = "0") String page){
+        int pageConvert = Integer.parseInt(page);
+        return this.userService.getUserList(pageConvert);
+    }
+
     @GetMapping
     public InformationRespondDTO getInformationDetail(){
         return this.informationService.getDetailInformation();
@@ -45,4 +56,6 @@ public class UserController {
         return this.userService.blockUser(id);
     }
 
+    @PutMapping(value = "/{id}/state")
+    public ResponseEntity<?>  unblockUser(@PathVariable("id") int id) {return this.userService.unblockUser(id);}
 }

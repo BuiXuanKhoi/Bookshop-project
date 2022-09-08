@@ -1,10 +1,11 @@
 package com.example.ecommerce_web.service.impl;
 
-import com.example.ecommerce_web.exceptions.ApiDeniedException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
+import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
+import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
@@ -15,14 +16,21 @@ import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -97,5 +105,36 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(messageRespond);
     }
 
+    @Override
+    public ResponseEntity<?> unblockUser(int userID){
 
+
+        Optional<Users> usersOptional = this.userRepository.findById(userID);
+
+        usersOptional.orElseThrow(
+                () -> new ResourceNotFoundException("Not Found User with ID:" + userID)
+        );
+
+        Users users = usersOptional.get();
+
+        users.setUserState(UserState.UNBLOCK);
+
+        this.userRepository.save(users);
+
+        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "User has been unblocked !!!"));
+    }
+
+    // ---------------------------------------- Get user list -----------------------------------------------------
+    @Override
+    public Page<UserRespondDTO> getUserList(int page){
+
+        Pageable pageable = PageRequest.of(page,10);
+
+        Page<UserRespondDTO> userList = this.userRepository.getPageUser(pageable);
+
+        if(userList.hasContent()){
+            return userList;
+        }
+        throw new ResourceNotFoundException("Not found user !!!");
+    }
 }

@@ -25,4 +25,8 @@ public class Author {
     @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY)
     private List<Books> books;
 
+    public Author(String authorName){
+        this.authorName = authorName;
+    }
+
 }

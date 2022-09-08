@@ -18,10 +18,16 @@ public class BookRequestDTO {
     private float bookPrice;
 
     private String imageLink;
+
     private String description;
+
     private int quantity;
+
     private int[] listCategory;
+
+
     private int authorId;
+
     private int creator;
 
 }
