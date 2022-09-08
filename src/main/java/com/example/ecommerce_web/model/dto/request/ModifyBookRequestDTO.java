@@ -1,13 +1,12 @@
 package com.example.ecommerce_web.model.dto.request;
 
 import com.example.ecommerce_web.model.BookState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Enumerated;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyBookRequestDTO {

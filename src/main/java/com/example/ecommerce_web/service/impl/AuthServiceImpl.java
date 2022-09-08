@@ -77,7 +77,6 @@ public class AuthServiceImpl implements AuthService {
         String userName = users.getUserName();
         String loginPassword = loginRequestDTO.getPassword();
         String password = users.getPassword();
-        UserState userState = users.getUserState();
 
         if(!loginUserName.equals(userName)){
             throw new ResourceNotFoundException("Account Not Exist !!!!");
@@ -99,8 +98,8 @@ public class AuthServiceImpl implements AuthService {
 
 
         String roleName = userDetail.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList()).get(0);
+                                                     .map(item -> item.getAuthority())
+                                                     .collect(Collectors.toList()).get(0);
 
         return new LoginRespondDTO(
                 userDetail.getUserId(),
@@ -124,7 +123,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
 
-    public void sendEmail(String receiver){
+    private void sendEmail(String receiver){
         String message = "Thanks for join our E-commerce project. Your password here: " +  password +
                 ". Please change your password after login.";
         String subject = "Welcome Join Us !";
@@ -133,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
-    public Users createUser(UserRequestDTO userRequestDTO){
+    private Users createUser(UserRequestDTO userRequestDTO){
         String roleName = userRequestDTO.getRole();
         Date dateOfBirth = userRequestDTO.getDateOfBirth();
         String userName = userRequestDTO.getUserName();
@@ -149,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
         return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
     }
 
-    public Information createInformation(UserRequestDTO userRequestDTO, Users users){
+    private Information createInformation(UserRequestDTO userRequestDTO, Users users){
         Information information = modelMapper.map(userRequestDTO, Information.class);
         information.setCreateDate(new Date());
         information.setUsers(users);
@@ -161,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
         return information;
     }
 
-    public String generatePassword(String userName, Date dateOfBirth){
+    private String generatePassword(String userName, Date dateOfBirth){
         String birth = myDateUtil.getStringDate(dateOfBirth);
         birth = birth.replaceAll("/", "");
         password = userName + "@" + birth;

@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page) {
         int[] listFilter;
-
+        Pageable pageable = createPage(page, mode);
 
         if(filter.equals("0"))
         {
@@ -76,9 +76,6 @@ public class BookServiceImpl implements BookService {
             listFilter = Arrays.stream(filter.split(","))
                     .mapToInt(Integer::parseInt).toArray();
         }
-
-        Pageable pageable = createPage(page, mode);
-
 
         Page<BookFeatureRespondDTO> listBookFeature = this.bookRepository.getPageBook(pageable, searchCode, listFilter);
 
