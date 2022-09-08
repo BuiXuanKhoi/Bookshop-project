@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     @Query(value = "select NEW com.example.ecommerce_web.model.dto.respond.UserRespondDTO( " +
             "usa.userId, usa.userName, inf.email, inf.address, inf.createDate, inf.updateDate," +
-            "inf.firstName, inf.lastName,inf.phoneNumber, usa.role.roleName) " +
+            "inf.firstName, inf.lastName,inf.phoneNumber, usa.role.roleName, usa.userState) " +
             "from Users usa " +
             "join usa.information inf"
             )

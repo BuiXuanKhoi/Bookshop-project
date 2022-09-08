@@ -36,4 +36,6 @@ public class UserRespondDTO {
     private String userPhoneNumber;
 
     private String roleName;
+
+    private UserState userState;
 }
