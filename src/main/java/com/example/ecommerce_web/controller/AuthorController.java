@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.controller;
 
+import com.example.ecommerce_web.model.dto.respond.AuthorRespondDTO;
 import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.service.AuthorService;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class AuthorController {
     }
 
     @GetMapping
-    public List<Author> getListAuthor(){
+    public List<AuthorRespondDTO> getListAuthor(){
         return this.authorService.getListAuthor();
     }
 }

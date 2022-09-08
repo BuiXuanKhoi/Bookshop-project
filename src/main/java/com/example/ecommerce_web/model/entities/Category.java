@@ -22,11 +22,9 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
-    @JsonProperty("description")
     @Column(name = "category_description")
     private String categoryDescription;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Classify> classifies;
 

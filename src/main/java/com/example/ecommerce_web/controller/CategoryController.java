@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.controller;
 
 
+import com.example.ecommerce_web.model.dto.respond.CategoryRespondDTO;
 import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getListCategory(){
+    public List<CategoryRespondDTO> getListCategory(){
         return this.categoryService.getListCategory();
     }
 }

@@ -24,7 +24,6 @@ public class Author {
     private String authorName;
 
     @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY)
-    @JsonIgnore
     private List<Books> books;
 
     public Author(String authorName){
