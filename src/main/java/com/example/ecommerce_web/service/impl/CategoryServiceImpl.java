@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
@@ -26,4 +28,10 @@ public class CategoryServiceImpl implements CategoryService {
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "New category has been added !!!"));
     }
+
+    @Override
+    public List<Category> getListCategory() {
+        return this.categoryRepository.findAll();
+    }
+
 }

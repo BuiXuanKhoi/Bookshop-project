@@ -19,14 +19,4 @@ public class MyDateUtil {
     public String getStringTime(Date date){
         return timeFormat.format(date);
     }
-
-//    public Date getDateFromDate(String date) {
-//        try
-//        {
-//            return dateFormat.parse(date);
-//        }
-//        catch (ParseException exception){
-//
-//        }
-//    }
 }

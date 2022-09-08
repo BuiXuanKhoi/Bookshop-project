@@ -3,10 +3,9 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.service.AuthorService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/author")
@@ -18,7 +17,12 @@ public class AuthorController {
     }
 
     @PostMapping
-    ResponseEntity<?> addAuthor(@RequestBody Author author){
+    public ResponseEntity<?> addAuthor(@RequestBody Author author){
         return this.authorService.addAuthor(author);
+    }
+
+    @GetMapping
+    public List<Author> getListAuthor(){
+        return this.authorService.getListAuthor();
     }
 }

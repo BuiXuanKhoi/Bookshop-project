@@ -1,5 +1,7 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -20,9 +22,11 @@ public class Category {
     @Column(name = "category_name")
     private String categoryName;
 
+    @JsonProperty("description")
     @Column(name = "category_description")
     private String categoryDescription;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Classify> classifies;
 

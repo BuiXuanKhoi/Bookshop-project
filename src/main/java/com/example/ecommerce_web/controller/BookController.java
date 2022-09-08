@@ -47,10 +47,10 @@ public class BookController {
         return this.bookService.deleteBook(bookId);
     }
 
-    @PostMapping("/category")
-    public ResponseEntity<?> addCategory(@RequestBody Category category){
-        return this.categoryService.addCategory(category);
-    }
+//    @PostMapping("/category")
+//    public ResponseEntity<?> addCategory(@RequestBody Category category){
+//        return this.categoryService.addCategory(category);
+//    }
 
     @GetMapping
     public Page<BookFeatureRespondDTO> getPageBook(

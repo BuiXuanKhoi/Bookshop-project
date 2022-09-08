@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.repository.AuthorRepository;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.http.HttpRequest;
+import java.util.List;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -19,10 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    @Override
-    public Author addNewAuthor(Author author) {
-        return this.authorRepository.save(author);
-    }
+
 
     @Override
     public ResponseEntity<?> addAuthor(Author author){
@@ -32,4 +31,17 @@ public class AuthorServiceImpl implements AuthorService {
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "New author has been added !!!"));
     }
+
+    @Override
+    public List<Author> getListAuthor() {
+        List<Author> listAuthor = this.authorRepository.findAll();
+
+        if(listAuthor.isEmpty()){
+            throw new ResourceNotFoundException("Don't have any author available !!!");
+        }
+
+        return listAuthor;
+    }
+
+
 }

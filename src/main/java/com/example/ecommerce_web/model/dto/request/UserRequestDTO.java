@@ -15,7 +15,6 @@ public class UserRequestDTO {
 
     @NotNull(message = "username cannot be null")
     @NotBlank(message = "username cannot be blank")
-    @NotEmpty(message = "username cannot be empty")
     private String userName;
 
     @NotNull(message = "phone number cannot be null")

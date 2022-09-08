@@ -20,6 +20,7 @@ import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
 import com.example.ecommerce_web.service.AuthService;
 import com.example.ecommerce_web.service.EmailService;
+import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
     EmailService emailService;
+    UserService userService;
 
     String password = "";
 
@@ -56,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            InformationRepository informationRepository, MyDateUtil myDateUtil,
                            ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService
+                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService, UserService userService
                            ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -67,6 +69,7 @@ public class AuthServiceImpl implements AuthService {
         this.encoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
+        this.userService = userService;
     }
 
     @Override
@@ -77,6 +80,9 @@ public class AuthServiceImpl implements AuthService {
         String userName = users.getUserName();
         String loginPassword = loginRequestDTO.getPassword();
         String password = users.getPassword();
+        Date lockTime = users.getLockTime();
+        Date now = new Date();
+
 
         if(!loginUserName.equals(userName)){
             throw new ResourceNotFoundException("Account Not Exist !!!!");
@@ -84,6 +90,10 @@ public class AuthServiceImpl implements AuthService {
 
         if (!encoder.matches(loginPassword, password)){
             throw new ResourceNotFoundException("Wrong password !!!");
+        }
+
+        if(lockTime.getTime() < now.getTime()){
+            this.userService.unblockUser(users.getUserId());
         }
 
         Authentication authentication = authenticationManager.authenticate(

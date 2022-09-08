@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Author {
     private String authorName;
 
     @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Books> books;
 
     public Author(String authorName){

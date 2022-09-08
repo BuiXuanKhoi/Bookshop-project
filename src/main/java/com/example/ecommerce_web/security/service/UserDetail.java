@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class UserDetail implements UserDetails {
@@ -19,6 +20,7 @@ public class UserDetail implements UserDetails {
     private String userPassword;
     private Collection<? extends GrantedAuthority> authorities;
     private UserState userState;
+    private  Date lockTime;
 
     public UserDetail(int userId, String userName,
                       String userPassword, Collection<? extends GrantedAuthority> authorities, UserState userState) {
@@ -51,6 +53,10 @@ public class UserDetail implements UserDetails {
     @Override
     public String getPassword() {
         return userPassword;
+    }
+
+    public void setLockTime(Date lockTime) {
+        this.lockTime = lockTime;
     }
 
     @Override
