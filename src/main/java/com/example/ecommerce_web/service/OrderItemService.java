@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderItemService {
 
-    OrderItems createOrderItem(CartItem cartItem);
+    OrderItems create(CartItem cartItem);
 
     void saveOrderItemWith(Orders orders, List<OrderItems> orderItemsList);
 }

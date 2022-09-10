@@ -1,7 +1,9 @@
 package com.example.ecommerce_web.service;
 
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
+import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
+import com.example.ecommerce_web.model.entities.Users;
 import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +21,6 @@ public interface UserService {
     ResponseEntity<?> unblockUser(int userId);
 
     Page<UserRespondDTO> getUserList(int page);
+
+    Users createUser(UserRequestDTO userRequestDTO);
 }

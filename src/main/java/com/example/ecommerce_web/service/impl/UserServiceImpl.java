@@ -1,12 +1,16 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
+import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
 import com.example.ecommerce_web.model.entities.Information;
+import com.example.ecommerce_web.model.entities.Role;
 import com.example.ecommerce_web.model.entities.Users;
+import com.example.ecommerce_web.repository.RoleRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserLocal;
@@ -43,11 +47,12 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtUtils;
     UserLocal userLocal;
     EmailService emailService;
+    RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil, ModelMapper modelMapper,
                            AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils,
-                           UserLocal userLocal, @Qualifier("googleEmail") EmailService emailService
+                           UserLocal userLocal, @Qualifier("googleEmail") EmailService emailService, RoleRepository roleRepository
                            ) {
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
@@ -56,6 +61,7 @@ public class UserServiceImpl implements UserService {
         this.encoder = encoder;
         this.userLocal = userLocal;
         this.emailService = emailService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -139,5 +145,29 @@ public class UserServiceImpl implements UserService {
             return userList;
         }
         throw new ResourceNotFoundException("Not found user !!!");
+    }
+
+    @Override
+    public Users createUser(UserRequestDTO userRequestDTO) {
+        String roleName = userRequestDTO.getRole();
+        Date dateOfBirth = userRequestDTO.getDateOfBirth();
+        String userName = userRequestDTO.getUserName();
+        String password = generatePassword(userName, dateOfBirth);
+        Role role = roleRepository.getRoleByRoleName(roleName);
+        Date lockTime = new Date();
+
+        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
+
+        if(usersOptional.isPresent()){
+            throw new ConstraintViolateException("User name already exist !!!!");
+        }
+        return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
+    }
+
+    private String generatePassword(String userName, Date dateOfBirth){
+        String birth = myDateUtil.getStringDate(dateOfBirth);
+        birth = birth.replaceAll("/", "");
+        String password = userName + "@" + birth;
+        return password;
     }
 }

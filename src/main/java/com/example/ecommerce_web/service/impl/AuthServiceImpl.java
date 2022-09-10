@@ -20,6 +20,7 @@ import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
 import com.example.ecommerce_web.service.AuthService;
 import com.example.ecommerce_web.service.EmailService;
+import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
@@ -51,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
     JwtUtils jwtUtils;
     EmailService emailService;
     UserService userService;
+    InformationService informationService;
 
     String password = "";
 
@@ -58,7 +60,8 @@ public class AuthServiceImpl implements AuthService {
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            InformationRepository informationRepository, MyDateUtil myDateUtil,
                            ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService, UserService userService
+                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService,
+                           UserService userService, InformationService informationService
                            ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -70,6 +73,7 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.emailService = emailService;
         this.userService = userService;
+        this.informationService = informationService;
     }
 
     @Override
@@ -82,7 +86,6 @@ public class AuthServiceImpl implements AuthService {
         String password = users.getPassword();
         Date lockTime = users.getLockTime();
         Date now = new Date();
-
 
         if(!loginUserName.equals(userName)){
             throw new ResourceNotFoundException("Account Not Exist !!!!");
@@ -100,11 +103,9 @@ public class AuthServiceImpl implements AuthService {
             }
         }
 
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
         );
-
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
@@ -127,58 +128,26 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
-        Users users = createUser(userRequestDTO);
-        Information information = createInformation(userRequestDTO, users);
+        Users users = userService.createUser(userRequestDTO);
+        String password = users.getPassword();
+        String passwordEncode = encoder.encode(password);
+        users.setPassword(passwordEncode);
+        Users savedUser = this.userRepository.save(users);
+
+        Information information = informationService.createInformationByExistedUser(userRequestDTO, savedUser);
         String receiver = information.getEmail();
-        this.userRepository.save(users);
         this.informationRepository.save(information);
 
-        sendEmail(receiver);
+        sendEmailPassword(receiver, password);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
 
-    private void sendEmail(String receiver){
+    private void sendEmailPassword(String receiver, String password){
         String message = "Thanks for join our E-commerce project. Your password here: " +  password +
                 ". Please change your password after login.";
         String subject = "Welcome Join Us !";
         EmailDetail emailDetail = new EmailDetail(receiver, message, subject);
         emailService.sendEmail(emailDetail);
-    }
-
-
-    private Users createUser(UserRequestDTO userRequestDTO){
-        String roleName = userRequestDTO.getRole();
-        Date dateOfBirth = userRequestDTO.getDateOfBirth();
-        String userName = userRequestDTO.getUserName();
-        String password = generatePassword(userName, dateOfBirth);
-        Role role = roleRepository.getRoleByRoleName(roleName);
-        Date lockTime = new Date();
-
-        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
-
-        if(usersOptional.isPresent()){
-            throw new ConstraintViolateException("User name already exist !!!!");
-        }
-        return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
-    }
-
-    private Information createInformation(UserRequestDTO userRequestDTO, Users users){
-        Information information = modelMapper.map(userRequestDTO, Information.class);
-        information.setCreateDate(new Date());
-        information.setUsers(users);
-
-        String location = userRequestDTO.getAddress();
-        Location address = Location.getLocation(location);
-        information.setAddress(address);
-
-        return information;
-    }
-
-    private String generatePassword(String userName, Date dateOfBirth){
-        String birth = myDateUtil.getStringDate(dateOfBirth);
-        birth = birth.replaceAll("/", "");
-        password = userName + "@" + birth;
-        return encoder.encode(password);
     }
 }

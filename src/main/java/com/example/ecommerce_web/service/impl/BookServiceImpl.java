@@ -12,6 +12,7 @@ import com.example.ecommerce_web.repository.*;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
+import com.example.ecommerce_web.service.ClassifyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,13 +44,14 @@ public class BookServiceImpl implements BookService {
     UserLocal userLocal;
     CategoryRepository categoryRepository;
     FeedbackRepository feedbackRepository;
+    ClassifyService classifyService;
 
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper
             , AuthorService authorService, ClassifyRepository classifyRepository
             , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal,
-                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository) {
+                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository, ClassifyService classifyService) {
         this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
         this.authorService = authorService;
@@ -59,6 +61,7 @@ public class BookServiceImpl implements BookService {
         this.userLocal = userLocal;
         this.categoryRepository = categoryRepository;
         this.feedbackRepository = feedbackRepository;
+        this.classifyService = classifyService;
     }
 
 
@@ -77,7 +80,7 @@ public class BookServiceImpl implements BookService {
                     .mapToInt(Integer::parseInt).toArray();
         }
 
-        Page<BookFeatureRespondDTO> listBookFeature = this.bookRepository.getPageBook(pageable, searchCode, listFilter);
+        Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter);
 
         if (listBookFeature.hasContent()){
             return listBookFeature;
@@ -91,18 +94,16 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO) {
 
-
-        int listClassifiesId[] = bookRequestDTO.getListCategory();
+        Date createDay = new Date();
+        int listCategoryId[] = bookRequestDTO.getListCategory();
         int authorId = bookRequestDTO.getAuthorId();
         String userName = userLocal.getLocalUserName();
-
-        List<Classify> classifyList = Arrays.stream(listClassifiesId)
-                .boxed().map(id -> getClassification(id)).collect(Collectors.toList());
-
         Optional<Author> authorOptional = this.authorRepository.findById(authorId);
         Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
 
-
+        List<Classify> classifyList = Arrays.stream(listCategoryId)
+                                            .boxed().map(id -> classifyService.createClassify(id))
+                                            .collect(Collectors.toList());
         usersOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Creator Not Found !!!")
         );
@@ -111,19 +112,15 @@ public class BookServiceImpl implements BookService {
                 () -> new ResourceNotFoundException("Not Found Author !!!")
         );
 
-
+        Author author = authorOptional.get();
+        Users creators = usersOptional.get();
 
         Books books = modelMapper.map(bookRequestDTO, Books.class);
         books.setClassifies(classifyList);
-        books.setAuthors(authorOptional.get());
+        books.setAuthors(author);
         books.setBookState(BookState.AVAILABLE);
-        books.setCreateDay(new Date());
-        books.setUsers(usersOptional.get());
-
-
-        Date createDay = new Date();
-
         books.setCreateDay(createDay);
+        books.setUsers(creators);
 
         Books savedBook = this.bookRepository.save(books);
 
@@ -158,19 +155,6 @@ public class BookServiceImpl implements BookService {
         bookRespondDTO.setCategoryName(categoryNameList);
         return bookRespondDTO;
     }
-
-
-
-    public Classify getClassification(int categoryId){
-       Optional<Category> categoryOptional = this.categoryRepository.findById(categoryId);
-
-       categoryOptional.orElseThrow(
-               () -> new ResourceNotFoundException("Category Not Exist !!!!")
-       );
-
-       Classify classify = new Classify(0,null, categoryOptional.get());
-       return this.classifyRepository.save(classify) ;
-   }
 
     private Pageable createPage(int page, String sortBy){
         Sort sort;
@@ -213,18 +197,17 @@ public class BookServiceImpl implements BookService {
     public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO){
 
         Optional<Books> booksOptional = this.bookRepository.findById(bookId);
+        String state = modifyBookRequestDTO.getState();
+        BookState bookState = BookState.getState(state);
 
         booksOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Book Not Found With ID: " + bookId)
         );
 
         Books books = booksOptional.get();
-
         modelMapper.map(modifyBookRequestDTO, books);
-
-        String state = modifyBookRequestDTO.getState();
-        BookState bookState = BookState.getState(state);
         books.setBookState(bookState);
+        books.setUpdateDay(new Date());
 
         this.bookRepository.save(books);
         return  ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Book successfully !!!"));
@@ -241,7 +224,6 @@ public class BookServiceImpl implements BookService {
         );
 
         Books books = booksOptional.get();
-
         this.bookRepository.delete(books);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Delete Book successfully !!!"));

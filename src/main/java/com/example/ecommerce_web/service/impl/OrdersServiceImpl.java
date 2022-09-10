@@ -66,21 +66,20 @@ public class OrdersServiceImpl implements OrdersService {
             throw new ResourceNotFoundException("You don't have any cart item to pay ");
         }
 
-        List<OrderItems> listOrderItems = transferFromCart(listCarItem);
+        List<OrderItems> listOrderItems = listCarItem.stream()
+                                                     .map(cartItem -> orderItemService.create(cartItem))
+                                                     .collect(Collectors.toList());
         Orders orders = new Orders();
-
         orders.setUsers(users);
         orders.setOrderItems(listOrderItems);
         orders.setOrderState(OrderState.PREPARED);
         Orders savedOrder = this.ordersRepository.save(orders);
 
-        this.orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
-        this.cartItemRepository.deleteCartItemByUsers(users.getUserId());
+        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
 
+        listCarItem.stream().forEach(cartItem -> cartItemRepository.delete(cartItem));
 
         OrderRespondDTO orderRespondDTO = new OrderRespondDTO(orders);
-
-
         return orderRespondDTO;
     }
 
@@ -123,16 +122,4 @@ public class OrdersServiceImpl implements OrdersService {
         return ResponseEntity.ok(messageRespond);
     }
 
-    public List<OrderItems> transferFromCart(List<CartItem> listCartItem){
-
-        List<OrderItems> listOrderItems = new ArrayList<>();
-
-        for(CartItem cartItem : listCartItem)
-        {
-            OrderItems orderItems = this.orderItemService.createOrderItem(cartItem);
-            listOrderItems.add(orderItems);
-        }
-
-        return listOrderItems;
-    }
 }

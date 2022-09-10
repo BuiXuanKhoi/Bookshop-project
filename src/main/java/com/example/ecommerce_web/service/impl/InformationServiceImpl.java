@@ -2,6 +2,7 @@ package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.model.Location;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
+import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Information;
@@ -69,5 +70,18 @@ public class InformationServiceImpl implements InformationService {
         Information information = this.informationRepository.getInformationByUsers(userId);
 
         return modelMapper.map(information, InformationRespondDTO.class);
+    }
+
+    @Override
+    public Information createInformationByExistedUser(UserRequestDTO userRequestDTO, Users users) {
+        Information information = modelMapper.map(userRequestDTO, Information.class);
+        information.setCreateDate(new Date());
+        information.setUsers(users);
+
+        String location = userRequestDTO.getAddress();
+        Location address = Location.getLocation(location);
+        information.setAddress(address);
+
+        return information;
     }
 }

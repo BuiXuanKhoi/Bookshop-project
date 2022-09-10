@@ -1,13 +1,12 @@
 package com.example.ecommerce_web.security.jwt;
 
-import com.example.ecommerce_web.exceptions.UnAuthorizationException;
 import com.example.ecommerce_web.security.service.UserDetail;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -41,34 +40,37 @@ public class JwtUtils {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String authToken)
+    public boolean validateToken(String authToken, HttpServletRequest request)
     {
-        try {
+        try
+        {
             Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(authToken);
             return true;
         }
         catch (SignatureException signature)
         {
-            throw new UnAuthorizationException("Invalid JWT Signature :" + signature.getMessage());
+            request.setAttribute("invalid signature", signature.getMessage());
         }
         catch (MalformedJwtException malformException)
         {
-            throw new UnAuthorizationException("Invalid Jwt Token :"+ malformException.getMessage());
+            request.setAttribute("invalid jwt", malformException.getMessage());
         }
         catch (ExpiredJwtException expiredException)
         {
-            throw new UnAuthorizationException("JWT Token is expired :" + expiredException.getMessage());
+            request.setAttribute("expired", expiredException.getMessage());
         }
         catch (UnsupportedJwtException unsupportException)
         {
-            throw new UnAuthorizationException("JWT Token is unsupported: "+ unsupportException.getMessage());
+            request.setAttribute("unsupported", unsupportException.getMessage());
         }
         catch (IllegalArgumentException jwtEmtyException)
         {
-            throw new UnAuthorizationException("JWT Token is Empty: "+ jwtEmtyException.getMessage());
+            request.setAttribute("empty", jwtEmtyException.getMessage());
         }
-        catch (Exception e) {
-            throw new UnAuthorizationException("Please Log in");
+        catch (Exception e)
+        {
+            return false;
         }
+        return false;
     }
 }
