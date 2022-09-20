@@ -16,13 +16,6 @@
     padding: 14px 16px;
     text-decoration: none;
 }
-.background-box{
-    overflow: hidden;
-    background: white;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-}
 
 .first-box{
     overflow: hidden;
@@ -31,17 +24,13 @@
     width: 40%;
     position: fixed;
 }
-.hexagon{
-    width: 30%;
-    height: 15%;
-    display: flex;
+.second-box{
+    overflow: hidden;
     background: whitesmoke;
-    margin-top: 20%;
-    margin-left: 50%;
-    transform: translate(-50%,-50%);
-}
-.hexagon:before,
-.hexagon:after{
+    height: 100%;
+    width: 60%;
+    margin-left: 40%;
+    position: fixed;
 
 }
 
