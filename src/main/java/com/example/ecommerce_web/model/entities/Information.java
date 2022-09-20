@@ -1,14 +1,18 @@
 package com.example.ecommerce_web.model.entities;
 
 
-import com.example.ecommerce_web.model.Location;
+import com.example.ecommerce_web.constant.Location;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,8 +48,10 @@ public class Information {
     private String lastName;
 
     @Column(name = "create_date")
+    @CreationTimestamp
     private Date createDate;
 
     @Column(name = "update_date")
+    @UpdateTimestamp
     private Date updateDate;
 }

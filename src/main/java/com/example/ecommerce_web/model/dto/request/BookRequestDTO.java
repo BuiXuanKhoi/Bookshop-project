@@ -24,9 +24,9 @@ public class BookRequestDTO {
 
     private int[] listCategory;
 
-
     private int authorId;
 
     private int creator;
 
+    private String state;
 }

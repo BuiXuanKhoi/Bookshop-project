@@ -7,19 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Basic;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
 @Transactional
-public interface CartItemRepository extends JpaRepository<CartItem, Integer>{
+public interface CartItemRepository extends BasicRepository<CartItem> {
 
     @Query(value = "select * from cart_items where user_id = :userId and book_id = :bookId", nativeQuery = true)
     Optional<CartItem> getCartItemByBooksAndUsers(int userId, int bookId);
-
-
-    @Modifying
-    @Query(value = "delete from cart_items where user_id = :userId", nativeQuery = true)
-    void deleteCartItemByUsers(int userId);
-
 }

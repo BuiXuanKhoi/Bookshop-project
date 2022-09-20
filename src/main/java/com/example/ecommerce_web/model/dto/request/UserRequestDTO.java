@@ -1,8 +1,6 @@
 package com.example.ecommerce_web.model.dto.request;
 
-import com.example.ecommerce_web.model.Location;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.util.Date;

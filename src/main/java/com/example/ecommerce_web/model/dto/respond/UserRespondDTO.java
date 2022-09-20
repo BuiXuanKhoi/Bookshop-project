@@ -1,18 +1,16 @@
 package com.example.ecommerce_web.model.dto.respond;
 
 
-import com.example.ecommerce_web.model.Location;
-import com.example.ecommerce_web.model.UserState;
-import com.example.ecommerce_web.model.entities.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.ecommerce_web.constant.Location;
+import com.example.ecommerce_web.constant.Role;
+import com.example.ecommerce_web.constant.UserState;
+import lombok.*;
 
 import java.util.Date;
 
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRespondDTO {
@@ -35,7 +33,7 @@ public class UserRespondDTO {
 
     private String userPhoneNumber;
 
-    private String roleName;
+    private Role roleName;
 
     private UserState userState;
 }

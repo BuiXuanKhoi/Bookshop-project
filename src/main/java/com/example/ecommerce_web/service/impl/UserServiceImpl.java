@@ -2,15 +2,13 @@ package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-import com.example.ecommerce_web.model.UserState;
+import com.example.ecommerce_web.constant.Role;
+import com.example.ecommerce_web.constant.UserState;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
-import com.example.ecommerce_web.model.entities.Information;
-import com.example.ecommerce_web.model.entities.Role;
 import com.example.ecommerce_web.model.entities.Users;
-import com.example.ecommerce_web.repository.RoleRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserLocal;
@@ -29,12 +27,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.util.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -46,13 +40,11 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
     UserLocal userLocal;
-    EmailService emailService;
-    RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil, ModelMapper modelMapper,
                            AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils,
-                           UserLocal userLocal, @Qualifier("googleEmail") EmailService emailService, RoleRepository roleRepository
+                           UserLocal userLocal
                            ) {
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
@@ -60,8 +52,21 @@ public class UserServiceImpl implements UserService {
         this.authenticationManager = authenticationManager;
         this.encoder = encoder;
         this.userLocal = userLocal;
-        this.emailService = emailService;
-        this.roleRepository = roleRepository;
+    }
+
+    public Users findById(int id){
+        return this.userRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Not Found User With ID: " + id)
+                );
+    }
+
+
+    @Override
+    public Users findByUserName(String userName) {
+        return this.userRepository.findUserByUserName(userName)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Not Found User With Name: " + userName));
     }
 
     @Override
@@ -69,44 +74,34 @@ public class UserServiceImpl implements UserService {
 
         String newPassword = changePasswordRequestDTO.getNewPassword();
         String oldPassword = changePasswordRequestDTO.getOldPassword();
-
         String userName = userLocal.getLocalUserName();
-
-        Optional<Users> users= this.userRepository.findUserByUserName(userName);
-
-        Users optionalUsers = users.get();
-        String validPassword = optionalUsers.getPassword();
-
+        Users users = this.userRepository.findUserByUserName(userName).get();
+        String validPassword = users.getPassword();
 
         if(!encoder.matches(oldPassword,validPassword)) {
            throw new ResourceNotFoundException("Password is wrong !!!!");
         }
 
         newPassword = encoder.encode(newPassword);
-        optionalUsers.setPassword(newPassword);
-        this.userRepository.save(optionalUsers);
+        users.setPassword(newPassword);
+        this.userRepository.save(users);
 
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Your password has been updated !!!"));
     }
 
     @Override
     public ResponseEntity<?> blockUser(int userId) {
-        long THREE_MINUTES = 180000; // You can waiting for 3 minutes and log in again, the account will be available.
-        Optional<Users> usersOptional = this.userRepository.findById(userId);
+        long THREE_MINUTES = 180000;
+        // Because of fast testing, You just have to waiting for 3 minutes and log in again, the account will be available again.
 
-        usersOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found User With ID: " + userId)
-        );
-
-        Users users = usersOptional.get();
+        Users users = this.userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("Not Found User With ID: " + userId));
 
         Date now = new Date();
-
         long lockUntil = now.getTime() + THREE_MINUTES;
 
         users.setUserState(UserState.BLOCK);
         users.setLockTime(new Date(lockUntil));
-
         this.userRepository.save(users);
 
         MessageRespond messageRespond = new MessageRespond( HttpStatus.OK.value(),"Block User Successfully !!!!");
@@ -116,14 +111,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> unblockUser(int userID){
 
-
-        Optional<Users> usersOptional = this.userRepository.findById(userID);
-
-        usersOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found User with ID:" + userID)
-        );
-
-        Users users = usersOptional.get();
+        Users users = findById(userID);
 
         users.setUserState(UserState.UNBLOCK);
         users.setLockTime(null);
@@ -149,11 +137,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users createUser(UserRequestDTO userRequestDTO) {
-        String roleName = userRequestDTO.getRole();
         Date dateOfBirth = userRequestDTO.getDateOfBirth();
         String userName = userRequestDTO.getUserName();
+        String roleName = userRequestDTO.getRole();
         String password = generatePassword(userName, dateOfBirth);
-        Role role = roleRepository.getRoleByRoleName(roleName);
+        Role role = Role.getRole(roleName);
         Date lockTime = new Date();
 
         Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
@@ -163,6 +151,7 @@ public class UserServiceImpl implements UserService {
         }
         return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
     }
+
 
     private String generatePassword(String userName, Date dateOfBirth){
         String birth = myDateUtil.getStringDate(dateOfBirth);

@@ -4,8 +4,10 @@ import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.AuthorRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Author;
+import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.repository.AuthorRepository;
 import com.example.ecommerce_web.service.AuthorService;
+import com.example.ecommerce_web.validator.ListValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,36 +21,28 @@ import java.util.stream.Collectors;
 public class AuthorServiceImpl implements AuthorService {
 
     AuthorRepository authorRepository;
-    ModelMapper modelMapper;
 
-    public AuthorServiceImpl(AuthorRepository authorRepository, ModelMapper modelMapper) {
+    public AuthorServiceImpl(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.modelMapper = modelMapper;
-    }
-
-
-
-    @Override
-    public ResponseEntity<?> addAuthor(Author author){
-
-        this.authorRepository.save(author);
-
-        return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "New author has been added !!!"));
     }
 
     @Override
-    public List<AuthorRespondDTO> getListAuthor() {
+    public Author add(Author author){
+        return this.authorRepository.save(author);
+    }
+
+    @Override
+    public Author getById(int id) {
+        return this.authorRepository.findById(id)
+                                    .orElseThrow(
+                             () -> new ResourceNotFoundException("Not Found Author with ID: " + id));
+    }
+
+    @Override
+    public List<Author> getListAuthor() {
         List<Author> listAuthor = this.authorRepository.findAll();
+        return ListValidator.ofList(listAuthor).ifNotEmpty();
 
-        if(listAuthor.isEmpty()){
-            throw new ResourceNotFoundException("Don't have any author available !!!");
-        }
-
-        List<AuthorRespondDTO> listAuthorRespond = listAuthor.stream()
-                                                             .map(author -> modelMapper.map(author, AuthorRespondDTO.class))
-                                                             .collect(Collectors.toList());
-
-        return listAuthorRespond;
     }
 
 

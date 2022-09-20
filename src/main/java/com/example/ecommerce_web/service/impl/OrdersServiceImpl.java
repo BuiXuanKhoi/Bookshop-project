@@ -1,15 +1,11 @@
 package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-import com.example.ecommerce_web.model.OrderState;
-import com.example.ecommerce_web.model.dto.respond.CartItemRespondDTO;
+import com.example.ecommerce_web.mapper.OrderMapper;
+import com.example.ecommerce_web.constant.OrderState;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
-import com.example.ecommerce_web.model.dto.respond.OrderItemRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.OrderRespondDTO;
-import com.example.ecommerce_web.model.entities.CartItem;
-import com.example.ecommerce_web.model.entities.OrderItems;
-import com.example.ecommerce_web.model.entities.Orders;
-import com.example.ecommerce_web.model.entities.Users;
+import com.example.ecommerce_web.model.entities.*;
 import com.example.ecommerce_web.repository.CartItemRepository;
 import com.example.ecommerce_web.repository.OrderItemsRepository;
 import com.example.ecommerce_web.repository.OrdersRepository;
@@ -17,18 +13,16 @@ import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.OrderItemService;
 import com.example.ecommerce_web.service.OrdersService;
+import com.example.ecommerce_web.validator.ListValidator;
+import com.example.ecommerce_web.validator.Validator;
+import org.hibernate.criterion.Order;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -37,27 +31,33 @@ public class OrdersServiceImpl implements OrdersService {
     OrdersRepository ordersRepository;
     UserLocal userLocal;
     UserRepository userRepository;
-    ModelMapper modelMapper;
     OrderItemsRepository orderItemsRepository;
     CartItemRepository cartItemRepository;
     OrderItemService orderItemService;
+    OrderMapper orderMapper;
 
     @Autowired
     public OrdersServiceImpl(OrdersRepository ordersRepository, UserRepository userRepository,
-                             UserLocal userLocal, ModelMapper modelMapper,
+                             UserLocal userLocal,
                              OrderItemsRepository orderItemsRepository,
-                             CartItemRepository cartItemRepository, OrderItemService orderItemService){
+                             CartItemRepository cartItemRepository, OrderItemService orderItemService,
+                             OrderMapper orderMapper){
         this.ordersRepository = ordersRepository;
         this.userLocal = userLocal;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
         this.orderItemsRepository = orderItemsRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderItemService = orderItemService;
+        this.orderMapper = orderMapper;
+    }
+
+    private Orders findById(int id){
+        return this.ordersRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order Not Found With ID: " + id));
     }
 
     @Override
-    public OrderRespondDTO createOrder() {
+    public Orders createOrder() {
         String userName = userLocal.getLocalUserName();
         Users users = this.userRepository.findUserByUserName(userName).get();
         List<CartItem> listCarItem = users.getCartItems();
@@ -74,52 +74,25 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderItems(listOrderItems);
         orders.setOrderState(OrderState.PREPARED);
         Orders savedOrder = this.ordersRepository.save(orders);
-
-        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
-
+//        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
         listCarItem.stream().forEach(cartItem -> cartItemRepository.delete(cartItem));
-
-        OrderRespondDTO orderRespondDTO = new OrderRespondDTO(orders);
-        return orderRespondDTO;
+        return savedOrder;
     }
 
     @Override
-    public List<OrderRespondDTO> getListOrder() {
+    public List<Orders> getListOrder() {
         String userName = userLocal.getLocalUserName();
-        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
-
-        List<Orders> listOrder = usersOptional.map(Users::getOrders).get();
-
-        if(listOrder.isEmpty()){
-            throw new ResourceNotFoundException("You don't have any orders !!!");
-        }
-
-        List<OrderRespondDTO> listOrderRespond = listOrder.stream()
-                                                          .map(OrderRespondDTO::new)
-                                                          .collect(Collectors.toList());
-
-        return listOrderRespond;
+        Users users = this.userRepository.findUserByUserName(userName).get();
+        List<Orders> listOrder = users.getOrders();
+        return ListValidator.ofList(listOrder).ifNotEmpty();
     }
 
     @Override
-    public ResponseEntity<?> updateOrderState(int orderId) {
-        Optional<Orders> ordersOptional = this.ordersRepository.findById(orderId);
-
-        ordersOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Order Not Found With ID: " + orderId)
-        );
-
-        Orders orders = ordersOptional.get();
-
+    public Orders updateOrderState(int orderId) {
+        Orders orders = findById(orderId);
         OrderState orderState = orders.getOrderState();
-        OrderState nextOrderState = OrderState.nextState(orderState);
-
+        OrderState nextOrderState = OrderState.nextOf(orderState);
         orders.setOrderState(nextOrderState);
-
-        this.ordersRepository.save(orders);
-
-        MessageRespond messageRespond = new MessageRespond(HttpStatus.OK.value(), "Order State update successfully !!!");
-        return ResponseEntity.ok(messageRespond);
+        return this.ordersRepository.save(orders);
     }
-
 }

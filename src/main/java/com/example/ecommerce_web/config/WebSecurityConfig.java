@@ -7,6 +7,7 @@ import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import javax.swing.text.html.HTML;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @SuppressWarnings("Deprecated ")
+@ComponentScan
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailServiceImpl userDetailServiceImpl;
@@ -69,25 +71,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**","/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/books/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/author").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/category").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/order").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/authors").permitAll()
+                .antMatchers(HttpMethod.GET,"api/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/users/information").hasAnyAuthority("ADMIN", "CUSTOMER")
+                .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/information").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.PUT,"api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/order/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT,"api/books").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/category").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/categories").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/books/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/order").hasAnyAuthority("CUSTOMER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/carts/**").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE,"api/books").hasAuthority("ADMIN")
-//                .antMatchers(HttpMethod.POST,"api/books/category").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST,"api/author").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET,"api/users/listuser").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"api/authors").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

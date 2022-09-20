@@ -15,12 +15,9 @@ import java.util.List;
 
 public interface UserService {
     ResponseEntity<?> changePassword(ChangePasswordRequestDTO changePasswordRequestDTO);
-
     ResponseEntity<?> blockUser(int userId);
-
     ResponseEntity<?> unblockUser(int userId);
-
     Page<UserRespondDTO> getUserList(int page);
-
     Users createUser(UserRequestDTO userRequestDTO);
+    Users findByUserName(String userName);
 }

@@ -1,11 +1,13 @@
 package com.example.ecommerce_web.service.impl;
 
-import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
+import com.example.ecommerce_web.mapper.CategoryMapper;
 import com.example.ecommerce_web.model.dto.respond.CategoryRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.repository.CategoryRepository;
 import com.example.ecommerce_web.service.CategoryService;
+import com.example.ecommerce_web.validator.ListValidator;
+import com.example.ecommerce_web.validator.Validator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,34 +21,26 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
     ModelMapper modelMapper;
+    CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper){
+    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, CategoryMapper categoryMapper){
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
-    public ResponseEntity<?> addCategory(Category category){
- 
-        this.categoryRepository.save(category);
-
-        return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "New category has been added !!!"));
+    public Category add(Category category){
+        return this.categoryRepository.save(category);
     }
 
     @Override
-    public List<CategoryRespondDTO> getListCategory() {
+    public List<Category> getListCategory() {
         List<Category> listCategory =  this.categoryRepository.findAll();
+        ListValidator<Category> listValidator = ListValidator.ofList(listCategory);
 
-        if(listCategory.isEmpty()){
-            throw new ResourceNotFoundException("There no category available !!!");
-        }
-
-        List<CategoryRespondDTO> listCategoryRespond = listCategory.stream()
-                                                                   .map(category -> modelMapper.map(category, CategoryRespondDTO.class))
-                                                                   .collect(Collectors.toList());
-
-        return listCategoryRespond;
+        return listValidator.ifNotEmpty();
     }
 
 }

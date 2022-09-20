@@ -1,9 +1,6 @@
 package com.example.ecommerce_web.model.dto.request;
 
-import com.example.ecommerce_web.model.BookState;
 import lombok.*;
-
-import javax.persistence.Enumerated;
 
 @Getter
 @Setter

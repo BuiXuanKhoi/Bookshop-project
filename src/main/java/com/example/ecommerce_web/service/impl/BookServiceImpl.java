@@ -1,7 +1,9 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.constant.BookState;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-import com.example.ecommerce_web.model.BookState;
+import com.example.ecommerce_web.mapper.BookMapper;
+import com.example.ecommerce_web.mapper.BookMapperImpl;
 import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyBookRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
@@ -13,6 +15,7 @@ import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.ClassifyService;
+import com.example.ecommerce_web.validator.ListValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -45,13 +45,15 @@ public class BookServiceImpl implements BookService {
     CategoryRepository categoryRepository;
     FeedbackRepository feedbackRepository;
     ClassifyService classifyService;
+    BookMapper bookMapper;
 
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper
             , AuthorService authorService, ClassifyRepository classifyRepository
             , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal,
-                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository, ClassifyService classifyService) {
+                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository,
+                           ClassifyService classifyService, BookMapper bookMapper) {
         this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
         this.authorService = authorService;
@@ -62,11 +64,20 @@ public class BookServiceImpl implements BookService {
         this.categoryRepository = categoryRepository;
         this.feedbackRepository = feedbackRepository;
         this.classifyService = classifyService;
+        this.bookMapper = bookMapper;
+    }
+
+    @Override
+    public Books getById(int id) {
+        return this.bookRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Book Not Found With ID: " + id)
+        );
     }
 
 
     @Override
-    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page) {
+    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page)
+    {
         int[] listFilter;
         Pageable pageable = createPage(page, mode);
 
@@ -92,68 +103,64 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO) {
+    public Books add(BookRequestDTO bookRequestDTO) {
 
-        Date createDay = new Date();
-        int listCategoryId[] = bookRequestDTO.getListCategory();
+        int[] listCategoryId = bookRequestDTO.getListCategory();
         int authorId = bookRequestDTO.getAuthorId();
         String userName = userLocal.getLocalUserName();
-        Optional<Author> authorOptional = this.authorRepository.findById(authorId);
-        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
+        Users users = this.userRepository.findUserByUserName(userName).get();
+
+        Author author = authorRepository.findById(authorId)
+                                        .orElseThrow(
+                                                () -> new ResourceNotFoundException("Not Found Author Witd ID: " + authorId)
+                                        );
 
         List<Classify> classifyList = Arrays.stream(listCategoryId)
-                                            .boxed().map(id -> classifyService.createClassify(id))
+                                            .boxed()
+                                            .map(id -> classifyService.createClassify(id))
                                             .collect(Collectors.toList());
-        usersOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Creator Not Found !!!")
-        );
-
-        authorOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found Author !!!")
-        );
-
-        Author author = authorOptional.get();
-        Users creators = usersOptional.get();
 
         Books books = modelMapper.map(bookRequestDTO, Books.class);
+
         books.setClassifies(classifyList);
         books.setAuthors(author);
+        books.setUsers(users);
         books.setBookState(BookState.AVAILABLE);
-        books.setCreateDay(createDay);
-        books.setUsers(creators);
-
         Books savedBook = this.bookRepository.save(books);
+        classifyList.stream().forEach(classify -> classifyService.updateClassifyWithBook(classify, savedBook));
 
-        classifyList.forEach(classify -> {
-            classify.setBooks(savedBook);
-            this.classifyRepository.save(classify);
-        });
+        return savedBook;
+    }
 
-        return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Add New Book Successfully !!!"));
+
+    @Override
+    @Transactional
+    public void delete(int bookId){
+        Books books = getById(bookId);
+        this.bookRepository.delete(books);
     }
 
     @Override
-    public BookRespondDTO getBookDetail(int bookId) {
-        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
+    public Books update(int bookId, ModifyBookRequestDTO request) {
+        Books books = getById(bookId);
+        Books mappedBook = bookMapper.toExistedBooks(request, books);
+        return this.bookRepository.save(mappedBook);
+    }
 
-        booksOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found Book With ID: " + bookId)
-        );
+    @Override
+    public List<Books> findTopPopular() {
+        return null;
+    }
 
-        Books books = booksOptional.get();
-        String authorName = books.getAuthors().getAuthorName();
-
-        List<Classify> classifyList = books.getClassifies();
-
-        List<String> categoryNameList = classifyList.stream()
-                                                    .map(Classify::getCategory)
-                                                    .map(Category::getCategoryName)
-                                                    .collect(Collectors.toList());
-
-        BookRespondDTO bookRespondDTO = modelMapper.map(books, BookRespondDTO.class);
-        bookRespondDTO.setAuthorName(authorName);
-        bookRespondDTO.setCategoryName(categoryNameList);
-        return bookRespondDTO;
+    @Override
+    public List<Books> findTopRecommend() {
+        List<Books> listBookRecommend = this.bookRepository.findAll();
+        ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
+        return listBookValid.ifNotEmpty()
+                            .stream()
+                            .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
+                            .skip(10)
+                            .collect(Collectors.toList());
     }
 
     private Pageable createPage(int page, String sortBy){
@@ -191,42 +198,6 @@ public class BookServiceImpl implements BookService {
         }
 
         return PageRequest.of(page, 20, sort);
-    }
-
-    @Override
-    public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO){
-
-        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
-        String state = modifyBookRequestDTO.getState();
-        BookState bookState = BookState.getState(state);
-
-        booksOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Book Not Found With ID: " + bookId)
-        );
-
-        Books books = booksOptional.get();
-        modelMapper.map(modifyBookRequestDTO, books);
-        books.setBookState(bookState);
-        books.setUpdateDay(new Date());
-
-        this.bookRepository.save(books);
-        return  ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Update Book successfully !!!"));
-    }
-
-    @Override
-    @Transactional
-    public ResponseEntity<?> deleteBook(int bookId){
-
-        Optional<Books> booksOptional = this.bookRepository.findById(bookId);
-
-        booksOptional.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found Books With ID: " + bookId)
-        );
-
-        Books books = booksOptional.get();
-        this.bookRepository.delete(books);
-
-        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Delete Book successfully !!!"));
     }
 
 }

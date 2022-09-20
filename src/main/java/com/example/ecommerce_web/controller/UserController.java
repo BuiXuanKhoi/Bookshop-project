@@ -1,10 +1,12 @@
 package com.example.ecommerce_web.controller;
 
 
+import com.example.ecommerce_web.mapper.InformationMapper;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
+import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +23,20 @@ public class UserController {
 
     UserService userService;
     InformationService informationService;
+    InformationMapper informationMapper;
 
 
     @Autowired
-    public UserController(UserService userService,   InformationService informationService) {
+    public UserController(UserService userService,   InformationService informationService, InformationMapper informationMapper) {
         this.userService = userService;
         this.informationService = informationService;
+        this.informationMapper = informationMapper;
     }
 
     @PutMapping ("/information" )
-    public ResponseEntity<?> modifyInformation(@RequestBody ModifyUserRequestDTO modifyUserRequestDTO){
-        return this.informationService.modifyInformation(modifyUserRequestDTO);
+    public InformationRespondDTO modifyInformation(@RequestBody ModifyUserRequestDTO modifyUserRequestDTO){
+        Information information =  this.informationService.update(modifyUserRequestDTO);
+        return informationMapper.toDTO(information);
     }
 
     @PutMapping(value = "/password")
@@ -39,16 +44,17 @@ public class UserController {
         return this.userService.changePassword(changePasswordRequestDTO);
     }
 
-    @GetMapping("/listuser")
+    @GetMapping
     public Page<UserRespondDTO> getUserList(
             @RequestParam(name = "page",required = false,defaultValue = "0") String page){
         int pageConvert = Integer.parseInt(page);
         return this.userService.getUserList(pageConvert);
     }
 
-    @GetMapping
+    @GetMapping("/information")
     public InformationRespondDTO getInformationDetail(){
-        return this.informationService.getDetailInformation();
+        Information information =  this.informationService.getByLocalUser();
+        return informationMapper.toDTO(information);
     }
 
     @PutMapping("/{id}")

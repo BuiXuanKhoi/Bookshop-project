@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.security.service;
 
-import com.example.ecommerce_web.model.UserState;
+import com.example.ecommerce_web.constant.Role;
+import com.example.ecommerce_web.constant.UserState;
 import com.example.ecommerce_web.model.entities.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +34,10 @@ public class UserDetail implements UserDetails {
 
     public static UserDetail init(Users users){
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(users.getRole().getRoleName()));
+        Role userRole = users.getRole();
+        String role = userRole.name();
+
+        authorities.add(new SimpleGrantedAuthority(role));
         users.getUserState();
 
         return new UserDetail(

@@ -8,17 +8,14 @@ import com.example.ecommerce_web.model.entities.Books;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface BookService {
-
     Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page);
-
-
-    BookRespondDTO getBookDetail(int bookId);
-
-
-    public ResponseEntity<?> addNewBook(BookRequestDTO bookRequestDTO);
-
-    public ResponseEntity<?> editBook(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
-
-    public ResponseEntity<?> deleteBook(int bookId);
+    Books getById(int bookId);
+    Books add(BookRequestDTO bookRequestDTO);
+    Books update(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
+    List<Books> findTopPopular();
+    List<Books> findTopRecommend();
+    void delete(int bookId);
 }

@@ -8,11 +8,8 @@ import com.example.ecommerce_web.model.entities.Users;
 import org.springframework.http.ResponseEntity;
 
 public interface InformationService {
-    ResponseEntity<?> modifyInformation(ModifyUserRequestDTO modifyUserRequestDTO);
-
-    InformationRespondDTO getDetailInformation();
-
+    Information update(ModifyUserRequestDTO modifyUserRequestDTO);
     Information createInformationByExistedUser(UserRequestDTO userRequestDTO, Users users);
-
-
+    Information getById(int id);
+    Information getByLocalUser();
 }

@@ -7,8 +7,6 @@ import com.example.ecommerce_web.model.entities.Orders;
 import java.util.List;
 
 public interface OrderItemService {
-
     OrderItems create(CartItem cartItem);
-
     void saveOrderItemWith(Orders orders, List<OrderItems> orderItemsList);
 }

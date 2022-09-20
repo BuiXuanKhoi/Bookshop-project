@@ -22,7 +22,6 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
-        int statusCode = HttpStatus.UNAUTHORIZED.value();
         String message;
         String detail;
 
@@ -57,7 +56,13 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
             detail = null;
         }
 
-        JwtErrorRespond jwtError = new JwtErrorRespond(statusCode, message, detail);
+
+        JwtErrorRespond jwtError = JwtErrorRespond.builder()
+                                                  .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                                  .message(message)
+                                                  .detail(detail)
+                                                  .build();
+
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

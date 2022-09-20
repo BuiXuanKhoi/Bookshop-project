@@ -2,6 +2,7 @@ package com.example.ecommerce_web.exceptions.handler;
 
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
+import com.example.ecommerce_web.exceptions.MethodNotImplementedException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
 import org.springframework.http.HttpHeaders;
@@ -25,10 +26,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ResourceNotFoundException.class})
     protected ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex){
 
-        String message = ex.getMessage();
-        int statusCode = HttpStatus.NOT_FOUND.value();
-
-        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message(ex.getMessage())
+                                                .statusCode(HttpStatus.NOT_FOUND.value())
+                                                .build();
 
         return new ResponseEntity<>(errorRespond, HttpStatus.NOT_FOUND);
     }
@@ -37,10 +38,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({ConstraintViolateException.class})
     protected ResponseEntity<?> handleConstraintViolateException(ConstraintViolateException ex){
 
-        String message = ex.getMessage();
-        int statusCode = HttpStatus.BAD_REQUEST.value();
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message(ex.getMessage())
+                                                .statusCode(HttpStatus.BAD_REQUEST.value())
+                                                .build();
 
-        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
         return new ResponseEntity<>( errorRespond, HttpStatus.BAD_REQUEST);
     }
 
@@ -54,29 +56,45 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        int statusCode = HttpStatus.BAD_REQUEST.value();
-        String message = "Validation Error";
-        ErrorRespond error = new ErrorRespond(statusCode,message , errors);
-        return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message("Validate Error !!!")
+                                                .statusCode(HttpStatus.BAD_REQUEST.value())
+                                                .validateMessage(errors)
+                                                .build();
+
+        return new ResponseEntity<Object>(errorRespond, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({AccessDeniedException.class})
     protected  ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex){
-        int statusCode = HttpStatus.FORBIDDEN.value();
-        String message = "You don't have enough permission to access this api";
 
-        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message("You don't have enough permission to access this api")
+                                                .statusCode(HttpStatus.METHOD_NOT_ALLOWED.value())
+                                                .build();
         return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
     }
 
 
     @ExceptionHandler({DisabledException.class})
     protected ResponseEntity<?> handleDisableException(DisabledException disabledException){
-        int statusCode = HttpStatus.UNAUTHORIZED.value();
-        String message = "Account has been disable !!!";
 
-        ErrorRespond errorRespond = new ErrorRespond(statusCode, message);
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message("Account has been disable !!!")
+                                                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                                .build();
 
         return new ResponseEntity<>(errorRespond, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({MethodNotImplementedException.class})
+    protected ResponseEntity<?> handleMethodNotImplementedException(MethodNotImplementedException ex){
+
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message(ex.getMessage())
+                                                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                                                .build();
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

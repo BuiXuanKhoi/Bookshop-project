@@ -1,16 +1,17 @@
 package com.example.ecommerce_web.model.entities;
 
-import com.example.ecommerce_web.model.UserState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.ecommerce_web.constant.Role;
+import com.example.ecommerce_web.constant.UserState;
+import lombok.*;
 
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,8 +29,8 @@ public class Users {
     @Column(name = "password")
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles")
     private Role role;
 
     @Enumerated(EnumType.STRING)

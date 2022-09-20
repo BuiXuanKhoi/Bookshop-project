@@ -1,18 +1,24 @@
 package com.example.ecommerce_web.model.entities;
 
-import com.example.ecommerce_web.model.BookState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.example.ecommerce_web.constant.BookState;
+import lombok.*;
+import org.hibernate.annotations.*;
+import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@Builder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -25,6 +31,8 @@ public class Books {
     private int bookId;
 
     @Column(name = "book_name")
+    @NotNull
+    @NotBlank(message = "Book name cannot be empty")
     private String bookName;
 
     @Column(name = "book_price")
@@ -32,6 +40,7 @@ public class Books {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @CreatedBy
     private Users users;
 
     @Column(name = "rating")
@@ -44,9 +53,11 @@ public class Books {
     private String imageLink;
 
     @Column(name = "create_day")
+    @CreationTimestamp
     private Date createDay;
 
     @Column(name = "update_day")
+    @UpdateTimestamp
     private Date updateDay;
 
     @Column(name = "description")
@@ -67,8 +78,15 @@ public class Books {
     private List<CartItem> cartItems;
 
     @OneToMany(mappedBy = "books",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @Fetch(FetchMode.SUBSELECT)
     private List<Classify> classifies;
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "classify",
+//            joinColumns  = @JoinColumn(name = "book_id"),
+//            inverseJoinColumns  = @JoinColumn(name = "category_id")
+//    )
+//    private Set<Category> categories;
 
     @OneToMany(mappedBy = "books", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Feedback> feedbacks;

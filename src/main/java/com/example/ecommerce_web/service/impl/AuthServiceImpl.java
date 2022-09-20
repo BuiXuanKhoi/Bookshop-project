@@ -1,20 +1,15 @@
 package com.example.ecommerce_web.service.impl;
 
 
-import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-import com.example.ecommerce_web.model.Location;
-import com.example.ecommerce_web.model.UserState;
 import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.request.EmailDetail;
 import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Information;
-import com.example.ecommerce_web.model.entities.Role;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.InformationRepository;
-import com.example.ecommerce_web.repository.RoleRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
@@ -43,35 +38,31 @@ import java.util.stream.Collectors;
 public class AuthServiceImpl implements AuthService {
 
     UserRepository userRepository;
-    RoleRepository roleRepository;
     InformationRepository informationRepository;
     MyDateUtil myDateUtil;
     ModelMapper modelMapper;
     AuthenticationManager authenticationManager;
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
-    EmailService emailService;
     UserService userService;
     InformationService informationService;
 
     String password = "";
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+    public AuthServiceImpl(UserRepository userRepository,
                            InformationRepository informationRepository, MyDateUtil myDateUtil,
                            ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager, @Qualifier("googleEmail") EmailService emailService,
+                           AuthenticationManager authenticationManager,
                            UserService userService, InformationService informationService
                            ) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.informationRepository = informationRepository;
         this.myDateUtil = myDateUtil;
         this.modelMapper = modelMapper;
         this.jwtUtils = jwtUtils;
         this.encoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
-        this.emailService = emailService;
         this.userService = userService;
         this.informationService = informationService;
     }
@@ -84,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
         String userName = users.getUserName();
         String loginPassword = loginRequestDTO.getPassword();
         String password = users.getPassword();
-        Date lockTime = users.getLockTime();
+        Optional<Date> lockTime = Optional.ofNullable(users.getLockTime());
         Date now = new Date();
 
         if(!loginUserName.equals(userName)){
@@ -95,13 +86,12 @@ public class AuthServiceImpl implements AuthService {
             throw new ResourceNotFoundException("Wrong password !!!");
         }
 
-        if (lockTime != null)
-        {
-            if(lockTime.getTime() < now.getTime())
-            {
-                this.userService.unblockUser(users.getUserId());
+        if (lockTime.isPresent()){
+            if (lockTime.get().before(now)){
+                userService.unblockUser(users.getUserId());
             }
         }
+
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
@@ -109,7 +99,6 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
-
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
 
 
@@ -117,37 +106,29 @@ public class AuthServiceImpl implements AuthService {
                                                      .map(item -> item.getAuthority())
                                                      .collect(Collectors.toList()).get(0);
 
-        return new LoginRespondDTO(
-                userDetail.getUserId(),
-                userDetail.getUsername(),
-                roleName,
-                jwt,
-                "Bearer"
-        );
+        return LoginRespondDTO.builder()
+                              .role(roleName)
+                              .token(jwt)
+                              .userId(userDetail.getUserId())
+                              .userName(userDetail.getUsername())
+                              .tokenType("Bearer")
+                              .build();
     }
 
     @Override
     public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
         Users users = userService.createUser(userRequestDTO);
+        Information information = informationService.createInformationByExistedUser(userRequestDTO, users);
         String password = users.getPassword();
+        System.out.println(password);
         String passwordEncode = encoder.encode(password);
         users.setPassword(passwordEncode);
-        Users savedUser = this.userRepository.save(users);
-
-        Information information = informationService.createInformationByExistedUser(userRequestDTO, savedUser);
-        String receiver = information.getEmail();
+        this.userRepository.save(users);
         this.informationRepository.save(information);
-
-        sendEmailPassword(receiver, password);
-
+        String receiver = information.getEmail();
+//        emailService.sendEmail(password, receiver);
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
 
-    private void sendEmailPassword(String receiver, String password){
-        String message = "Thanks for join our E-commerce project. Your password here: " +  password +
-                ". Please change your password after login.";
-        String subject = "Welcome Join Us !";
-        EmailDetail emailDetail = new EmailDetail(receiver, message, subject);
-        emailService.sendEmail(emailDetail);
-    }
+
 }

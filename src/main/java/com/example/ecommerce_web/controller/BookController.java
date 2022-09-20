@@ -1,19 +1,27 @@
 package com.example.ecommerce_web.controller;
 
 
+import com.example.ecommerce_web.mapper.BookMapper;
+import com.example.ecommerce_web.mapper.BookMapperImpl;
+import com.example.ecommerce_web.mapper.FeedbackMapper;
 import com.example.ecommerce_web.model.dto.request.*;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Books;
-import com.example.ecommerce_web.model.entities.Category;
+import com.example.ecommerce_web.model.entities.Feedback;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.CategoryService;
 import com.example.ecommerce_web.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
@@ -22,35 +30,38 @@ public class BookController {
     BookService bookService;
     FeedbackService feedbackService;
     CategoryService categoryService;
+    BookMapper bookMapper;
+    FeedbackMapper feedbackMapper;
 
     @Autowired
-    public BookController(BookService bookService, FeedbackService feedbackService,CategoryService categoryService) {
+    public BookController(BookService bookService, FeedbackService feedbackService
+            , CategoryService categoryService, BookMapper bookMapper, FeedbackMapper feedbackMapper) {
         this.bookService = bookService;
         this.feedbackService = feedbackService;
         this.categoryService = categoryService;
+        this.bookMapper = bookMapper;
+        this.feedbackMapper = feedbackMapper;
     }
 
     @PostMapping
-    public ResponseEntity<?> addNewBook(@RequestBody BookRequestDTO bookRequestDTO){
-        return this.bookService.addNewBook(bookRequestDTO);
+    public BookRespondDTO addNewBook(@RequestBody BookRequestDTO bookRequestDTO){
+        Books books = this.bookService.add(bookRequestDTO);
+        return bookMapper.toDTO(books);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editBook(
+    public BookRespondDTO editBook(
             @PathVariable int id,
             @RequestBody ModifyBookRequestDTO modifyBookRequestDTO){
-        return this.bookService.editBook(id, modifyBookRequestDTO);
+        Books books = this.bookService.update(id, modifyBookRequestDTO);
+        return bookMapper.toDTO(books);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable int bookId){
-        return this.bookService.deleteBook(bookId);
+    public ResponseEntity<?> deleteBook(@PathVariable int id){
+        this.bookService.delete(id);
+        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Delete Book successfully !!!"));
     }
-
-//    @PostMapping("/category")
-//    public ResponseEntity<?> addCategory(@RequestBody Category category){
-//        return this.categoryService.addCategory(category);
-//    }
 
     @GetMapping
     public Page<BookFeatureRespondDTO> getPageBook(
@@ -62,16 +73,35 @@ public class BookController {
         return this.bookService.getPageBook(searchCode,filter,mode,pageConverted);
     }
 
-    @PostMapping("/{id}")
+    @GetMapping("/recommend")
+    public List<BookRespondDTO> getListRecommend(){
+        return this.bookService.findTopRecommend()
+                               .stream()
+                               .map(bookMapper::toDTO)
+                               .collect(Collectors.toList());
+    }
+
+    @PostMapping("/{id}/feedbacks")
     public FeedbackRespondDTO giveFeedback(
             @PathVariable("id") int bookId,
             @RequestBody FeedbackRequestDTO feedbackRequestDTO
     ){
-        return this.feedbackService.giveFeedback(feedbackRequestDTO, bookId);
+        Feedback savedFeedback = this.feedbackService.giveFeedback(feedbackRequestDTO, bookId);
+        return feedbackMapper.toDTO(savedFeedback);
+    }
+
+    @GetMapping("/{id}/feedbacks")
+    public List<FeedbackRespondDTO> getListFeedback(@PathVariable int id){
+        List<Feedback> listFeedback = this.feedbackService.getListFeedback(id);
+
+        return listFeedback.stream()
+                           .map(feedbackMapper::toDTO)
+                           .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){
-        return this.bookService.getBookDetail(bookId);
+        Books books =  this.bookService.getById(bookId);
+        return bookMapper.toDTO(books);
     }
 }

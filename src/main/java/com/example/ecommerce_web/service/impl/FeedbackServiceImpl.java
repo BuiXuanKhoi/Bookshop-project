@@ -2,6 +2,7 @@ package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
+import com.example.ecommerce_web.mapper.FeedbackMapper;
 import com.example.ecommerce_web.model.dto.request.FeedbackRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
 import com.example.ecommerce_web.model.entities.Books;
@@ -11,65 +12,76 @@ import com.example.ecommerce_web.repository.BookRepository;
 import com.example.ecommerce_web.repository.FeedbackRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
+import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.FeedbackService;
+import com.example.ecommerce_web.service.UserService;
+import com.example.ecommerce_web.validator.ListValidator;
+import com.example.ecommerce_web.validator.Validator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
     FeedbackRepository feedbackRepository;
     UserLocal userLocal;
-    BookRepository bookRepository;
     ModelMapper modelMapper;
-    UserRepository userRepository;
+    FeedbackMapper feedbackMapper;
+    BookService bookService;
+    UserService userService;
 
     @Autowired
     public FeedbackServiceImpl(FeedbackRepository feedbackRepository, UserLocal userLocal,
-                               BookRepository bookRepository, ModelMapper modelMapper, UserRepository userRepository){
+                                ModelMapper modelMapper
+            ,  FeedbackMapper feedbackMapper, BookService bookService, UserService userService){
         this.feedbackRepository = feedbackRepository;
         this.userLocal = userLocal;
-        this.bookRepository = bookRepository;
         this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
+        this.feedbackMapper = feedbackMapper;
+        this.bookService = bookService;
+        this.userService = userService;
     }
 
 
     @Override
-    public FeedbackRespondDTO giveFeedback(FeedbackRequestDTO feedbackRequestDTO, int bookId) {
-
+    public Feedback giveFeedback(FeedbackRequestDTO feedbackRequestDTO, int bookId) {
         String userName = userLocal.getLocalUserName();
-        Date now = new Date();
-        Feedback feedback = modelMapper.map(feedbackRequestDTO, Feedback.class);
-        Users users = this.userRepository.findUserByUserName(userName).get();
-        Optional<Books> books = this.bookRepository.findById(bookId);
+        Users users = userService.findByUserName(userName);
+        Books books = bookService.getById(bookId);
+        Feedback feedback = feedbackMapper.fromDTO(feedbackRequestDTO);
 
-        books.orElseThrow(
-                () -> new ResourceNotFoundException("Not Found Book With ID: " + bookId )
-        );
-
-        Optional<Feedback> existedFeedback = this.feedbackRepository.getFeedbackByUserAndBook(bookId, users.getUserId());
-
-        if(existedFeedback.isPresent()){
-            throw new ConstraintViolateException("User cannot rating an book two times !!!");
-        }
-
-
-
-        feedback.setBooks(books.get());
+        List<Feedback> listFeedbackUser = users.getFeedbacks();
+        feedback.setBooks(books);
         feedback.setUsers(users);
-        feedback.setCreateDay(now);
 
-        Feedback savedFeedback = this.feedbackRepository.save(feedback);
+        ifNotExistThenContinue(listFeedbackUser, books);
 
-        FeedbackRespondDTO feedbackRespond = modelMapper.map(savedFeedback, FeedbackRespondDTO.class);
-        feedbackRespond.setUserName(userName);
+        return this.feedbackRepository.save(feedback);
+    }
 
-        return feedbackRespond;
+    @Override
+    public List<Feedback> getListFeedback(int bookId) {
+        Books books = bookService.getById(bookId);
+        List<Feedback> listFeedback = books.getFeedbacks();
+        ListValidator<Feedback> listFeebackValidator = ListValidator.ofList(listFeedback);
+        return listFeebackValidator.ifNotEmpty();
+    }
+
+    private void ifNotExistThenContinue(List<Feedback> listFeedbackUser, Books books){
+        listFeedbackUser.stream()
+                .filter(feedback1 -> feedback1.getBooks().equals(books))
+                .findAny()
+                .ifPresent(s ->
+                {
+                    throw new ConstraintViolateException("User cannot rating an book two times !!!");
+                });
     }
 }

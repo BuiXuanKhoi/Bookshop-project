@@ -1,15 +1,13 @@
 package com.example.ecommerce_web.model.dto.respond;
 
 import com.example.ecommerce_web.model.entities.Users;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class InformationRespondDTO {

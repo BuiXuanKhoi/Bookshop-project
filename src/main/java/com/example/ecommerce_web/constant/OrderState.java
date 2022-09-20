@@ -1,10 +1,6 @@
-package com.example.ecommerce_web.model;
+package com.example.ecommerce_web.constant;
 
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
-
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 public enum OrderState {
         PREPARED("PREPARED"),
@@ -19,7 +15,7 @@ public enum OrderState {
                 this.state = state;
         }
 
-        public static OrderState nextState(OrderState orderState){
+        public static OrderState nextOf(OrderState orderState){
 
                 switch (orderState)
                 {

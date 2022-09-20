@@ -2,10 +2,7 @@ package com.example.ecommerce_web.model.dto.respond;
 
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.CartItem;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemRespondDTO {

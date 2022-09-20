@@ -1,9 +1,9 @@
 package com.example.ecommerce_web.model.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.catalina.User;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -11,7 +11,9 @@ import java.awt.print.Book;
 import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -28,6 +30,7 @@ public class Feedback {
     private String comment;
 
     @Column(name = "create_day")
+    @CreationTimestamp
     private Date createDay;
 
 

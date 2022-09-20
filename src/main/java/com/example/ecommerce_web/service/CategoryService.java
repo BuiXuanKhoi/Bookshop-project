@@ -9,10 +9,6 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import java.util.List;
 
 public interface CategoryService {
-
-//    public ResponseEntity<?> addCategory(AddCategoryDTO addCategoryDTO);
-    public ResponseEntity<?> addCategory(Category category);
-
-    List<CategoryRespondDTO> getListCategory();
-
+    Category add(Category category);
+    List<Category> getListCategory();
 }

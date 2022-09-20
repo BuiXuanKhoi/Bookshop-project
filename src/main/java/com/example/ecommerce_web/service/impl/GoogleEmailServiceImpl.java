@@ -12,43 +12,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-@Service
-@Qualifier("googleEmail")
+//
+//@Service
+//@Qualifier("googleEmail")
 public class GoogleEmailServiceImpl implements EmailService {
 
-    @Value("${spring.mail.username}")
-    private String sender;
+//    @Value("${spring.mail.username}")
+//    private String sender;
 
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    public GoogleEmailServiceImpl(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+//    private JavaMailSender javaMailSender;
+//
+//    @Autowired
+//    public GoogleEmailServiceImpl(JavaMailSender javaMailSender) {
+//        this.javaMailSender = javaMailSender;
+//    }
 
     @Override
-    public ResponseEntity<?> sendEmail(EmailDetail emailDetail) {
-        try {
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-            String subject = emailDetail.getSubject();
-            String message = emailDetail.getMessage();
-            String receiver = emailDetail.getRecipient();
-
-            mailMessage.setSubject(subject);
-            mailMessage.setTo(receiver);
-            mailMessage.setFrom(sender);
-            mailMessage.setText(message);
-
-            javaMailSender.send(mailMessage);
+    public ResponseEntity<?> sendEmail(String password, String receiver) {
+//            SimpleMailMessage mailMessage = new SimpleMailMessage();
+//
+//            String message = "Thanks for join our E-commerce project. Your password here: " +  password +
+//                ". Please change your password after login.";
+//            String subject = "Welcome Join Us !";
+//
+//            mailMessage.setSubject(subject);
+//            mailMessage.setTo(receiver);
+//            mailMessage.setFrom(sender);
+//            mailMessage.setText(message);
+//            javaMailSender.send(mailMessage);
 
             return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Email Sent Success !!!"));
-        }
-        catch (Exception e)
-        {
-            throw new ResourceNotFoundException(e.getMessage());
-        }
+
+
     }
 }

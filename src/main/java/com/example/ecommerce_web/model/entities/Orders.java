@@ -1,14 +1,14 @@
 package com.example.ecommerce_web.model.entities;
 
-import com.example.ecommerce_web.model.OrderState;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.ecommerce_web.constant.OrderState;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
