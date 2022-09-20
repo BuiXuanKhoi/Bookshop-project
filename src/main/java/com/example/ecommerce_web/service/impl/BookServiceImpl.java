@@ -159,7 +159,7 @@ public class BookServiceImpl implements BookService {
         return listBookValid.ifNotEmpty()
                             .stream()
                             .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
-                            .skip(10)
+                            .limit(10)
                             .collect(Collectors.toList());
     }
 
