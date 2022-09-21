@@ -1,9 +1,14 @@
 import './Signup.css'
-import React, {useEffect, useRef, useState} from "react";
-import 'antd/dist/antd.min.css';
-import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker, message,Modal} from "antd";
+import React, {useEffect, useState,useRef} from "react";
+import 'antd/dist/antd.css';
+import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker,} from "antd";
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
+import {TwitterOutlined} from "@ant-design/icons";
+import {FacebookFilled} from "@ant-design/icons"
+import {LinkedinFilled} from "@ant-design/icons";
+import Modal from "antd/es/modal/Modal";
+
 
 const {Option} = Select;
 const dateFormatList = 'DD/MM/YYYY';
@@ -22,6 +27,9 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
+    useEffect(()=>{
+        Send();
+    },[user])
 
     const errorPopup = (mes, code) =>{
         Modal.error({
@@ -55,19 +63,23 @@ const SignUp = () =>{
     useEffect(() =>{
         if(isInit.current)
         {
-            signup();
+            PostAPI();
         }else
         {
             isInit.current = true;
         }
     },[user])
 
-    const signup = () =>{
+
+
+    const PostAPI = () =>{
+        console.log("Second")
+        console.log(user)
         axios
             .post("http://localhost:8080/api/auth/signup",{
                 userName: user.userName,
                 dateOfBirth: user.dateOfBirth,
-                firstName: user.firstName.trim(),
+                firstName: user.firstName,
                 lastName: user.lastName,
                 address: user.address,
                 phoneNumber: user.phoneNumber,
@@ -75,14 +87,13 @@ const SignUp = () =>{
                 role: user.role,
             })
             .then((response)=>
-                successPopup(response.data.message))
-            .catch((error)=>{
-                if(error.response.status === 400){
-                    errorPopup(error.response.message, error.response.data.message);
+                successPopUp(response.data.message))
+            .catch((error)=> {
+                if (error.response.status === 400){
+                    errorPopUp(error.response.message, error.response.data.message);
                 }
             });
     }
-
 
 
 
@@ -93,7 +104,7 @@ const SignUp = () =>{
                 span: 20,
             },
             sm: {
-                span: 8,
+                span: 5,
             },
         },
         wrapperCol:{
@@ -101,7 +112,7 @@ const SignUp = () =>{
                 span: 20,
             },
             sm: {
-                span: 16,
+                span: 15,
             },
         },
     };
@@ -113,8 +124,8 @@ const SignUp = () =>{
                 offset: 0,
             },
             sm: {
-                span: 16,
-                offset: 8,
+                span: 10,
+                offset: 5,
             },
         },
     };
@@ -124,8 +135,22 @@ const SignUp = () =>{
         <>
             <div className={"first-box"}>
 
+                <div className="hex">
+                    <div className="hex-background">
+                        <img src={"https://images.unsplash.com/photo-1553729784-e91953dec042?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80\""}/>
+                    </div>
+                </div>
+
+                <p>Sign in with another accounts</p>
+                <Button type="primary" shape="circle" style={{marginLeft:"20%",marginTop:"80%",position:"relative"}} icon={<TwitterOutlined style={{fontSize:"25px"}}/>} size={"large"}/>
+                <Button type="primary" shape="circle" style={{background:"#4267B2",marginLeft:"20%",marginTop:"80%",position:"relative"}} icon={<FacebookFilled style={{fontSize:"25px"}}/>} size={"large"}/>
+                <Button type="primary" shape="circle" style={{background:"#0077B5",marginLeft:"20%",marginTop:"80%",position:"relative"}} icon={<LinkedinFilled style={{fontSize:"25px"}}/>} size={"large"}/>
             </div>
+
+
             <div className={"second-box"}>
+                <header-position> Create your Book store Account</header-position>
+                <position>
                 <Form {...formItemLayout}
                       form={form}
                       name="register"
@@ -152,6 +177,7 @@ const SignUp = () =>{
 
                     <Form.Item name = {"dateOfBirth"}
                                label = {"Date of Birth"}
+
                                rules = {[
                                    {
                                        required: true, message: " Please insert your birthday !"
@@ -190,7 +216,7 @@ const SignUp = () =>{
                     </Form.Item>
 
                     <Form.Item name = {"firstName"}
-                               label = {"First Name"}
+                               label= {"First Name"}
                                rules={[
                                    {max: 128, message: "Your first name must be less than 128 character",},
                                    {
@@ -247,9 +273,10 @@ const SignUp = () =>{
                     </Form.Item>
 
                     <Form.Item {...tailFormItemLayout}>
-                        <Button   type={"primary"} htmlType={"Submit"}>Register</Button>
+                        <Button  type={"primary"} htmlType={"Submit"}>Signup</Button>
                     </Form.Item>
                 </Form>
+                </position>
             </div>
         </>
 

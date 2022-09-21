@@ -1,21 +1,3 @@
-.navbar {
-    overflow: hidden;
-    background: #ede7f6;
-    position: fixed;
-    top:0;
-    height: 5%;
-    width: 100%;
-}
-
-.navbar a {
-    float: right;
-    display: flex;
-    color: black;
-    text-align: center;
-    align-items: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
 
 .first-box{
     overflow: hidden;
@@ -23,6 +5,7 @@
     height: 100%;
     width: 40%;
     position: fixed;
+
 }
 .second-box{
     overflow: hidden;
@@ -31,6 +14,89 @@
     width: 60%;
     margin-left: 40%;
     position: fixed;
+}
+.roundbox {
+    margin-top: 20%;
+    margin-left: 18%;
+    height: 35px;
+    width: 35px;
+    background-color: whitesmoke;
+    border-radius: 50%;
+    display: inline-block;
+    float: left;
+    align-items: center;
+    justify-content: center;
+
+}
+.first-box p{
+    position: absolute;
+    text-align: center;
+    color: white;
+    font-family: "Arial";
+    font-size: 30px;
+    margin-top: 64%;
+    margin-left: 18%;
+}
+.first-box hexagon::before{
+    content: "\2B22";
+    font-size:225px;
+    position: absolute;
+    color: #fafafa;
+    margin-left: 35%;
 
 }
 
+.hex-background {
+    position: absolute;
+    background-color: white ;/*color of the main-background*/
+    top: 2px; /* equal to border thickness */
+    left: 2px; /* equal to border thickness */
+    width: 237px; /* container height - (border thickness * 2) */
+    height: 204.84px; /* container height - (border thickness * 2) */
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+.hex {
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    width: 240px;
+    height: 207.84px; /* width * 0.866 */
+    background: white;
+    box-sizing: border-box;
+    margin-left: 29%;
+    margin-top: 20%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.hex img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+}
+
+.second-box position{
+    position: absolute;
+    text-align: left;
+    margin-left: 10%;
+    margin-top: 20%;
+    width: 90%;
+    height: 50%;
+}
+.second-box header-position{
+    position: absolute;
+    text-align: left;
+    margin-left: 18%;
+    margin-top: 8%;
+    width: 100%;
+    height: 50%;
+    font-family: "Palatino Linotype";
+    font-size: 35px;
+    color:#c2185b;
+    font-weight: bolder;
+}
