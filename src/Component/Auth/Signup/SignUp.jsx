@@ -1,7 +1,7 @@
 import './Signup.css'
-import React, {useEffect, useState} from "react";
-import 'antd/dist/antd.css';
-import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker,} from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import 'antd/dist/antd.min.css';
+import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker, message,Modal} from "antd";
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
 
@@ -10,14 +10,8 @@ const dateFormatList = 'DD/MM/YYYY';
 
 const SignUp = () =>{
     const [form] = Form.useForm();
-    const onFinish = (values) => {
-        console.log('Received values of form:',values)
-    };
     let role = 'CUSTOMER';
-
-    const [isLoading, setIsLoading] = useState(false)
-
-
+    const isInit = useRef(false);
     const [user, setUser] = useState({
         userName:'',
         dateOfBirth: '',
@@ -28,16 +22,22 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
-    useEffect(()=>{
-        Send();
-    },[user])
 
-    const setTrue = () => {
-        setIsLoading(true);
+    const errorPopup = (mes, code) =>{
+        Modal.error({
+            title: "Signup Error: " + code,
+            content : mes
+        });
+    };
+
+    const successPopup = (mes) => {
+        Modal.success({
+            title: "Signup Success: ",
+            content: mes
+        })
     }
 
     const Send = (values) => {
-
         setUser(
             {
                 userName: values.userName,
@@ -50,25 +50,39 @@ const SignUp = () =>{
                 role: role,
             }
         )
-        console.log(user);
-        // PostAPI();
     }
 
-    // const PostAPI = () =>{
-    //     axios
-    //         .post("http://localhost:8080/api/auth/signup",{
-    //             userName: user.userName,
-    //             dateOfBirth: user.dateOfBirth,
-    //             firstName: user.firstName.trim(),
-    //             lastName: user.lastName,
-    //             address: user.address,
-    //             phoneNumber: user.phoneNumber,
-    //             email: user.email,
-    //             role: user.role,
-    //         })
-    //         .then((response)=>console.log(response))
-    //         .catch((error)=>console.log(error));
-    // }
+    useEffect(() =>{
+        if(isInit.current)
+        {
+            signup();
+        }else
+        {
+            isInit.current = true;
+        }
+    },[user])
+
+    const signup = () =>{
+        axios
+            .post("http://localhost:8080/api/auth/signup",{
+                userName: user.userName,
+                dateOfBirth: user.dateOfBirth,
+                firstName: user.firstName.trim(),
+                lastName: user.lastName,
+                address: user.address,
+                phoneNumber: user.phoneNumber,
+                email: user.email,
+                role: user.role,
+            })
+            .then((response)=>
+                successPopup(response.data.message))
+            .catch((error)=>{
+                if(error.response.status === 400){
+                    errorPopup(error.response.message, error.response.data.message);
+                }
+            });
+    }
+
 
 
 
@@ -159,7 +173,8 @@ const SignUp = () =>{
                                rules = {[
                                    {max:128, message: "Your last name must be less than 128 characters",},
                                    {
-                                       pattern: new RegExp("^[a-zA-Z]+( [a-zA-Z]+)+$"),
+                                       // pattern: new RegExp("^[a-zA-Z]+( [a-zA-Z]+)+$"),
+                                       pattern: new RegExp("^[A-Z]([a-z])+"),
                                        message: "Your last name cannot contain the number or special characters",
                                    },
                                    () =>({
@@ -175,7 +190,7 @@ const SignUp = () =>{
                     </Form.Item>
 
                     <Form.Item name = {"firstName"}
-                               lable = {"First Name"}
+                               label = {"First Name"}
                                rules={[
                                    {max: 128, message: "Your first name must be less than 128 character",},
                                    {
@@ -197,7 +212,7 @@ const SignUp = () =>{
 
 
                     <Form.Item name={"location"}
-                               lable={"Location"}
+                               label={"Location"}
                                initialValue={"HCM"}
                                 rules={[
 
@@ -232,7 +247,7 @@ const SignUp = () =>{
                     </Form.Item>
 
                     <Form.Item {...tailFormItemLayout}>
-                        <Button  type={"primary"} htmlType={"Submit"}>Register</Button>
+                        <Button   type={"primary"} htmlType={"Submit"}>Register</Button>
                     </Form.Item>
                 </Form>
             </div>
