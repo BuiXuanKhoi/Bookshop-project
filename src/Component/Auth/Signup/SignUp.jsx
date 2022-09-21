@@ -15,14 +15,8 @@ const dateFormatList = 'DD/MM/YYYY';
 
 const SignUp = () =>{
     const [form] = Form.useForm();
-    const isInit = useRef(false);
-    const onFinish = (values) => {
-        console.log('Received values of form:',values)
-    };
     let role = 'CUSTOMER';
-
-
-
+    const isInit = useRef(false);
     const [user, setUser] = useState({
         userName:'',
         dateOfBirth: '',
@@ -33,33 +27,23 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
+    useEffect(()=>{
+        Send();
+    },[user])
 
-    const errorPopUp = (mes,code) =>{
+    const errorPopup = (mes, code) =>{
         Modal.error({
-            title:"Signup Error: " + code,
-            content: mes,
-        })
-    }
+            title: "Signup Error: " + code,
+            content : mes
+        });
+    };
 
-    const successPopUp = (mes) =>{
+    const successPopup = (mes) => {
         Modal.success({
-            title: " Signup Success: ",
+            title: "Signup Success: ",
             content: mes
         })
     }
-
-    useEffect(()=>{
-        if (isInit.current){
-            PostAPI();
-            console.log("yes");
-
-        }
-        else {
-            console.log("No");
-            isInit.current = true;}
-    },[user])
-
-
 
     const Send = (values) => {
         setUser(
@@ -74,9 +58,19 @@ const SignUp = () =>{
                 role: role,
             }
         )
-        console.log(user);
-
     }
+
+    useEffect(() =>{
+        if(isInit.current)
+        {
+            PostAPI();
+        }else
+        {
+            isInit.current = true;
+        }
+    },[user])
+
+
 
     const PostAPI = () =>{
         console.log("Second")
@@ -85,7 +79,7 @@ const SignUp = () =>{
             .post("http://localhost:8080/api/auth/signup",{
                 userName: user.userName,
                 dateOfBirth: user.dateOfBirth,
-                firstName: user.firstName.trim(),
+                firstName: user.firstName,
                 lastName: user.lastName,
                 address: user.address,
                 phoneNumber: user.phoneNumber,
@@ -205,7 +199,8 @@ const SignUp = () =>{
                                rules = {[
                                    {max:128, message: "Your last name must be less than 128 characters",},
                                    {
-                                       pattern: new RegExp("^[a-zA-Z]+( [a-zA-Z]+)+$"),
+                                       // pattern: new RegExp("^[a-zA-Z]+( [a-zA-Z]+)+$"),
+                                       pattern: new RegExp("^[A-Z]([a-z])+"),
                                        message: "Your last name cannot contain the number or special characters",
                                    },
                                    () =>({
