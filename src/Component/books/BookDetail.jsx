@@ -1,9 +1,10 @@
 import React from "react";
 
-export default function Cart(){
+export default function BookDetail(){
+
     return(
         <div>
-            Cart !!!
+            Book Detail !!!
 
         </div>
     );
