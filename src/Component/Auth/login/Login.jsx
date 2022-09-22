@@ -91,7 +91,7 @@ export default function Login(){
                                 </use>
                             </svg>
                             <span className="hidden">Password</span></label>
-                        <input {...register("passWord")} id="login password" type="password" name="password" className="form--input"
+                        <input {...register("passWord")} id="login password" type="password"  className="form--input"
                                placeholder="Password" required/>
                     </div>
 
