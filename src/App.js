@@ -10,6 +10,7 @@ import {BrowserRouter, Switch, Route, useParams} from 'react-router-dom';
 import Cart from "./Component/cart/Cart";
 import Order from "./Component/order/Order";
 import Header from "./Component/Header";
+import Footer from './Component/Footer';
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +26,7 @@ function App() {
             <Route path={'/order'} component={Order}/>
             <Route path={'/'} component={Home}/>
         </Switch>
+        <Footer/>
     </BrowserRouter>
   );
 }

@@ -41,20 +41,7 @@ const SignUp = () =>{
         })
     }
 
-    const Send = (values) => {
-        setUser(
-            {
-                userName: values.userName,
-                dateOfBirth: values.dateOfBirth.format("DD/MM/YYYY"),
-                firstName: values.firstName,
-                lastName: values.lastName,
-                address: values.location,
-                phoneNumber: values.phoneNumber,
-                email: values.email,
-                role: role,
-            }
-        )
-    }
+
 
     useEffect(() =>{
         if(isInit.current)
@@ -67,6 +54,18 @@ const SignUp = () =>{
     },[user])
 
 
+    const Send = (values) =>{
+        setUser({
+            userName: values.userName,
+            dateOfBirth: values.dateOfBirth,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            phoneNumber: values.phoneNumber,
+            email: values.email,
+            role: role,
+        })
+    }
 
     const PostAPI = () =>{
         console.log("Second")
