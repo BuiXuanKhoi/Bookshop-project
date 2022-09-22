@@ -6,6 +6,7 @@ import Login from "./Component/Auth/login/Login";
 function App() {
   return (
     <div>
+
       <Login />
     </div>);
 }

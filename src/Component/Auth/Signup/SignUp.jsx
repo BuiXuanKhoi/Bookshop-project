@@ -27,9 +27,7 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
-    useEffect(()=>{
-        Send();
-    },[user])
+
 
     const errorPopup = (mes, code) =>{
         Modal.error({
@@ -45,20 +43,7 @@ const SignUp = () =>{
         })
     }
 
-    const Send = (values) => {
-        setUser(
-            {
-                userName: values.userName,
-                dateOfBirth: values.dateOfBirth.format("DD/MM/YYYY"),
-                firstName: values.firstName,
-                lastName: values.lastName,
-                address: values.location,
-                phoneNumber: values.phoneNumber,
-                email: values.email,
-                role: role,
-            }
-        )
-    }
+
 
     useEffect(() =>{
         if(isInit.current)
@@ -71,6 +56,18 @@ const SignUp = () =>{
     },[user])
 
 
+    const Send = (values) =>{
+        setUser({
+            userName: values.userName,
+            dateOfBirth: values.dateOfBirth,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            address: values.address,
+            phoneNumber: values.phoneNumber,
+            email: values.email,
+            role: role,
+        })
+    }
 
     const PostAPI = () =>{
         console.log("Second")
@@ -87,10 +84,10 @@ const SignUp = () =>{
                 role: user.role,
             })
             .then((response)=>
-                successPopUp(response.data.message))
+                successPopup(response.data.message))
             .catch((error)=> {
                 if (error.response.status === 400){
-                    errorPopUp(error.response.message, error.response.data.message);
+                    errorPopup(error.response.message, error.response.data.message);
                 }
             });
     }
