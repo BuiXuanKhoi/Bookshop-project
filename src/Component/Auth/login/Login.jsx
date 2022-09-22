@@ -4,13 +4,15 @@ import '../Signup/Signup.css';
 import {Button, Form, Modal} from "antd";
 import Input from "antd/es/input/Input";
 import axios from "axios";
-
+import {useCookies} from 'react-cookie';
 export default function Login(){
 
     const[loginData, setLoginData] = useState({
         userName: '',
         password: ''
     });
+    const[cookies, useCookies] = useCookies(['book-token']);
+
 
     const isInit = useRef(false);
 
@@ -18,7 +20,7 @@ export default function Login(){
 
     const errorPopup = (code, mess) =>{
         Modal.error({
-            title: "Error Login: " + code,
+            title: "Error Login",
             content: mess
         })
     }

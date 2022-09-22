@@ -1,13 +1,12 @@
 import './Signup.css'
 import React, {useEffect, useState,useRef} from "react";
-import 'antd/dist/antd.css';
-import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker,} from "antd";
+import 'antd/dist/antd.min.css';
+import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker, Modal} from "antd";
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
 import {TwitterOutlined} from "@ant-design/icons";
 import {FacebookFilled} from "@ant-design/icons"
 import {LinkedinFilled} from "@ant-design/icons";
-import Modal from "antd/es/modal/Modal";
 
 
 const {Option} = Select;
@@ -27,9 +26,6 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
-    useEffect(()=>{
-        Send();
-    },[user])
 
     const errorPopup = (mes, code) =>{
         Modal.error({
@@ -76,21 +72,12 @@ const SignUp = () =>{
         console.log("Second")
         console.log(user)
         axios
-            .post("http://localhost:8080/api/auth/signup",{
-                userName: user.userName,
-                dateOfBirth: user.dateOfBirth,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                address: user.address,
-                phoneNumber: user.phoneNumber,
-                email: user.email,
-                role: user.role,
-            })
+            .post("http://localhost:8080/api/auth/signup",user)
             .then((response)=>
-                successPopUp(response.data.message))
+                successPopup(response.data.message))
             .catch((error)=> {
                 if (error.response.status === 400){
-                    errorPopUp(error.response.message, error.response.data.message);
+                    errorPopup(error.response.message, error.response.data.message);
                 }
             });
     }
