@@ -1,13 +1,12 @@
 import './Signup.css'
 import React, {useEffect, useState,useRef} from "react";
-import 'antd/dist/antd.css';
-import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker,} from "antd";
+import 'antd/dist/antd.min.css';
+import {AutoComplete, Button, Input, InputNumber, Select, Checkbox, Form, DatePicker, Modal} from "antd";
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
 import {TwitterOutlined} from "@ant-design/icons";
 import {FacebookFilled} from "@ant-design/icons"
 import {LinkedinFilled} from "@ant-design/icons";
-import Modal from "antd/es/modal/Modal";
 
 
 const {Option} = Select;
@@ -27,7 +26,6 @@ const SignUp = () =>{
         email: '',
         role: '',
     });
-
 
     const errorPopup = (mes, code) =>{
         Modal.error({
@@ -73,16 +71,7 @@ const SignUp = () =>{
         console.log("Second")
         console.log(user)
         axios
-            .post("http://localhost:8080/api/auth/signup",{
-                userName: user.userName,
-                dateOfBirth: user.dateOfBirth,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                address: user.address,
-                phoneNumber: user.phoneNumber,
-                email: user.email,
-                role: user.role,
-            })
+            .post("http://localhost:8080/api/auth/signup",user)
             .then((response)=>
                 successPopup(response.data.message))
             .catch((error)=> {

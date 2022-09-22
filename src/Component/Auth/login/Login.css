@@ -51,7 +51,7 @@
 :root {
     --htmlFontSize: 100%;
 
-    --bodyBackgroundColor: white;/*#2c3338;*/
+    --bodyBackgroundColor: #e3f2fd;/*#2c3338;*/
     --bodyColor: var(--baseColor);
     --bodyFontFamily: "Open Sans";
     --bodyFontFamilyFallback: sans-serif;
@@ -145,7 +145,7 @@ input[type="submit"] {
     --loginBorderRadus: 0.25rem;
     --loginColor: #eee;
 
-    --loginInputBackgroundColor: #3b4148;
+    --loginInputBackgroundColor: #bdbdbd;
     --loginInputHoverBackgroundColor: #434a52;
 
     --loginLabelBackgroundColor:  #0096FF;

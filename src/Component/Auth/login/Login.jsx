@@ -8,22 +8,34 @@ import "./Login.css"
 
 import {useForm} from "react-hook-form";
 
-
+import {useCookies} from 'react-cookie';
+import {Link} from "react-router-dom";
+import {createPath, useNavigate} from "react-router";
 export default function Login(){
+
 
     // const[loginData, setLoginData] = useState({
     //     userName: '',
     //     password: ''
     // });
     const {register, handleSubmit} = useForm();
+    // const[cookies, useCookies] = useCookies(['book-token']);
+
 
     const isInit = useRef(false);
 
-    const onSubmit = (d) => {alert(JSON.stringify(d));}
+    // const onSubmit = (d) => {
+    //     console.log(d);
+    //     alert(JSON.stringify(d));
+    // }
+
+    const afterSubmit = (d) =>{
+        console.log(d);
+    }
 
     const errorPopup = (code, mess) =>{
         Modal.error({
-            title: "Error Login: " + code,
+            title: "Error Login",
             content: mess
         })
     }
@@ -34,6 +46,7 @@ export default function Login(){
             content: mes
         })
     }
+
 
     // const setData = (values) =>{
     //     setLoginData({
@@ -69,7 +82,7 @@ export default function Login(){
 
             <div className="grid">
                 <h2>Sign In</h2>
-                <form className={"form login"} onSubmit={handleSubmit(onSubmit)}>
+                <form className="form login" onSubmit={handleSubmit(afterSubmit)}>
 
                     <div className="formfield">
                         <label htmlFor="login--username">
@@ -79,7 +92,7 @@ export default function Login(){
                                 </use>
                             </svg>
                             <span className="hidden">Username</span></label>
-                        <input {...register("userName")} autoComplete="username" id="login--username" type="text" name="username"
+                        <input {...register("username")} autoComplete="username" id="login--username" type="text"
                                className="forminput" placeholder="Username" required/>
                     </div>
 
@@ -101,7 +114,7 @@ export default function Login(){
 
             </form>
 
-            <p className="text--center">Not a member? <a href="#">Sign up now</a>
+            <p className="text--center">Not a member? <a href="/signup">Sign up now</a>
                 <svg className="icon">
                     <use href="#icon-arrow-right">
 
