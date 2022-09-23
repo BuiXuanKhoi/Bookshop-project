@@ -34,7 +34,7 @@ function App() {
     // </BrowserRouter>
       <>
           <NavigateBar/>
-          <Login/>
+          {/*// <Login/>*/}
       </>
 
   );

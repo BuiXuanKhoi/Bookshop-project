@@ -3,23 +3,78 @@
     width: 100%;
     height: 10%;
     background: #2C3333;
-    color: white;
-
+    display: flex;
+    align-items: center;
+    align-content: center;
+    /*justify-tent: right*/
 }
 
 .book-icon{
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.1em;
+    padding-right: 0.1em;
     background: #005A8D;
-    font-size: 2rem;
+    font-size: 2.2em;
     position: absolute;
-    margin-top: 0.3rem;
+    float: left;
+    margin-left: 1%;
+    color: whitesmoke;
+
 }
 .text-next-to-icon{
     color: yellowgreen;
-    font-size: 1.5rem;
-    float: left;
-    margin-left: 5rem;
+    font-size: 3.5em;
+    float: right;
+    margin-left: 1.4em;
+    position: absolute;
+    font-weight: bolder;
+    font-family: "Palatino Linotype";
+
+}
+.nah > ul {
+    margin-left: 25em;
+    color: white;
+    align-items: center;
+}
+.nah > ul > li{
+    display: inline-block;
+    text-align: center;
+    margin-left: 1.5em;
+    font-size: 1.2em;
+}
+
+.button-icon{
+    background: #2C3333;
+    display:block;
+    align-items:center;
+    justify-content: center;
+    padding-bottom: 10%;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-right: 10%;
+    align-content: center;
+    border-radius: 50%;
+}
+
+.icon-user{
+    color: greenyellow;
+}
+
+.personal{
+    margin-left: 40rem;
+    position: absolute;
+    margin-top: 20%;
+}
+
+.logout{
+
+}
+
+.history{
+
+}
+
+.information{
+
 }
