@@ -1,0 +1,25 @@
+.nah{
+    position: fixed;
+    width: 100%;
+    height: 10%;
+    background: #2C3333;
+    color: white;
+
+}
+
+.book-icon{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: #005A8D;
+    font-size: 2rem;
+    position: absolute;
+    margin-top: 0.3rem;
+}
+.text-next-to-icon{
+    color: yellowgreen;
+    font-size: 1.5rem;
+    float: left;
+    margin-left: 5rem;
+}

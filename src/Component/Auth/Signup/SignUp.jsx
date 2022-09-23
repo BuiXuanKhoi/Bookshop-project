@@ -70,8 +70,7 @@ const SignUp = () =>{
     }
 
     const PostAPI = () =>{
-        console.log("Second")
-        console.log(user)
+
         axios
             .post("https://ecommerce-web0903.herokuapp.com/api/auth/signup",user)
             .then((response)=>
