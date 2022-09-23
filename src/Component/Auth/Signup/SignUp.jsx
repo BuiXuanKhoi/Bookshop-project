@@ -57,21 +57,23 @@ const SignUp = () =>{
     const Send = (values) =>{
         setUser({
             userName: values.userName,
-            dateOfBirth: values.dateOfBirth,
+            dateOfBirth: values.dateOfBirth.format(dateFormatList),
             firstName: values.firstName,
             lastName: values.lastName,
-            address: values.address,
+            address: values.location,
             phoneNumber: values.phoneNumber,
             email: values.email,
             role: role,
         })
+
+        console.log(values);
     }
 
     const PostAPI = () =>{
         console.log("Second")
         console.log(user)
         axios
-            .post("http://localhost:8080/api/auth/signup",user)
+            .post("https://ecommerce-web0903.herokuapp.com/api/auth/signup",user)
             .then((response)=>
                 successPopup(response.data.message))
             .catch((error)=> {

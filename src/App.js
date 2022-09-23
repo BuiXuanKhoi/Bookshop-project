@@ -7,11 +7,27 @@ import Home from "./Component/home/Home";
 import Shop from "./Component/shop/Shop";
 import BookDetail from "./Component/books/BookDetail";
 import {BrowserRouter, Switch, Route, useParams} from 'react-router-dom';
-import Cart from "./Component/cart/Cart";
-import Order from "./Component/order/Order";
+import Cart from "./Component/users/cart/Cart";
+import Order from "./Component/users/order/Order";
 import Header from "./Component/Header";
 import Footer from './Component/Footer';
+import {useEffect, useState} from "react";
 function App() {
+
+    const [loginData, setLoginData] = useState({
+        role : '',
+        userName: '',
+        token : '',
+        tokenType: 'Bearer',
+        userId: 0
+    });
+
+    useEffect(() =>{
+        if(localStorage.getItem('login') != null){
+            setLoginData(JSON.parse(localStorage.getItem('login')))
+        }
+    },[loginData])
+
   return (
     <BrowserRouter>
         <Header/>
