@@ -57,10 +57,10 @@ const SignUp = () =>{
     const Send = (values) =>{
         setUser({
             userName: values.userName,
-            dateOfBirth: values.dateOfBirth,
+            dateOfBirth: values.dateOfBirth.format("DD/MM/YYYY"),
             firstName: values.firstName,
             lastName: values.lastName,
-            address: values.address,
+            address: values.location,
             phoneNumber: values.phoneNumber,
             email: values.email,
             role: role,
@@ -68,8 +68,7 @@ const SignUp = () =>{
     }
 
     const PostAPI = () =>{
-        console.log("Second")
-        console.log(user)
+
         axios
             .post("http://localhost:8080/api/auth/signup",user)
             .then((response)=>

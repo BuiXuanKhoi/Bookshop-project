@@ -8,29 +8,28 @@ import "./Login.css"
 
 import {useForm} from "react-hook-form";
 
-import {useCookies} from 'react-cookie';
+//import {useCookies} from 'react-cookie';
 import {Link} from "react-router-dom";
 import {createPath, useNavigate} from "react-router";
 export default function Login(){
 
 
-    // const[loginData, setLoginData] = useState({
-    //     userName: '',
-    //     password: ''
-    // });
+    const[loginData, setLoginData] = useState({
+        userName: "",
+        password: "",
+    });
     const {register, handleSubmit} = useForm();
     // const[cookies, useCookies] = useCookies(['book-token']);
 
-
     const isInit = useRef(false);
 
-    // const onSubmit = (d) => {
-    //     console.log(d);
-    //     alert(JSON.stringify(d));
-    // }
 
-    const afterSubmit = (d) =>{
-        console.log(d);
+    const afterSubmit = (values) =>{
+
+        setLoginData({
+            userName: values.username,
+            password: values.password,
+        })
     }
 
     const errorPopup = (code, mess) =>{
@@ -48,33 +47,26 @@ export default function Login(){
     }
 
 
-    // const setData = (values) =>{
-    //     setLoginData({
-    //         userName:values.userName,
-    //         password: values.password
-    //     })
-    // }
 
-    // const login = () =>{
-    //     axios.post('http://localhost:8080/api/auth/login', loginData)
-    //         .then((res) =>{
-    //             successPopup("You can access shopping page now !!!");
-    //         }).catch((err) => {
-    //             errorPopup(err.response.status, err.response.data.message);
-    //     })
-    // }
 
-    // useEffect(() =>{
-    //     if(isInit.current)
-    //     {
-    //         console.log(submit)
-    //         //login();
-    //     }
-    //     else
-    //     {
-    //         isInit.current = true;
-    //     }
-    // },[loginData])
+    const login = () =>{
+        axios.post('http://localhost:8080/api/auth/login',loginData)
+            .then((res) =>{
+                successPopup("You can access shopping page now !!!");
+            }).catch((err) => {
+                errorPopup(err.response.status, err.response.data.message);
+        })
+    }
+
+    useEffect(() =>{
+        if(isInit.current) {
+            login();
+        }
+        else
+        {
+            isInit.current = true;
+        }
+    },[loginData])
 
 
     return(
@@ -104,7 +96,7 @@ export default function Login(){
                                 </use>
                             </svg>
                             <span className="hidden">Password</span></label>
-                        <input {...register("passWord")} id="login password" type="password"  className="form--input"
+                        <input {...register("password")} id="login password" type="password"  className="form--input"
                                placeholder="Password" required/>
                     </div>
 
