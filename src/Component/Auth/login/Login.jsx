@@ -7,10 +7,10 @@ import axios from "axios";
 import "./Login.css"
 
 import {useForm} from "react-hook-form";
-
-//import {useCookies} from 'react-cookie';
+import {getCookie} from 'react-use-cookie';
 import {Link} from "react-router-dom";
 import {createPath, useNavigate} from "react-router";
+import {useCookies} from "react-cookie";
 export default function Login(){
 
 
@@ -18,8 +18,9 @@ export default function Login(){
         userName: "",
         password: "",
     });
+
     const {register, handleSubmit} = useForm();
-    // const[cookies, useCookies] = useCookies(['book-token']);
+    const[cookies, setCookies] = useCookies(['book-token']);
 
     const isInit = useRef(false);
 
@@ -40,6 +41,7 @@ export default function Login(){
     }
 
     const successPopup = (mes) => {
+        console.log(JSON.parse(getCookie('book-token')))
         Modal.success({
             title: "Login Success",
             content: mes
@@ -50,8 +52,14 @@ export default function Login(){
 
 
     const login = () =>{
-        axios.post('http://localhost:8080/api/auth/login',loginData)
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/auth/login',loginData)
             .then((res) =>{
+                setCookies('book-token',{
+                    userName : res.data.userName,
+                    role : res.data.role,
+                    token : res.data.token,
+                    type : res.data.tokenType
+                });
                 successPopup("You can access shopping page now !!!");
             }).catch((err) => {
                 errorPopup(err.response.status, err.response.data.message);

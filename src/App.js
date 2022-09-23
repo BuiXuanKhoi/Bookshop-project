@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import './Component/Auth/Signup/SignUp'
 import SignUp from "./Component/Auth/Signup/SignUp";
@@ -11,48 +10,42 @@ import Cart from "./Component/users/cart/Cart";
 import Order from "./Component/users/order/Order";
 import Header from "./Component/Header";
 import Footer from './Component/Footer';
-import {Routes} from "react-router";
 import NavigateBar from "./Component/shop/NavigateBar/NavigateBar";
 import {useEffect, useState} from "react";
+import {getCookie} from "react-use-cookie";
 function App() {
 
     const [loginData, setLoginData] = useState({
         role : '',
         userName: '',
         token : '',
-        tokenType: 'Bearer',
-        userId: 0
+        tokenType: 'Bearer'
     });
 
     useEffect(() =>{
-        if(localStorage.getItem('login') != null){
-            setLoginData(JSON.parse(localStorage.getItem('login')))
+        if(getCookie('book-token') != null){
+            setLoginData(JSON.parse(getCookie('book-token')))
         }
     },[loginData])
 
   return (
-    // <BrowserRouter>
-    //     {/*<Header/>*/}
-    //     {/*<Switch>*/}
-    //     {/*    <Route path={'/login'} component={Login}/>*/}
-    //     {/*    <Route path={'/signup'} component={SignUp}/>*/}
-    //     {/*    <Route path={'/shop'} component={Shop}/>*/}
-    //     {/*    <Route path={'/books'} >*/}
-    //     {/*        <Route path={':bookId'} component={BookDetail}/>*/}
-    //     {/*    </Route>*/}
-    //     {/*    <Route path={'/cart'} component={Cart}/>*/}
-    //     {/*    <Route path={'/order'} component={Order}/>*/}
-    //     {/*    <Route path={'/'} component={Home}/>*/}
-    //     {/*</Switch>*/}
-    //
-    //     {/*<Footer/>*/}
-    //
-    // </BrowserRouter>
-      <>
-          <NavigateBar/>
-          <Login/>
-      </>
+    <BrowserRouter>
+        <NavigateBar/>
+        <Switch>
+            <Route path={'/login'} component={Login}/>
+            <Route path={'/signup'} component={SignUp}/>
+            <Route path={'/shop'} component={Shop}/>
+            <Route path={'/books'} >
+                <Route path={':bookId'} component={BookDetail}/>
+            </Route>
+            <Route path={'/cart'} component={Cart}/>
+            <Route path={'/order'} component={Order}/>
+            <Route path={'/'} component={Home}/>
+        </Switch>
 
+        <Footer/>
+
+    </BrowserRouter>
   );
 }
 
