@@ -32,13 +32,13 @@ function App() {
     <BrowserRouter>
         <NavigateBar/>
         <Switch>
-            <Route path={'/login'} component={Login}/>
+            {/*// <Route path={'/login'} component={Login}/>
             <Route path={'/signup'} component={SignUp}/>
             <Route path={'/shop'} component={Shop}/>
             <Route path={'/books'} >
                 <Route path={':bookId'} component={BookDetail}/>
             </Route>
-            <Route path={'/cart'} component={Cart}/>
+            <Route path={'/cart'} component={Cart}/>*/}
             <Route path={'/order'} component={Order}/>
             <Route path={'/'} component={Home}/>
         </Switch>
