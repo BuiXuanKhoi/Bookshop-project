@@ -60,12 +60,18 @@ public class BookMapperImpl implements BookMapper {
         return bookRespondDTO;
     }
 
+
     @Override
     public Books toExistedBooks(ModifyBookRequestDTO modifyBookRequestDTO,Books books) {
-        modelMapper.map(modifyBookRequestDTO, books);
         String state = modifyBookRequestDTO.getState();
         BookState bookState = BookState.getState(state);
+        modelMapper.map(modifyBookRequestDTO, books);
         books.setBookState(bookState);
         return books;
+    }
+
+    @Override
+    public Books fromDTO(BookRequestDTO requestDTO) {
+        return modelMapper.map(requestDTO, Books.class);
     }
 }

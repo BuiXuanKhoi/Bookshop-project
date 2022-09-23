@@ -56,7 +56,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemRespondDTO addToCart(CartItemRequestDTO cartItemRequestDTO) {
+    public CartItem addToCart(CartItemRequestDTO cartItemRequestDTO) {
         int bookId = cartItemRequestDTO.getBookId();
         String userName = userLocal.getLocalUserName();
         int addedQuantity = cartItemRequestDTO.getQuantity();
@@ -73,9 +73,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItem.setBooks(books);
         cartItem.setUsers(users);
-        CartItem savedCartItem = this.cartItemRepository.save(cartItem);
-
-        return new CartItemRespondDTO(savedCartItem);
+        return this.cartItemRepository.save(cartItem);
     }
 
     private void updateCartItem(int existedId, CartItem cartItem, int quantity){
@@ -98,13 +96,11 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     @Modifying
-    public ResponseEntity<?> deleteCartItem(int cartItemId) {
+    public void deleteCartItem(int cartItemId) {
 
          CartItem cartItem = findById(cartItemId);
 
          this.cartItemRepository.delete(cartItem);
-         MessageRespond messageRespond = new MessageRespond(HttpStatus.OK.value(), "Delete Cart Item Successfully !!!");
-         return ResponseEntity.ok(messageRespond);
     }
 
 //

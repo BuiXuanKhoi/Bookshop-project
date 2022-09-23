@@ -33,23 +33,28 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     FeedbackRepository feedbackRepository;
     UserLocal userLocal;
-    ModelMapper modelMapper;
     FeedbackMapper feedbackMapper;
     BookService bookService;
     UserService userService;
 
     @Autowired
-    public FeedbackServiceImpl(FeedbackRepository feedbackRepository, UserLocal userLocal,
-                                ModelMapper modelMapper
+    public FeedbackServiceImpl(FeedbackRepository feedbackRepository, UserLocal userLocal
             ,  FeedbackMapper feedbackMapper, BookService bookService, UserService userService){
         this.feedbackRepository = feedbackRepository;
         this.userLocal = userLocal;
-        this.modelMapper = modelMapper;
         this.feedbackMapper = feedbackMapper;
         this.bookService = bookService;
         this.userService = userService;
     }
 
+
+    @Override
+    public Feedback getById(int id) {
+        return this.feedbackRepository.findById(id)
+                                      .orElseThrow(
+                                              () -> new ResourceNotFoundException("Not Found Feedback With ID: " + id)
+                                      );
+    }
 
     @Override
     public Feedback giveFeedback(FeedbackRequestDTO feedbackRequestDTO, int bookId) {

@@ -35,20 +35,18 @@ public class UserServiceImpl implements UserService {
 
     UserRepository userRepository;
     MyDateUtil myDateUtil;
-    ModelMapper modelMapper;
     AuthenticationManager authenticationManager;
     PasswordEncoder encoder;
     JwtUtils jwtUtils;
     UserLocal userLocal;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil, ModelMapper modelMapper,
+    public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil,
                            AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils,
                            UserLocal userLocal
                            ) {
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
-        this.modelMapper = modelMapper;
         this.authenticationManager = authenticationManager;
         this.encoder = encoder;
         this.userLocal = userLocal;
@@ -75,7 +73,7 @@ public class UserServiceImpl implements UserService {
         String newPassword = changePasswordRequestDTO.getNewPassword();
         String oldPassword = changePasswordRequestDTO.getOldPassword();
         String userName = userLocal.getLocalUserName();
-        Users users = this.userRepository.findUserByUserName(userName).get();
+        Users users = findByUserName(userName);
         String validPassword = users.getPassword();
 
         if(!encoder.matches(oldPassword,validPassword)) {
@@ -94,8 +92,7 @@ public class UserServiceImpl implements UserService {
         long THREE_MINUTES = 180000;
         // Because of fast testing, You just have to waiting for 3 minutes and log in again, the account will be available again.
 
-        Users users = this.userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("Not Found User With ID: " + userId));
+        Users users = findById(userId);
 
         Date now = new Date();
         long lockUntil = now.getTime() + THREE_MINUTES;
@@ -142,21 +139,24 @@ public class UserServiceImpl implements UserService {
         String roleName = userRequestDTO.getRole();
         String password = generatePassword(userName, dateOfBirth);
         Role role = Role.getRole(roleName);
-        Date lockTime = new Date();
 
         Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
 
         if(usersOptional.isPresent()){
             throw new ConstraintViolateException("User name already exist !!!!");
         }
-        return new Users(userName, password, role, UserState.UNBLOCK, lockTime);
+        return Users.builder()
+                    .userName(userName)
+                    .password(password)
+                    .role(role)
+                    .userState(UserState.UNBLOCK)
+                    .build();
     }
 
 
     private String generatePassword(String userName, Date dateOfBirth){
         String birth = myDateUtil.getStringDate(dateOfBirth);
         birth = birth.replaceAll("/", "");
-        String password = userName + "@" + birth;
-        return password;
+        return userName + "@" + birth;
     }
 }

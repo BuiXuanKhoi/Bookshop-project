@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
     UserService userService;
     InformationService informationService;
 
-    String password = "";
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository,
@@ -70,17 +70,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginRespondDTO login(LoginRequestDTO loginRequestDTO) {
 
-        Users users = this.userRepository.findUserByUserName(loginRequestDTO.getUserName()).get();
-        String loginUserName = loginRequestDTO.getUserName();
-        String userName = users.getUserName();
+        Users users = userService.findByUserName(loginRequestDTO.getUserName());
         String loginPassword = loginRequestDTO.getPassword();
         String password = users.getPassword();
         Optional<Date> lockTime = Optional.ofNullable(users.getLockTime());
         Date now = new Date();
-
-        if(!loginUserName.equals(userName)){
-            throw new ResourceNotFoundException("Account Not Exist !!!!");
-        }
 
         if (!encoder.matches(loginPassword, password)){
             throw new ResourceNotFoundException("Wrong password !!!");
@@ -103,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
 
 
         String roleName = userDetail.getAuthorities().stream()
-                                                     .map(item -> item.getAuthority())
+                                                     .map(GrantedAuthority::getAuthority)
                                                      .collect(Collectors.toList()).get(0);
 
         return LoginRespondDTO.builder()

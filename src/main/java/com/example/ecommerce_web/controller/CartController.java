@@ -3,8 +3,11 @@ package com.example.ecommerce_web.controller;
 import com.example.ecommerce_web.mapper.CartItemMapper;
 import com.example.ecommerce_web.model.dto.request.CartItemRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.CartItemRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.MessageRespond;
+import com.example.ecommerce_web.model.entities.CartItem;
 import com.example.ecommerce_web.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +29,8 @@ public class CartController {
 
     @PostMapping
     public CartItemRespondDTO addToCart(@RequestBody CartItemRequestDTO cartItemRequestDTO){
-        return this.cartItemService.addToCart(cartItemRequestDTO);
+        CartItem cartItem = this.cartItemService.addToCart(cartItemRequestDTO);
+        return cartItemMapper.toDTO(cartItem);
     }
 
     @GetMapping
@@ -39,6 +43,8 @@ public class CartController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCartItem( @PathVariable("id") int id){
-        return this.cartItemService.deleteCartItem(id);
+        this.cartItemService.deleteCartItem(id);
+        MessageRespond messageRespond = new MessageRespond(HttpStatus.OK.value(), "Delete Cart Item Successfully !!!");
+        return ResponseEntity.ok(messageRespond);
     }
 }

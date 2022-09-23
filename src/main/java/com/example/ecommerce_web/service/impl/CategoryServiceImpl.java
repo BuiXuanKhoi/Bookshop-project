@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.CategoryMapper;
 import com.example.ecommerce_web.model.dto.respond.CategoryRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
@@ -20,13 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
-    ModelMapper modelMapper;
     CategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, CategoryMapper categoryMapper){
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper){
         this.categoryRepository = categoryRepository;
-        this.modelMapper = modelMapper;
         this.categoryMapper = categoryMapper;
     }
 
@@ -41,6 +40,14 @@ public class CategoryServiceImpl implements CategoryService {
         ListValidator<Category> listValidator = ListValidator.ofList(listCategory);
 
         return listValidator.ifNotEmpty();
+    }
+
+    @Override
+    public Category findById(int id) {
+        return this.categoryRepository.findById(id)
+                                      .orElseThrow(
+                                              () -> new ResourceNotFoundException("Not Found Category With ID: " + id)
+                                      );
     }
 
 }

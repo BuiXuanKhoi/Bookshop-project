@@ -28,20 +28,17 @@ public class InformationServiceImpl implements InformationService {
 
     InformationRepository informationRepository;
     MyDateUtil myDateUtil;
-    ModelMapper modelMapper;
     UserLocal userLocal;
     InformationMapper informationMapper;
     UserService userService;
 
     @Autowired
     public InformationServiceImpl(InformationRepository informationRepository,
-                                  MyDateUtil myDateUtil, ModelMapper modelMapper,
-                                  UserLocal userLocal, InformationMapper informationMapper,
+                                  MyDateUtil myDateUtil, UserLocal userLocal, InformationMapper informationMapper,
                                   UserService userService) {
         this.informationRepository = informationRepository;
         this.userService = userService;
         this.myDateUtil = myDateUtil;
-        this.modelMapper = modelMapper;
         this.userLocal = userLocal;
         this.informationMapper = informationMapper;
     }

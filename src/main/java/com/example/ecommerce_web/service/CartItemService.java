@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface CartItemService {
-    CartItemRespondDTO addToCart(CartItemRequestDTO cartItemRequestDTO);
+    CartItem addToCart(CartItemRequestDTO cartItemRequestDTO);
     List<CartItem> getListCartItem();
-    ResponseEntity<?> deleteCartItem(int cartItemId);
+    void deleteCartItem(int cartItemId);
 }

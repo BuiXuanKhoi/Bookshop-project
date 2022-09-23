@@ -9,7 +9,7 @@ public enum Location {
     HCM("HCM"),
     DN("DN");
 
-    private String location;
+    private final String location;
 
     Location(String location) {
         this.location = location;

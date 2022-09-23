@@ -10,7 +10,7 @@ public enum BookState {
        OUT_OF_STOCK("OUT_OF_STOCK"),
        EXPIRED("EXPIRED");
 
-       private String state;
+       private final String state;
 
        BookState(String state) {
               this.state = state;

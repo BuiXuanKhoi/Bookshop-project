@@ -55,11 +55,10 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
-    public Users(String userName, String password, Role role, UserState userState, Date lockTime) {
+    public Users(String userName, String password, Role role, UserState userState) {
         this.userName = userName;
         this.password = password;
         this.role = role;
         this.userState = userState;
-        this.lockTime = lockTime;
     }
 }

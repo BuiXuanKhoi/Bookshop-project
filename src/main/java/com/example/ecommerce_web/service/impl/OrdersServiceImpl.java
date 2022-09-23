@@ -34,21 +34,18 @@ public class OrdersServiceImpl implements OrdersService {
     OrderItemsRepository orderItemsRepository;
     CartItemRepository cartItemRepository;
     OrderItemService orderItemService;
-    OrderMapper orderMapper;
 
     @Autowired
     public OrdersServiceImpl(OrdersRepository ordersRepository, UserRepository userRepository,
                              UserLocal userLocal,
                              OrderItemsRepository orderItemsRepository,
-                             CartItemRepository cartItemRepository, OrderItemService orderItemService,
-                             OrderMapper orderMapper){
+                             CartItemRepository cartItemRepository, OrderItemService orderItemService){
         this.ordersRepository = ordersRepository;
         this.userLocal = userLocal;
         this.userRepository = userRepository;
         this.orderItemsRepository = orderItemsRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderItemService = orderItemService;
-        this.orderMapper = orderMapper;
     }
 
     private Orders findById(int id){

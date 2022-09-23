@@ -7,6 +7,7 @@ import com.example.ecommerce_web.model.entities.Feedback;
 import java.util.List;
 
 public interface FeedbackService {
+    Feedback getById(int id);
     Feedback giveFeedback(FeedbackRequestDTO feedbackRequestDTO, int bookId);
     List<Feedback> getListFeedback(int bookId);
 }

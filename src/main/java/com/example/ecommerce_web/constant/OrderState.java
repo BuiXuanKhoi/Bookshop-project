@@ -3,17 +3,12 @@ package com.example.ecommerce_web.constant;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 
 public enum OrderState {
-        PREPARED("PREPARED"),
-        PACKAGED("PACKAGED"),
-        DELIVERED("DELIVERED"),
-        RECEIVED("RECEIVED"),
-        COMPLETED("COMPLETED");
+        PREPARED,
+        PACKAGED,
+        DELIVERED,
+        RECEIVED,
+        COMPLETED;
 
-        private String state;
-
-        OrderState(String state) {
-                this.state = state;
-        }
 
         public static OrderState nextOf(OrderState orderState){
 

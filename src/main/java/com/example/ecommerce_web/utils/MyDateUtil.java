@@ -9,8 +9,8 @@ import java.util.Date;
 @Component
 public class MyDateUtil {
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
 
     public String getStringDate(Date date){
         return dateFormat.format(date);

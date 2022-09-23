@@ -15,6 +15,7 @@ import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.ClassifyService;
+import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.validator.ListValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,6 @@ import java.util.stream.Collectors;
 public class BookServiceImpl implements BookService {
 
     BookRepository bookRepository;
-    ModelMapper modelMapper;
     AuthorService authorService;
     ClassifyRepository classifyRepository;
     AuthorRepository authorRepository;
@@ -46,16 +46,16 @@ public class BookServiceImpl implements BookService {
     FeedbackRepository feedbackRepository;
     ClassifyService classifyService;
     BookMapper bookMapper;
+    UserService userService;
 
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, ModelMapper modelMapper
+    public BookServiceImpl(BookRepository bookRepository
             , AuthorService authorService, ClassifyRepository classifyRepository
             , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal,
                            CategoryRepository categoryRepository, FeedbackRepository feedbackRepository,
-                           ClassifyService classifyService, BookMapper bookMapper) {
+                           ClassifyService classifyService, BookMapper bookMapper, UserService userService) {
         this.bookRepository = bookRepository;
-        this.modelMapper = modelMapper;
         this.authorService = authorService;
         this.classifyRepository = classifyRepository;
         this.authorRepository = authorRepository;
@@ -65,6 +65,7 @@ public class BookServiceImpl implements BookService {
         this.feedbackRepository = feedbackRepository;
         this.classifyService = classifyService;
         this.bookMapper = bookMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -108,7 +109,7 @@ public class BookServiceImpl implements BookService {
         int[] listCategoryId = bookRequestDTO.getListCategory();
         int authorId = bookRequestDTO.getAuthorId();
         String userName = userLocal.getLocalUserName();
-        Users users = this.userRepository.findUserByUserName(userName).get();
+        Users users = userService.findByUserName(userName);
 
         Author author = authorRepository.findById(authorId)
                                         .orElseThrow(
@@ -120,14 +121,14 @@ public class BookServiceImpl implements BookService {
                                             .map(id -> classifyService.createClassify(id))
                                             .collect(Collectors.toList());
 
-        Books books = modelMapper.map(bookRequestDTO, Books.class);
+        Books books = bookMapper.fromDTO(bookRequestDTO);
 
         books.setClassifies(classifyList);
         books.setAuthors(author);
         books.setUsers(users);
         books.setBookState(BookState.AVAILABLE);
         Books savedBook = this.bookRepository.save(books);
-        classifyList.stream().forEach(classify -> classifyService.updateClassifyWithBook(classify, savedBook));
+        classifyList.forEach(classify -> classifyService.updateClassifyWithBook(classify, savedBook));
 
         return savedBook;
     }
@@ -164,38 +165,22 @@ public class BookServiceImpl implements BookService {
     }
 
     private Pageable createPage(int page, String sortBy){
-        Sort sort;
         char field = sortBy.charAt(0);
         char mode = sortBy.charAt(1);
-        String fieldSort;
 
-        switch (field){
-            case 'p':
-                fieldSort = "bookPrice";
-                break;
-            case 'r':
-                fieldSort = "ratingPoint";
-                break;
-            case 'n' :
-                fieldSort = "bookName";
-                break;
-            case 'i':
-                fieldSort = "bookId";
-                break;
-            default:
-                throw new ResourceNotFoundException("NOT FOUND FIELD SORT !!!");
-        }
+        String fieldSort = switch (field) {
+            case 'p' -> "bookPrice";
+            case 'r' -> "ratingPoint";
+            case 'n' -> "bookName";
+            case 'i' -> "bookId";
+            default -> throw new ResourceNotFoundException("NOT FOUND FIELD SORT !!!");
+        };
 
-        switch (mode){
-            case 'a':
-                sort = Sort.by( Sort.Direction.ASC,fieldSort);
-                break;
-            case 'd':
-                sort = Sort.by( Sort.Direction.DESC,fieldSort);
-                break;
-            default:
-                throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
-        }
+        Sort sort = switch (mode) {
+            case 'a' -> Sort.by(Sort.Direction.ASC, fieldSort);
+            case 'd' -> Sort.by(Sort.Direction.DESC, fieldSort);
+            default -> throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
+        };
 
         return PageRequest.of(page, 20, sort);
     }

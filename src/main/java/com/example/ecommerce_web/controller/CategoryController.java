@@ -37,7 +37,7 @@ public class CategoryController {
     @GetMapping
     public List<CategoryRespondDTO> getListCategory(){
         return this.categoryService.getListCategory()
-                                   .parallelStream()
+                                   .stream()
                                    .map(categoryMapper::toDTO)
                                    .collect(Collectors.toList());
     }
