@@ -6,41 +6,25 @@ import InformationPage from "../Component/information/InformationPage";
 import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import BookDetail from "../Component/books/BookDetail";
+import Report from "../Component/admin/manage/report/Report";
 
 export const AdminRoute = [
+
+
     {
-        path: '/',
-        component : <Home/>,
-        title : 'Home Page'
+        path: '/report',
+        component: <Report/>,
+        title: 'Report'
     },
     {
         path: '/users',
         component: <UserTable/>,
         title: 'Manage User'
     },
-    {
-        path: '/shop',
-        component: <Shop/>,
-        title: 'Shop Page'
-    },
+
     {
         path: '/information',
         component: <InformationPage/>,
-        title: 'Information Pae'
-    },
-    {
-        path: '/login',
-        component: <Login/>,
-        title: 'Login Page'
-    },
-    {
-        path: '/signup',
-        component: <SignUp/>,
-        title: 'Signup Page'
-    },
-    {
-        path: '/books/:id',
-        component: <BookDetail/>,
-        title: 'Book Detail'
+        title: 'Information'
     }
 ]

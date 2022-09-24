@@ -9,44 +9,20 @@ import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 
 export const CustomerRoute = [
-    {
-        path: '/',
-        component : <Home/>,
-        title : 'Home Page'
-    },
-    {
-        path: '/shop',
-        component: <Shop/>,
-        title: 'Shop Page'
-    },
-    {
-        path: '/books/:id',
-        component: <BookDetail/>,
-        title: 'Book Detail'
-    },
+
     {
         path: 'information',
         component: <InformationPage/>,
-        title: 'Information Page'
+        title: 'Information'
     },
     {
         path: '/cart',
         component: <Cart/>,
-        title: 'Cart Page'
+        title: 'Cart'
     },
     {
         path: '/order',
         component: <Order/>,
-        title: 'Order Page'
-    },
-    {
-        path: '/login',
-        component: <Login/>,
-        title: 'Login Page'
-    },
-    {
-        path: '/signup',
-        component: <SignUp/>,
-        title: 'Signup Page'
+        title: 'Order'
     }
 ]

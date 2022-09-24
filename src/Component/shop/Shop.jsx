@@ -6,9 +6,9 @@ export default function Shop(){
 
     return(
         <div style={{paddingTop : 80}}>
-            <h3>
+            <h1>
                 Books
-            </h3>
+            </h1>
             <Row>
                 <Col span={18} push={6}>
                     Hello

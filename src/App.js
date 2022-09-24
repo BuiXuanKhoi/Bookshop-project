@@ -11,9 +11,17 @@ import Order from "./Component/users/order/Order";
 import Header from "./Component/Header";
 import Footer from './Component/Footer';
 import NavigateBar from "./Component/shop/NavigateBar/NavigateBar";
-import {useEffect, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import {getCookie} from "react-use-cookie";
-function App() {
+import {AdminRoute} from "./routes/AdminRoute";
+import {CustomerRoute} from "./routes/CustomerRoute";
+import RoutesDefine from "./routes/RoutesDefine";
+import {BasicRoutes} from "./routes/BasicRoutes";
+import {UserRoute} from "./routes/UserRoute";
+
+export const Context = createContext();
+
+function App()  {
 
     const [loginData, setLoginData] = useState({
         role : '',
@@ -22,30 +30,35 @@ function App() {
         tokenType: 'Bearer'
     });
 
+
     useEffect(() =>{
-        if(getCookie('book-token') != null){
+        if(getCookie('book-token') !== ''){
             setLoginData(JSON.parse(getCookie('book-token')))
         }
-    },[loginData])
+    },[loginData.token])
+
+
 
   return (
     <BrowserRouter>
-        <NavigateBar/>
-        <Switch>
-            {/*// <Route path={'/login'} component={Login}/>
-            <Route path={'/signup'} component={SignUp}/>
-            <Route path={'/shop'} component={Shop}/>
-            <Route path={'/books'} >
-                <Route path={':bookId'} component={BookDetail}/>
-            </Route>
-            <Route path={'/cart'} component={Cart}/>*/}
-            <Route path={'/order'} component={Order}/>
-            <Route path={'/'} component={Home}/>
-        </Switch>
-
-        <Footer/>
-
+        {loginData.role === 'CUSTOMER' ? (
+            <div>
+                <NavigateBar menu={CustomerRoute}/>
+                <RoutesDefine routes={BasicRoutes(CustomerRoute)}/>
+            </div>
+        ) : loginData.role === 'ADMIN' ? (
+            <div>
+                <NavigateBar menu={AdminRoute}/>
+                <RoutesDefine routes={BasicRoutes(AdminRoute)}/>
+            </div>
+        ) : (
+            <div>
+                <NavigateBar menu={null}/>
+                <RoutesDefine routes={UserRoute}/>
+            </div>
+        )}
     </BrowserRouter>
+
   );
 }
 

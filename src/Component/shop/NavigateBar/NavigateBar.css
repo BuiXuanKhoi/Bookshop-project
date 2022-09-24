@@ -57,6 +57,20 @@
     border-radius: 50%;
 }
 
+.paddingtoLeft{
+    padding-left: 20px;
+    margin-left: 20px;
+}
+
+.Link{
+    color: white;
+    font-size: 1.2em;
+}
+
+.paddingnow{
+    padding-top: 500px;
+}
+
 .icon-user{
     color: greenyellow;
 }
@@ -65,6 +79,12 @@
     margin-left: 40rem;
     position: absolute;
     margin-top: 20%;
+}
+
+.icon-person{
+    margin-left: 80em;
+    position: absolute;
+    margin-top: 1em;
 }
 
 .logout{

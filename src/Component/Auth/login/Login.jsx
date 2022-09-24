@@ -8,9 +8,9 @@ import "./Login.css"
 
 import {useForm} from "react-hook-form";
 import {getCookie} from 'react-use-cookie';
-import {Link} from "react-router-dom";
-import {createPath, useNavigate} from "react-router";
+import {Link, Redirect} from "react-router-dom";
 import {useCookies} from "react-cookie";
+import {useNavigate} from "react-router";
 export default function Login(){
 
 
@@ -23,6 +23,9 @@ export default function Login(){
     const[cookies, setCookies] = useCookies(['book-token']);
 
     const isInit = useRef(false);
+    const navigate = useNavigate();
+
+
 
 
     const afterSubmit = (values) =>{
@@ -38,7 +41,11 @@ export default function Login(){
             title: "Error Login",
             content: mess
         })
+
+        window.location.reload();
     }
+
+
 
     const successPopup = (mes) => {
         console.log(JSON.parse(getCookie('book-token')))
@@ -46,6 +53,8 @@ export default function Login(){
             title: "Login Success",
             content: mes
         })
+
+        navigate('/');
     }
 
 
