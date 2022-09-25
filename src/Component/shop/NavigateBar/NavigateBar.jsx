@@ -7,6 +7,7 @@ import Login from "../../Auth/login/Login";
 import {Link} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router";
+import color from "color";
 // const menu = (
 //     <Menu
 //         items={[
@@ -54,18 +55,18 @@ const NavMenu = (nav) => {
     const handleClick = ({key}) => {
         console.log(key);
         if(key === 'logout'){
-            handleLogout();
+            logout();
         }
     }
 
-    const handleLogout = () => {
+    const logout = () => {
         removeCookies('book-token');
         window.location.reload();
     }
     return(
       <Menu onClick={handleClick}>
           {nav.map((item) =>
-              <Menu.Item key={item.path}>{item.title}</Menu.Item>
+              <Menu.Item  key={item.path}>{item.title}</Menu.Item>
           )}
 
           <Menu.Item key={'logout'} >Log out</Menu.Item>
@@ -81,13 +82,7 @@ export default function NavigateBar({menu}) {
         <>
         <div className={"nah"}>
             <BookFilled className={"book-icon"}/>
-            <p className={"text-next-to-icon"}>Book Shop</p>
-            <ul>
-                <li>Home</li>
-                <li>Shop</li>
-                <li style={{textDecoration:"underline",}}>About</li>
-                <li>Cart</li>
-            </ul>
+            <Link className={"text-next-to-icon"} to={'/'} >Book Shop</Link>
             {menu === null ? (
                 <div className={'icon-person'}>
                     <Link className={'Link'} to={'/login'}>Login</Link>
