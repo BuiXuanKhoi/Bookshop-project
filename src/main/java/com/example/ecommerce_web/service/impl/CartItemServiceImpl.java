@@ -12,6 +12,7 @@ import com.example.ecommerce_web.repository.BookRepository;
 import com.example.ecommerce_web.repository.CartItemRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
+import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.CartItemService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.validator.ListValidator;
@@ -36,11 +37,12 @@ public class CartItemServiceImpl implements CartItemService {
     UserRepository userRepository;
     CartItemMapper cartItemMapper;
     UserService userService;
+    BookService bookService;
 
     @Autowired
     public CartItemServiceImpl(CartItemRepository cartItemRepository, BookRepository bookRepository,
                                UserLocal userLocal, ModelMapper modelMapper
-            , UserRepository userRepository, CartItemMapper cartItemMapper, UserService userService){
+            , UserRepository userRepository, CartItemMapper cartItemMapper, UserService userService, BookService bookService){
         this.cartItemRepository=cartItemRepository;
         this.bookRepository = bookRepository;
         this.userLocal = userLocal;
@@ -48,6 +50,7 @@ public class CartItemServiceImpl implements CartItemService {
         this.userRepository = userRepository;
         this.cartItemMapper = cartItemMapper;
         this.userService = userService;
+        this.bookService = bookService;
     }
 
     private CartItem findById(int id){
@@ -60,16 +63,15 @@ public class CartItemServiceImpl implements CartItemService {
         int bookId = cartItemRequestDTO.getBookId();
         String userName = userLocal.getLocalUserName();
         int addedQuantity = cartItemRequestDTO.getQuantity();
-        Users users = this.userRepository.findUserByUserName(userName).get();
-        Books books = this.bookRepository.findById(bookId)
-                                         .orElseThrow(
-                                                 () -> new ResourceNotFoundException("Book Not Found With ID: " + bookId));
+        Users users = userService.findByUserName(userName);
+        Books books = bookService.getById(bookId);
 
         CartItem cartItem = modelMapper.map(cartItemRequestDTO, CartItem.class);
-        users.getCartItems().stream()
-                            .filter(item -> item.getBooks().equals(books))
-                            .findAny()
-                            .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
+//        users.getCartItems().stream()
+//                            .filter(item -> item.getBooks().equals(books))
+//                            .findAny()
+//                            .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
+        updateAlreadyExist(users, books, cartItem, addedQuantity);
 
         cartItem.setBooks(books);
         cartItem.setUsers(users);
@@ -97,22 +99,15 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Modifying
     public void deleteCartItem(int cartItemId) {
-
          CartItem cartItem = findById(cartItemId);
-
          this.cartItemRepository.delete(cartItem);
     }
 
-//
-//    private CartItem ifExistThenUpdate(int userId, int bookId,CartItem cartItem, int addedQuantity){
-//        this.cartItemRepository.getCartItemByBooksAndUsers(userId, bookId)
-//                .ifPresent(existedItem -> {
-//                    int existedQuantity = existedItem.getQuantity();
-//                    int existedCartId = existedItem.getCartItemsID();
-//                    cartItem.setQuantity(existedQuantity + addedQuantity);
-//                    cartItem.setCartItemsID(existedCartId);
-//                    return;
-//                });
-//        return cartItem;
-//    }
+    @Override
+    public void updateAlreadyExist(Users users, Books books, CartItem cartItem, int addedQuantity) {
+        users.getCartItems().stream()
+                .filter(item -> item.getBooks().equals(books))
+                .findAny()
+                .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
+    }
 }
