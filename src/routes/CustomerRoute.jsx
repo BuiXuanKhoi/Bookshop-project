@@ -13,12 +13,14 @@ export const CustomerRoute = [
     {
         path: 'information',
         component: <InformationPage/>,
-        title: 'Information'
+        title: 'Information',
+        className: 'information',
     },
     {
         path: '/cart',
         component: <Cart/>,
-        title: 'Cart'
+        title: 'Cart',
+        className:'cart',
     },
     {
         path: '/order',

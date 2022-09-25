@@ -1,0 +1,15 @@
+.recommend-table{
+    color:red;
+    background: blue;
+    font-size: 30px;
+    padding-top: 40px;
+    position: relative;
+    top:10rem;
+}
+
+.new{
+    color: black;
+    background: pink;
+    position: absolute;
+    top: 10rem;
+}

@@ -7,45 +7,58 @@ import Login from "../../Auth/login/Login";
 import {Link} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router";
-// const menu = (
-//     <Menu
-//         items={[
-//             {
-//                 key: '1',
-//                 label: (
-//                     <div>
-//                         {/*<ProfileOutlined className={"icon-user"}/>*/}
-//                         <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" className={"information"}>
-//                             Personal's Information
-//                         </a>
-//                     </div>
-//                 ),
-//             },
-//             {
-//                 key: '2',
-//                 label: (
-//                     <div>
-//                         <HourglassOutlined className={"icon-history"}/>
-//                         <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com" className={"history"}>
-//                             Ordered history
-//                         </a>
-//                     </div>
-//                 ),
-//             },
-//             {
-//                 key: '3',
-//                 label: (
-//                     <div>
-//                         <LogoutOutlined className={"icon-logout"}/>
-//                         <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com" className={"logout"}>
-//                             Log out
-//                         </a>
-//                     </div>
-//                 ),
-//             },
-//         ]}
-//     />
-// );
+const menu = (
+    <Menu
+        items={[
+            {
+                key: '1',
+                label: (
+                    <div>
+                        <ProfileOutlined className={"icon-user"}/>
+                        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com" className={"information"}>
+                            Information
+                        </a>
+                    </div>
+                ),
+            },
+            {
+                key: '2',
+                label: (
+                    <div>
+                        <HourglassOutlined className={"icon-cart"}/>
+                        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com" className={"cart"}>
+                            Cart
+                        </a>
+                    </div>
+                ),
+            },
+
+            {
+                key: '3',
+                label: (
+                    <div>
+                        <HourglassOutlined className={"icon-order"}/>
+                        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com" className={"order"}>
+                            Order
+                        </a>
+                    </div>
+                ),
+            },
+
+            {
+                key: '4',
+                label: (
+                    <div>
+                        <LogoutOutlined className={"icon-logout"}/>
+                        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com" className={"logout"}>
+                            Logout
+                        </a>
+                    </div>
+                ),
+            },
+        ]}
+    />
+);
 
 const NavMenu = (nav) => {
 
@@ -65,7 +78,12 @@ const NavMenu = (nav) => {
     return(
       <Menu onClick={handleClick}>
           {nav.map((item) =>
-              <Menu.Item key={item.path}>{item.title}</Menu.Item>
+              <Menu.Item key={item.path}>
+                  <Link to={item.path}>
+                      {item.title}
+              </Link>
+
+              </Menu.Item>
           )}
 
           <Menu.Item key={'logout'} >Log out</Menu.Item>
@@ -82,12 +100,7 @@ export default function NavigateBar({menu}) {
         <div className={"nah"}>
             <BookFilled className={"book-icon"}/>
             <p className={"text-next-to-icon"}>Book Shop</p>
-            <ul>
-                <li>Home</li>
-                <li>Shop</li>
-                <li style={{textDecoration:"underline",}}>About</li>
-                <li>Cart</li>
-            </ul>
+
             {menu === null ? (
                 <div className={'icon-person'}>
                     <Link className={'Link'} to={'/login'}>Login</Link>

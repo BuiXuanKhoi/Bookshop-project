@@ -1,14 +1,12 @@
 import React from "react";
 import './Home.css';
-
+import RecommendTable from "./recommend/RecommendTable";
 
 export default function Home(){
 
     return(
-        // <div className="animated-icon">
-        //     <div className="book-cover"></div>
-        //     <div className="page"></div>
-        // </div>
-        <div>No</div>
+        <div>
+            <RecommendTable/>
+        </div>
     );
 }
