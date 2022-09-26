@@ -6,7 +6,6 @@
     display: flex;
     align-items: center;
     align-content: center;
-    /*justify-tent: right*/
 }
 
 .book-icon{
@@ -32,17 +31,7 @@
     font-family: "Palatino Linotype";
 
 }
-.nah > ul {
-    margin-left: 25em;
-    color: white;
-    align-items: center;
-}
-.nah > ul > li{
-    display: inline-block;
-    text-align: center;
-    margin-left: 1.5em;
-    font-size: 1.2em;
-}
+
 
 .button-icon{
     background: #2C3333;
@@ -82,7 +71,7 @@
 }
 
 .icon-person{
-    margin-left: 80em;
+    margin-left: 50em;
     position: absolute;
     margin-top: 1em;
 }
@@ -91,10 +80,14 @@
 
 }
 
-.history{
+.cart{
 
 }
 
 .information{
+    color: red;
+}
+
+.order{
 
 }

@@ -64,13 +64,19 @@ const NavMenu = (nav) => {
         window.location.reload();
     }
     return(
-      <Menu onClick={handleClick}>
-          {nav.map((item) =>
-              <Menu.Item  key={item.path}>{item.title}</Menu.Item>
-          )}
+        <Menu onClick={handleClick}>
+            {nav.map((item) =>
+                    <Menu onClick={handleClick}>
+                        {nav.map((item) =>
+                            <Menu.Item  key={item.path}>{item.title}</Menu.Item>
+                        )}
 
-          <Menu.Item key={'logout'} >Log out</Menu.Item>
-      </Menu>
+                        <Menu.Item key={'logout'} >Log out</Menu.Item>
+                    </Menu>
+                )}
+
+            <Menu.Item key={'logout'} >Log out</Menu.Item>
+        </Menu>
     );
 }
 

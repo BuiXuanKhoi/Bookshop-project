@@ -10,7 +10,6 @@ import Report from "../Component/admin/manage/report/Report";
 
 export const AdminRoute = [
 
-
     {
         path: '/report',
         component: <Report/>,
