@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Avatar, Card, Col, Pagination, Row} from "antd";
+import {Avatar, Card, Col, Menu, Pagination, Row} from "antd";
 import FilterColumn from "./setting/FilterColumn";
 import DisplayBooks from "./display/DisplayBooks";
 import axios from "axios";
 import './Shop.css'
+import ButtonArrow from "./ButtonArrow";
 
 const {Meta} = Card;
 
@@ -18,6 +19,7 @@ export default function Shop(){
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState([]);
     const [mode, setMode] = useState('na');
+    const [id, setId] = useState();
 
     const displayBooks = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&mode=' + mode + '&searchCode=' + search + '&filter=' + categories)
@@ -57,6 +59,23 @@ export default function Shop(){
         displayBooks();
     }
 
+    const menu = (
+        <Menu
+
+            items={[
+                {
+                    label : 'Sort By Price Low To High.',
+                    key : 'pa'
+                }
+            ]}
+        />
+    )
+
+    useEffect(() =>{
+        console.log(id);
+    },[id])
+
+
 
 
 
@@ -66,15 +85,17 @@ export default function Shop(){
             <h1>
                 Books
             </h1>
-            <Row >
-                <Col span={18} push={6} >
-                    <Row>
-                        {
-                            pageBooks.map((book) => (
+            <Row className='shop-except-header'>
+                <Col span={18} push={6} className='display-column'>
 
-                                <Col span={6} key={book.bookId}>
+                    <Row className='eachRow'>
+                        {
+                            pageBooks.map((book) =>
+
+                                <Col span={6} key={book.bookId} className='eachRow'>
                                     <Card
-                                        style={{width: 250}}
+                                        style={{width: 200,
+                                            borderRadius : '10px'}}
                                         key={book.bookId}
                                         cover={
                                             <img
@@ -82,16 +103,20 @@ export default function Shop(){
                                                 src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
                                             />
                                         }
+                                        actions={<ButtonArrow/>}
+                                        onClick={ (e) => {
+                                            setId(book.bookId);
+                                        }}
                                     >
                                         <Meta
                                             avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
                                             title={book.bookName}
                                             description={book.bookPrice}
-                                        />
+                                       />
+                                        <ButtonArrow/>
                                     </Card>
                                 </Col>
-
-                            ))
+                            )
                         }
                     </Row>
 
