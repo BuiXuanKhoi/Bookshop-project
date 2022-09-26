@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 import {TwitterOutlined} from "@ant-design/icons";
 import {FacebookFilled} from "@ant-design/icons"
 import {LinkedinFilled} from "@ant-design/icons";
+import {useNavigate} from "react-router";
 
 
 const {Option} = Select;
@@ -27,6 +28,8 @@ const SignUp = () =>{
         role: '',
     });
 
+    const navigate = useNavigate();
+
     const errorPopup = (mes, code) =>{
         Modal.error({
             title: "Signup Error: " + code,
@@ -39,6 +42,8 @@ const SignUp = () =>{
             title: "Signup Success: ",
             content: mes
         })
+
+        navigate('/login');
     }
 
 

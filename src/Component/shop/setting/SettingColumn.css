@@ -1,13 +1,25 @@
 ul {
     display: block;
     margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
+    margin-bottom: 2em;
     /*padding-left: 40px;*/
     list-style-type: none ;
 }
 
+.page-navigate{
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+li{
+    padding-right: 3px;
+}
+
 .paddingcheck{
+    padding-top: 0.5rem;
+}
+
+.paddingItem{
     padding-top: 1rem;
 }

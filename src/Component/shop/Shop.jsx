@@ -1,20 +1,102 @@
-import React from "react";
-import {Col, Row} from "antd";
-import SettingColumn from "./setting/SettingColumn";
+import React, {useEffect, useRef, useState} from "react";
+import {Avatar, Card, Col, Pagination, Row} from "antd";
+import FilterColumn from "./setting/FilterColumn";
+import DisplayBooks from "./display/DisplayBooks";
+import axios from "axios";
+import './Shop.css'
+
+const {Meta} = Card;
 
 export default function Shop(){
 
+    const [authors, setAuthors] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [pageBooks, setPageBooks] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [page, setPage] = useState(0);
+    const [search, setSearch] = useState('');
+    const [filter, setFilter] = useState([]);
+    const [mode, setMode] = useState('na');
+
+    const displayBooks = () => {
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&mode=' + mode + '&searchCode=' + search + '&filter=' + categories)
+            .then((res) => {
+                setPageBooks(res.data.content)
+                setCurrentPage(res.data.number)
+                setTotalElements(res.data.totalElements)
+            })
+            .catch((err) => setPageBooks([]))
+    }
+
+    useEffect(() => displayBooks(), []);
+
+
+
+
+    const updateAuthor = (e) => {
+        if(e.target.checked)
+        {
+            authors.push(e.target.value);
+        }else
+        {
+            authors.splice(authors.indexOf(e.target.value), 1);
+        }
+    }
+
+    const updateCategories = (e) => {
+        if(e.target.checked)
+        {
+            categories.push(e.target.value);
+        }else
+        {
+            categories.splice(categories.indexOf(e.target.value), 1);
+        }
+
+        console.log(categories);
+        displayBooks();
+    }
+
+
     return(
-        <div style={{paddingTop : 80}}>
+        <div className={'shop'}>
             <h1>
                 Books
             </h1>
-            <Row>
-                <Col span={18} push={6}>
-                    Hello
+            <Row >
+                <Col span={18} push={6} >
+                    <Row>
+                        {
+                            pageBooks.map((book) => (
+
+                                <Col span={6} key={book.bookId}>
+                                    <Card
+                                        style={{width: 250}}
+                                        key={book.bookId}
+                                        cover={
+                                            <img
+                                                alt="example"
+                                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                            />
+                                        }
+                                    >
+                                        <Meta
+                                            avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}
+                                            title={book.bookName}
+                                            description={book.bookPrice}
+                                        />
+                                    </Card>
+                                </Col>
+
+                            ))
+                        }
+                    </Row>
+
+                    <Pagination className='page-navigate' defaultCurrent={currentPage} defaultPageSize={20} total={totalElements} />
+
                 </Col>
-                <Col span={6} pull={18}>
-                    <SettingColumn/>
+                <Col span={6} pull={18} >
+                    <FilterColumn changeAuthorFilter={updateAuthor} changeCategoryFilter={updateCategories}/>
                 </Col>
             </Row>
 

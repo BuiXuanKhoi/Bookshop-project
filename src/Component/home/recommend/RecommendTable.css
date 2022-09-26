@@ -1,15 +1,105 @@
 .recommend-table{
-    color:red;
-    background: blue;
-    font-size: 30px;
-    padding-top: 40px;
     position: relative;
-    top:10rem;
+    top:7em;
+    align-content: center;
+}
+.viewAllButton{
+    background:#73777B;
+    border-radius: 3px;
+    color: white;
+    padding: 5px;
+
+    position: absolute;
+}
+.onSaleCardList{
+    border-style: ridge;
+    height: 30rem;
+    width: 78%;
+    margin-left: 8%;
+    margin-top: 1%;
+    text-align: center;
+}
+.Additional{
+    background: #eeeeee;
+    font-weight: bolder;
 }
 
-.new{
-    color: black;
-    background: pink;
-    position: absolute;
-    top: 10rem;
+.arrowPointerInList{
+    font-size: 500%;
+    color: gray;
+
+}
+.displayItemInColumn{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    align-content: center;
+}
+.buttonArrowDesign{
+    justify-content: center;
+    height:40%;
+    width: 90%;
+    border-style: none;
+}
+
+
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1000px;
+    margin-block: 2rem;
+
+}
+
+img {
+    max-width: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    width: clamp(10rem, calc(10rem + 1vw), 11rem);
+    overflow: hidden;
+    box-shadow: 0 .1rem 1rem rgba(0, 0, 0, 0.1);
+    background: white;
+    background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+}
+
+.card__body {
+
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.card__body h4 {
+    font-size: 1.3rem;
+    text-transform: capitalize;
+}
+.card__body p{
+    margin-top: 0%;
+}
+
+.card__footer {
+    display: flex;
+    padding: 1rem;
+    margin-top: auto;
+}
+
+.user {
+    display: flex;
+    gap: .5rem;
+    font-weight: bolder;
+}
+
+.user__image {
+    border-radius: 50%;
+}
+.user__info h5 {
+    margin-left: 1em;
+    font-weight: bolder;
 }
