@@ -165,8 +165,10 @@ public class BookServiceImpl implements BookService {
 //                            .collect(Collectors.toList());
         List<Books> listBookRecommendSorted = listBookValid.ifNotEmpty()
                                                             .stream()
-                                                            .sorted(Comparator.comparingDouble(Books::getRatingPoint))
+                                                            .sorted(Comparator.comparingDouble(Books::getRatingPoint).reversed())
+                                                            .limit(8)
                                                             .collect(Collectors.toList());
+
         return listBookRecommendSorted;
     }
 
