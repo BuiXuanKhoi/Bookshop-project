@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -151,7 +152,15 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Books> findTopPopular() {
-        return null;
+        List<Books> listBookPopular = this.bookRepository.findAll();
+        ListValidator<Books> listBookValid = ListValidator.ofList(listBookPopular);
+
+        List<Books> listBookPopularSorted = listBookValid.ifNotEmpty()
+                                                        .stream()
+                                                        .sorted(Comparator.comparingInt(Books::getQuantity))
+                                                        .limit(8)
+                                                        .collect(Collectors.toList());
+        return listBookPopularSorted;
     }
 
     @Override

@@ -81,6 +81,15 @@ public class BookController {
                                .collect(Collectors.toList());
     }
 
+    @GetMapping(value = "/popular")
+    public List<BookRespondDTO> getListPopular(){
+        return this.bookService.findTopPopular()
+                                .stream()
+                                .map(bookMapper::toDTO)
+                                .collect(Collectors.toList());
+    }
+
+
     @PostMapping("/{id}/feedbacks")
     public FeedbackRespondDTO giveFeedback(
             @PathVariable("id") int bookId,
