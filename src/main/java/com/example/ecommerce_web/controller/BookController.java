@@ -83,11 +83,11 @@ public class BookController {
     }
 
     @GetMapping(value = "/popular")
-    public List<BookRespondDTO> getListPopular(){
+    public List<BookRespondDTO> getListPopular() {
         return this.bookService.findTopPopular()
-                                .stream()
-                                .map(bookMapper::toDTO)
-                                .collect(Collectors.toList());
+                .stream()
+                .map(bookMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 
