@@ -90,6 +90,13 @@ public class BookController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping(value = "/onsale")
+    public List<BookRespondDTO> getListOnSales(){
+        return this.bookService.findTopOnSale()
+                    .stream()
+                    .map(bookMapper::toDTO)
+                    .collect(Collectors.toList());
+    }
 
     @PostMapping("/{id}/feedbacks")
     public FeedbackRespondDTO giveFeedback(
