@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -21,6 +23,8 @@ public class Category {
     private int categoryId;
 
     @Column(name = "category_name")
+    @NotNull(message = "category name must not be null")
+    @NotBlank(message = "category name is required")
     private String categoryName;
 
     @Column(name = "category_description")

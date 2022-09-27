@@ -118,7 +118,6 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "User has been unblocked !!!"));
     }
 
-    // ---------------------------------------- Get user list -----------------------------------------------------
     @Override
     public Page<UserRespondDTO> getUserList(int page){
 

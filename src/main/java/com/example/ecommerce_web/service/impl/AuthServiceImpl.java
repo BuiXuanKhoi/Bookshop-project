@@ -86,7 +86,6 @@ public class AuthServiceImpl implements AuthService {
             }
         }
 
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
         );
@@ -94,7 +93,6 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
-
 
         String roleName = userDetail.getAuthorities().stream()
                                                      .map(GrantedAuthority::getAuthority)

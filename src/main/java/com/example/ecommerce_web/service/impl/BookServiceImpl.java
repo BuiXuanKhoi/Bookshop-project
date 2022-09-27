@@ -75,6 +75,13 @@ public class BookServiceImpl implements BookService {
         );
     }
 
+    @Override
+    public List<Books> findAllBooks() {
+        List<Books> listBookRecommend = this.bookRepository.findAll();
+        ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
+        return listBookValid.ifNotEmpty();
+    }
+
 
     @Override
     public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page)
@@ -142,26 +149,42 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public CartItem getCartItemByBook(int bookId) {
+        String userName = userLocal.getLocalUserName();
+        Users users = userService.findByUserName(userName);
+        Books books = getById(bookId);
+        return users.getCartItems()
+                    .stream()
+                    .filter(item -> item.getBooks().equals(books))
+                    .findAny()
+                    .orElseThrow(
+                        () -> new ResourceNotFoundException("Don't have cart item exist with this book !"));
+    }
+
+    @Override
     public Books update(int bookId, ModifyBookRequestDTO request) {
         Books books = getById(bookId);
         Books mappedBook = bookMapper.toExistedBooks(request, books);
         return this.bookRepository.save(mappedBook);
     }
 
+
+
     @Override
     public List<Books> findTopPopular() {
-        return null;
+        List<Books> listBooks = findAllBooks();
+        return listBooks.stream()
+                        .limit(10)
+                        .collect(Collectors.toList());
     }
 
     @Override
     public List<Books> findTopRecommend() {
-        List<Books> listBookRecommend = this.bookRepository.findAll();
-        ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
-        return listBookValid.ifNotEmpty()
-                            .stream()
-                            .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
-                            .limit(10)
-                            .collect(Collectors.toList());
+        List<Books> listBooks = findAllBooks();
+        return listBooks.stream()
+                        .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
+                        .limit(10)
+                        .collect(Collectors.toList());
     }
 
     private Pageable createPage(int page, String sortBy){

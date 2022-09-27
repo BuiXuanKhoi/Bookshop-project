@@ -29,7 +29,7 @@ public class CartController {
 
     @PostMapping
     public CartItemRespondDTO addToCart(@RequestBody CartItemRequestDTO cartItemRequestDTO){
-        CartItem cartItem = this.cartItemService.addToCart(cartItemRequestDTO);
+        CartItem cartItem = this.cartItemService.add(cartItemRequestDTO);
         return cartItemMapper.toDTO(cartItem);
     }
 
@@ -39,6 +39,14 @@ public class CartController {
                                    .stream()
                                    .map(cartItemMapper::toDTO)
                                    .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}")
+    public CartItemRespondDTO updateCart(@PathVariable int id,
+                                         @RequestParam(name = "quantity", defaultValue = "1")String addedQuantity){
+        int quantityConverted = Integer.parseInt(addedQuantity);
+        CartItem cartItem = this.cartItemService.update(id, quantityConverted);
+        return cartItemMapper.toDTO(cartItem);
     }
 
     @DeleteMapping("/{id}")

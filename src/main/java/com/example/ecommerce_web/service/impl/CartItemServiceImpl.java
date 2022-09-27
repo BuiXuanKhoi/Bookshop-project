@@ -54,25 +54,19 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     private CartItem findById(int id){
-        return   this.cartItemRepository.findById(id).orElseThrow(
+        return this.cartItemRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Not Found Cart Item With ID: " + id));
     }
 
     @Override
-    public CartItem addToCart(CartItemRequestDTO cartItemRequestDTO) {
+    public CartItem add(CartItemRequestDTO cartItemRequestDTO) {
         int bookId = cartItemRequestDTO.getBookId();
         String userName = userLocal.getLocalUserName();
         int addedQuantity = cartItemRequestDTO.getQuantity();
         Users users = userService.findByUserName(userName);
         Books books = bookService.getById(bookId);
-
         CartItem cartItem = modelMapper.map(cartItemRequestDTO, CartItem.class);
-//        users.getCartItems().stream()
-//                            .filter(item -> item.getBooks().equals(books))
-//                            .findAny()
-//                            .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
         updateAlreadyExist(users, books, cartItem, addedQuantity);
-
         cartItem.setBooks(books);
         cartItem.setUsers(users);
         return this.cartItemRepository.save(cartItem);
@@ -106,8 +100,16 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public void updateAlreadyExist(Users users, Books books, CartItem cartItem, int addedQuantity) {
         users.getCartItems().stream()
-                .filter(item -> item.getBooks().equals(books))
-                .findAny()
-                .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
+                            .filter(item -> item.getBooks().equals(books))
+                            .findAny()
+                            .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
+    }
+
+    @Override
+    public CartItem update(int cartId, int addedQuantity) {
+        CartItem cartItem = findById(cartId);
+        int existedQuantity = cartItem.getQuantity();
+        cartItem.setQuantity(existedQuantity + addedQuantity);
+        return cartItem;
     }
 }

@@ -38,7 +38,6 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getListCategory() {
         List<Category> listCategory =  this.categoryRepository.findAll();
         ListValidator<Category> listValidator = ListValidator.ofList(listCategory);
-
         return listValidator.ifNotEmpty();
     }
 

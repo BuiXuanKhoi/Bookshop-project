@@ -10,8 +10,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface CartItemService {
-    CartItem addToCart(CartItemRequestDTO cartItemRequestDTO);
+    CartItem add(CartItemRequestDTO cartItemRequestDTO);
     List<CartItem> getListCartItem();
     void deleteCartItem(int cartItemId);
     void updateAlreadyExist(Users users, Books books, CartItem cartItem, int addedQuantity);
+    CartItem update(int cartId, int addedQuantity);
 }

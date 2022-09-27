@@ -3,13 +3,12 @@ package com.example.ecommerce_web.controller;
 
 import com.example.ecommerce_web.mapper.BookMapper;
 import com.example.ecommerce_web.mapper.BookMapperImpl;
+import com.example.ecommerce_web.mapper.CartItemMapper;
 import com.example.ecommerce_web.mapper.FeedbackMapper;
 import com.example.ecommerce_web.model.dto.request.*;
-import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.MessageRespond;
+import com.example.ecommerce_web.model.dto.respond.*;
 import com.example.ecommerce_web.model.entities.Books;
+import com.example.ecommerce_web.model.entities.CartItem;
 import com.example.ecommerce_web.model.entities.Feedback;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.CategoryService;
@@ -32,15 +31,17 @@ public class BookController {
     CategoryService categoryService;
     BookMapper bookMapper;
     FeedbackMapper feedbackMapper;
+    CartItemMapper cartItemMapper;
 
     @Autowired
     public BookController(BookService bookService, FeedbackService feedbackService
-            , CategoryService categoryService, BookMapper bookMapper, FeedbackMapper feedbackMapper) {
+            , CategoryService categoryService, BookMapper bookMapper, FeedbackMapper feedbackMapper, CartItemMapper cartItemMapper) {
         this.bookService = bookService;
         this.feedbackService = feedbackService;
         this.categoryService = categoryService;
         this.bookMapper = bookMapper;
         this.feedbackMapper = feedbackMapper;
+        this.cartItemMapper = cartItemMapper;
     }
 
     @PostMapping
@@ -81,6 +82,14 @@ public class BookController {
                                .collect(Collectors.toList());
     }
 
+    @GetMapping("/popular")
+    public List<BookRespondDTO> getListPopular(){
+        return this.bookService.findTopPopular()
+                               .stream()
+                               .map(bookMapper::toDTO)
+                               .collect(Collectors.toList());
+    }
+
     @PostMapping("/{id}/feedbacks")
     public FeedbackRespondDTO giveFeedback(
             @PathVariable("id") int bookId,
@@ -103,5 +112,11 @@ public class BookController {
     public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){
         Books books =  this.bookService.getById(bookId);
         return bookMapper.toDTO(books);
+    }
+
+    @GetMapping("/{id}/cart")
+    public CartItemRespondDTO getCartItemExistByBook(@PathVariable int id){
+        CartItem cartItem = this.bookService.getCartItemByBook(id);
+        return cartItemMapper.toDTO(cartItem);
     }
 }
