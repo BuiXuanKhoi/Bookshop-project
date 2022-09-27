@@ -28,9 +28,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.Collections;
 
 @Service
 @Transactional
@@ -172,19 +174,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Books> findTopPopular() {
-        List<Books> listBooks = findAllBooks();
-        return listBooks.stream()
-                        .limit(10)
-                        .collect(Collectors.toList());
+        return findAllBooks().stream()
+                             .sorted(Comparator.comparingInt(Books::getQuantity))
+                             .limit(8)
+                             .collect(Collectors.toList());
     }
+
+
 
     @Override
     public List<Books> findTopRecommend() {
-        List<Books> listBooks = findAllBooks();
-        return listBooks.stream()
-                        .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
-                        .limit(10)
-                        .collect(Collectors.toList());
+        return findAllBooks().stream()
+                             .sorted(Comparator.comparingDouble(Books::getRatingPoint).reversed())
+                             .limit(8)
+                             .collect(Collectors.toList());
     }
 
     private Pageable createPage(int page, String sortBy){
