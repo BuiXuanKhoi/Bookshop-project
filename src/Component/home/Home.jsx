@@ -86,10 +86,10 @@ export default function Home(){
 
                 <Row>
                     <Col span={3} offset={10}>
-                        <Button type="primary" onClick={handleClick} style={{backgroundColor:'blue'}} icon={<SearchOutlined />}>Recommend</Button>
+                        <Button type="primary"  style={{backgroundColor:'blue'}} icon={<SearchOutlined />}>Recommend</Button>
                     </Col>
                     <Col span={3} pull={1}>
-                        <Button type="primary"  onClick={handleClick} icon={<SearchOutlined />} style={{background:"white"}}>Popular</Button>
+                        <Button type="primary"   icon={<SearchOutlined />} style={{background:"white"}}>Popular</Button>
                     </Col>
                 </Row>
 

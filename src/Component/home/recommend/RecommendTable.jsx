@@ -42,7 +42,7 @@ const books = [
         bookPrice: 14.4
     }
 
-
+]
 
 
 export default function RecommendTable(){
