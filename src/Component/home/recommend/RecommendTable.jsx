@@ -71,6 +71,7 @@ export default function RecommendTable(){
                     <Button onClick={handleOnClickOfLeftButton} className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
                     </Button>
                 </Col>
+
                 {
                     bookListOnSales.map(item =>(
                         <Col span={5} >

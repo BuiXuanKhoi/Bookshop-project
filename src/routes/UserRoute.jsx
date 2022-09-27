@@ -2,6 +2,7 @@ import Home from "../Component/home/Home";
 import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import Shop from "../Component/shop/Shop";
+import BookDetail from "../Component/books/BookDetail";
 
 export const UserRoute = [
 
@@ -24,5 +25,10 @@ export const UserRoute = [
         path: '/',
         component: <Home/>,
         title: 'Home'
+    },
+    {
+        path: '/books/:id',
+        component: <BookDetail/>,
+        title: 'Book Detail'
     }
 ]

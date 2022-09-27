@@ -44,7 +44,7 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
     return(
         <div className={'display'}>
             <ul>
-                <li>Category
+                <li className={'select-box'}>Category
                     <ul>
                         {category.map((item) =>
                             <li  key={item.categoryId} className="paddingcheck">
@@ -56,7 +56,7 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
                         )}
                     </ul>
                 </li>
-                <li className={'paddingItem'}>Author
+                <li className={'paddingItem'}  >Author
                     <ul>
                         {author.map((item) =>
                             <li  key={item.authorID} className="paddingcheck">

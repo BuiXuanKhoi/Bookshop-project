@@ -12,6 +12,18 @@ ul {
     justify-content: center;
 }
 
+.display-column{
+    margin-top: 4.5rem;
+}
+
+.select-box {
+    border: 1.5px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+    font-size: 20px;
+}
+
 li{
     padding-right: 3px;
 }
@@ -21,5 +33,10 @@ li{
 }
 
 .paddingItem{
-    padding-top: 1rem;
+    margin-top: 1rem;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    color: black;
+    font-size: 20px;
 }

@@ -4,8 +4,26 @@
     padding-top: 5em;
 }
 
+.shop-except-header{
+    padding-top: 2.5em;
+}
+
+.dropdown-sort{
+    margin-left: 84.7rem;
+}
+
 .filter{
     position: fixed;
+}
+
+.buttonMore{
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+}
+
+.eachRow{
+    margin-bottom: 3.5rem;
 }
 
 .display{

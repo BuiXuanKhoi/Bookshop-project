@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import './Home.css';
 import RecommendTable from "./recommend/RecommendTable";
 import {Button, Col, Row} from "antd";
@@ -6,6 +6,7 @@ import './recommend/RecommendTable.css'
 import './Home.css'
 import {CaretLeftOutlined, SearchOutlined} from "@ant-design/icons"
 import axios from "axios";
+import {useEffect} from "react";
 export default function Home(){
 
     const [changeStateButton, setChangeStateButton] = useState(false);
