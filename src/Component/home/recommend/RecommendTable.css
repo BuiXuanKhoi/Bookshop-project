@@ -43,7 +43,6 @@
 }
 
 
-
 .container {
     display: flex;
     flex-wrap: wrap;
@@ -52,6 +51,7 @@
     margin-block: 2rem;
 
 }
+
 
 img {
     max-width: 100%;
@@ -63,6 +63,7 @@ img {
     display: flex;
     flex-direction: column;
     width: clamp(10rem, calc(10rem + 1vw), 11rem);
+
     overflow: hidden;
     box-shadow: 0 .1rem 1rem rgba(0, 0, 0, 0.1);
     background: white;
@@ -102,4 +103,13 @@ img {
 .user__info h5 {
     margin-left: 1em;
     font-weight: bolder;
+}
+
+.buttonChangeState{
+    color: black;
+    background: white;
+}
+Button.active{
+    color: white;
+    background: gray;
 }

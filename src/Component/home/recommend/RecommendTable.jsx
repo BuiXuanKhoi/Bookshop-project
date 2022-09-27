@@ -6,39 +6,11 @@ import Meta from "antd/es/card/Meta";
 import { Avatar, Card } from 'antd';
 import './RecommendTable.css'
 import Icon from "antd/es/icon";
+import {Link} from "react-router-dom";
 import MyCard from "../../general/MyCard";
 
 
-const menu = (
-    <Menu
-        items={[
-            {
-                key: '1',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                        1st menu item
-                    </a>
-                ),
-            },
-            {
-                key: '2',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                        2nd menu item
-                    </a>
-                ),
-            },
-            {
-                key: '3',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                        3rd menu item
-                    </a>
-                ),
-            },
-        ]}
-    />
-);
+
 
 const books = [
     {
@@ -69,9 +41,18 @@ const books = [
         bookName:'Doraemon',
         bookPrice: 14.4
     }
-]
+
+
+
 
 export default function RecommendTable(){
+
+    const [bookCard ,setbookCard]= useState({
+        url: '',
+        authorName:'',
+        bookName:'',
+        price:'',
+    });
 
 
 
@@ -84,10 +65,10 @@ export default function RecommendTable(){
                     On Sale
                 </Col>
                 <Col span={5} pull={1}>
-                    <Dropdown overlay={menu} placement="bottomRight" arrow>
-                        <Button className={"viewAllButton"}>View all <CaretRightOutlined />
-                        </Button>
-                    </Dropdown>
+
+                    <Button className={"viewAllButton"}><a href={"/shop"}>View all <CaretRightOutlined /></a>
+                    </Button>
+
                 </Col>
             </Row>
 

@@ -4,23 +4,78 @@ import RecommendTable from "./recommend/RecommendTable";
 import {Button, Col, Row} from "antd";
 import './recommend/RecommendTable.css'
 import './Home.css'
-import {SearchOutlined} from "@ant-design/icons"
+import {CaretLeftOutlined, SearchOutlined} from "@ant-design/icons"
 export default function Home(){
 
-    const [value, setValue] = useState(1);
-    const [isChange, setIsChange] = useState(false);
+    const [changeStateButton, setChangeStateButton] = useState(false);
 
-    const handleClick = (event) => {
-        if (value !== 1){
-            value.style.background = 'white';
+    const bookList = [{
+        url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+        bookName: 'The old man and the sea',
+        authorName: 'Ernest Hemingway',
+        price: 18.5,
+    },
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+
+        },
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+
+        {
+            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+            bookName: 'The old man and the sea',
+            authorName: 'Ernest Hemingway',
+            price: 18.5,
+        },
+    ]
+
+    const changeStyleOfButton = () =>{
+        if (changeStateButton){
+            setChangeStateButton(false);
         }
-        event.target.style.background = 'black';
-        setValue(event.target);
-        console.log(value);
+        else{setChangeStateButton(true);}
     }
 
+
     return(
+
         <div >
+
             <RecommendTable/>
             <div className={"recommend-table"}>
                 <Row className={"feature"}>
@@ -38,16 +93,34 @@ export default function Home(){
                     </Col>
                 </Row>
 
-                <Row >
-                    <Col>
-                        <Row style={{borderStyle:"ridge",borderColor:"green"}}>
-                            hello world
-                        </Row>
+                <Row className={"onSaleCardList"} style={{height:"65rem"}}>
 
-                        <Row style={{borderStyle:"ridge",borderColor:"red"}}>
-                            hi world
-                        </Row>
-                    </Col>
+                        {
+                            bookList.map(item => (
+                                <Col span={6} >
+                                    <div className="container">
+                                        <div className="card">
+                                            <div className="card__header">
+                                                <img src={item.url} alt="card__image"
+                                                     className="card__image" style={{ width:"300"}}/>
+                                            </div>
+                                            <div className="card__body">
+                                                <h4>{item.bookName}</h4>
+                                                <p>{item.authorName}</p>
+                                            </div>
+                                            <div className="card footer" style={{background:"#D8D8D8"}}>
+                                                <div className="user">
+                                                    <div className="user__info">
+                                                        <h5>${item.price}</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Col>
+                            ))
+                        }
+
                 </Row>
             </div>
         </div>
