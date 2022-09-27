@@ -5,73 +5,44 @@ import {Button, Col, Row} from "antd";
 import './recommend/RecommendTable.css'
 import './Home.css'
 import {CaretLeftOutlined, SearchOutlined} from "@ant-design/icons"
+import axios from "axios";
 export default function Home(){
 
     const [changeStateButton, setChangeStateButton] = useState(false);
+    const [bookList, setBookList] = useState([])
 
-    const bookList = [{
-        url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-        bookName: 'The old man and the sea',
-        authorName: 'Ernest Hemingway',
-        price: 18.5,
-    },
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
 
-        },
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-
-        {
-            url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-            bookName: 'The old man and the sea',
-            authorName: 'Ernest Hemingway',
-            price: 18.5,
-        },
-    ]
-
-    const changeStyleOfButton = () =>{
+    const changeStyleOfRecommendButton = (event) =>{
         if (changeStateButton){
             setChangeStateButton(false);
         }
         else{setChangeStateButton(true);}
+        getRecommendBookList()
+    }
+    const getRecommendBookList = () => {
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/recommend")
+            .then((res)=>{
+                setBookList(res.data);
+            })
     }
 
+    const changeStyleOfPopularButton = (event) =>{
+        if (changeStateButton){
+            setChangeStateButton(false);
+        }
+        else{setChangeStateButton(true);}
+        getPopularBookList()
+    }
+    const getPopularBookList = () => {
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/popular")
+            .then((res) => {
+                setBookList(res.data)
+            })
+    }
 
+    useEffect(() =>{
+        getPopularBookList();
+    },[])
     return(
 
         <div >
@@ -87,15 +58,15 @@ export default function Home(){
                 <Row>
                     <Col span={12} style={{display:"flex",justifyContent:"flex-end"}} >
                         {
-                            changeStateButton ? <Button type="primary" onClick={changeStyleOfButton} className={"buttonChangeState"} style={{transition:0.1,background:"gray",color:"white"}}>Recommend</Button> :
-                                <Button type="primary" onClick={changeStyleOfButton} className={"buttonChangeState"} >Recommend</Button>
+                            changeStateButton ? <Button type="primary" onClick={changeStyleOfRecommendButton} className={"buttonChangeState"} style={{transition:0.1,background:"gray",color:"white"}}>Recommend</Button> :
+                                <Button type="primary" onClick={changeStyleOfRecommendButton} className={"buttonChangeState"} >Recommend</Button>
                         }
 
                     </Col>
                     <Col span={12} >
                         {
-                            changeStateButton ? <Button type="primary" onClick={changeStyleOfButton} className={"buttonChangeState"}>Popular</Button> :
-                                <Button type="primary" onClick={changeStyleOfButton} className={"buttonChangeState"} style={{transition:0.1,background:"gray",color:"white"}}>Popular</Button>
+                            changeStateButton ? <Button type="primary" onClick={changeStyleOfPopularButton} className={"buttonChangeState"}>Popular</Button> :
+                                <Button type="primary" onClick={changeStyleOfPopularButton} className={"buttonChangeState"} style={{transition:0.1,background:"gray",color:"white"}}>Popular</Button>
                         }
 
                     </Col>
@@ -109,7 +80,7 @@ export default function Home(){
                                     <div className="container">
                                         <div className="card">
                                             <div className="card__header">
-                                                <img src={item.url} alt="card__image"
+                                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
                                                      className="card__image" style={{ width:"300"}}/>
                                             </div>
                                             <div className="card__body">
@@ -119,7 +90,7 @@ export default function Home(){
                                             <div className="card footer" style={{background:"#D8D8D8"}}>
                                                 <div className="user">
                                                     <div className="user__info">
-                                                        <h5>${item.price}</h5>
+                                                        <h5>${item.bookPrice}</h5>
                                                     </div>
                                                 </div>
                                             </div>

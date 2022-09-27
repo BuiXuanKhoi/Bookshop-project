@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Divider, Row, Col, Button, Menu, Dropdown} from "antd";
 import Cart from "../../users/cart/Cart";
 import {CaretLeftOutlined,SettingOutlined, EditOutlined, EllipsisOutlined,CaretRightOutlined} from "@ant-design/icons";
@@ -7,68 +7,49 @@ import { Avatar, Card } from 'antd';
 import './RecommendTable.css'
 import Icon from "antd/es/icon";
 import {Link} from "react-router-dom";
+import axios from "axios";
+import {set} from "react-hook-form";
 
-
-
+let number = 0;
 
 export default function RecommendTable(){
-    const [bookCard ,setbookCard]= useState({
-        url: '',
-        authorName:'',
-        bookName:'',
-        price:'',
-    });
+    const [bookListOnSales ,setBookListOnSales]= useState([]);
+    const [saveList, setSaveList] = useState([]);
+    const [position,setPosition]=useState(0);
+    useEffect(()=>{
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/onsale")
+                .then((res)=>{
+                    localStorage.setItem("bookListOnSales",JSON.stringify(res.data))
+                })
+    },[]);
 
-    const bookCardList = (bookCard) => {
-        return(
-
-            <div className="container">
-                <div className="card">
-                    <div className="card__header">
-                        <img src={bookCard.url} alt="card__image"
-                             className="card__image" style={{ width:"300"}}/>
-                    </div>
-                    <div className="card__body">
-                        <h4>{bookCard.bookName}</h4>
-                        <p>{bookCard.authorName}</p>
-                    </div>
-                    <div className="card footer" style={{background:"#D8D8D8"}}>
-                        <div className="user">
-                            <div className="user__info">
-                                <h5>$ {bookCard.price}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    const bookList = [{
-        url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
-        bookName: 'The old man and the sea',
-        authorName: 'Hemingway',
-        price: 18.5,
-        },
-        {
-            url:'https://cdn0.fahasa.com/media/catalog/product/t/o/to_kill_a_mockingbird_1_2019_01_18_16_59_17.jpg',
-            bookName:'To Kill A Mockingbird',
-            authorName:'Harpen Lee',
-            price: 6.30,
-
-        },
-        {
-            url: 'https://images.thuvienpdf.com/dQtVi1.webp',
-            bookName: 'The hollowing hill',
-            authorName: 'Emily Bronte',
-            price: 14.7,
-        },
-        {
-            url: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/The_Great_Gatsby_cover_1925_%281%29.jpg',
-            bookName: 'The great Gatsby',
-            authorName: 'Fitzergald',
-            price: 21.9,
+    useEffect(()=>{
+            const saved = localStorage.getItem("bookListOnSales");
+            const initialValue = JSON.parse(saved);
+            setBookListOnSales(initialValue.slice(0,4));
+            setSaveList(initialValue)
+    },[])
+    useEffect(()=>{
+        console.log("Yes")
+        console.log(position)
         }
-    ]
+    ,[position])
+    const handleOnClickOfRightButton = () => {
+        if(number<6){
+            number+=1;
+        }
+        setPosition(number)
+        setBookListOnSales(saveList.slice(number,number+4))
+    }
+
+    const handleOnClickOfLeftButton = () => {
+        if(number>0){
+            number -=1;
+        }
+        setPosition(number)
+        setBookListOnSales(saveList.slice(number,number+4))
+    }
+
     return(
 
         <div className={"recommend-table"} >
@@ -87,16 +68,16 @@ export default function RecommendTable(){
 
             <Row className={"onSaleCardList"} >
                 <Col span={2} className={"displayItemInColumn"}>
-                    <Button className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
+                    <Button onClick={handleOnClickOfLeftButton} className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
                     </Button>
                 </Col>
                 {
-                    bookList.map(item =>(
+                    bookListOnSales.map(item =>(
                         <Col span={5} >
                             <div className="container">
                                 <div className="card">
                                     <div className="card__header">
-                                        <img src={item.url} alt="card__image"
+                                        <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
                                              className="card__image" style={{ width:"300"}}/>
                                     </div>
                                     <div className="card__body">
@@ -106,7 +87,7 @@ export default function RecommendTable(){
                                     <div className="card footer" style={{background:"#D8D8D8"}}>
                                         <div className="user">
                                             <div className="user__info">
-                                                <h5>${item.price}</h5>
+                                                <h5>${item.bookPrice}</h5>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +98,7 @@ export default function RecommendTable(){
                 }
 
                 <Col span={2} className={"displayItemInColumn"}>
-                    <Button className={"buttonArrowDesign"} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
+                    <Button className={"buttonArrowDesign"} onClick={handleOnClickOfRightButton} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
                     {/*<CaretRightOutlined  className={"arrowPointerInList"}/>*/}
                     </Button>
                 </Col>
