@@ -6,6 +6,7 @@ import Meta from "antd/es/card/Meta";
 import { Avatar, Card } from 'antd';
 import './RecommendTable.css'
 import Icon from "antd/es/icon";
+import MyCard from "../../general/MyCard";
 
 
 const menu = (
@@ -39,38 +40,40 @@ const menu = (
     />
 );
 
-export default function RecommendTable(){
-    const [bookCard ,setbookCard]= useState({
-        url: '',
-        authorName:'',
-        bookName:'',
-        price:'',
-    });
-
-    const bookCardList = (bookCard) => {
-        return(
-
-            <div className="container">
-                <div className="card">
-                    <div className="card__header">
-                        <img src={bookCard.url} alt="card__image"
-                             className="card__image" style={{ width:"300"}}/>
-                    </div>
-                    <div className="card__body">
-                        <h4>{bookCard.bookName}</h4>
-                        <p>{bookCard.authorName}</p>
-                    </div>
-                    <div className="card footer" style={{background:"#D8D8D8"}}>
-                        <div className="user">
-                            <div className="user__info">
-                                <h5>$ {bookCard.price}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+const books = [
+    {
+        bookId: 9,
+        url: 'https://cdn-amz.woka.io/images/I/71dUEXcxJzL.jpg',
+        authorName : 'Hemingway',
+        bookName : 'The Man And The Sea',
+        bookPrice: 15.8
+    },
+    {
+        bookId: 10,
+        url:'https://static.8cache.com/cover/eJzLyTDWz8nJLtH1KvFKTk0pCzeMCjeJCHbyMggxLg7ziSqo8CqrDEoPKUnKTC_JzwoKNHHJMLQ0qQjwqzRKz_coTPQ1DPDxzsxzqUzMMPfOTzQtcM_wLrctNgAAYsoejA==/sherlock-holmes-toan-tap.jpg',
+        authorName: 'Conan Doyle',
+        bookName: 'Sherlock Holmes',
+        bookPrice: 30.2
+    },
+    {
+        bookId: 11,
+        url: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466912744l/30752004._SY475_.jpg',
+        authorName: 'Nguyen Nhat Anh',
+        bookName: 'Mat Biec',
+        bookPrice: 12.6
+    },
+    {
+        bookId: 12,
+        url:'https://upload.wikimedia.org/wikipedia/vi/b/b7/Doraemon1.jpg',
+        authorName: 'Fujiko F Fujio',
+        bookName:'Doraemon',
+        bookPrice: 14.4
     }
+]
+
+export default function RecommendTable(){
+
+
 
     return(
 
@@ -94,92 +97,13 @@ export default function RecommendTable(){
                     </Button>
                 </Col>
 
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
+                {
+                    books.map(item =>(
+                        <Col span={5}>
+                            <MyCard item={item} url={item.url}/>
+                        </Col>
+                    ))
+                }
 
                 <Col span={2} className={"displayItemInColumn"}>
                     <Button className={"buttonArrowDesign"} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>

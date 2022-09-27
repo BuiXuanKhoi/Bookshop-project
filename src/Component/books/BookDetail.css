@@ -1,0 +1,29 @@
+.book-detail{
+    padding-top: 7em;
+}
+
+.book-detail-box{
+    border: 1px solid black;
+    height: 20rem;
+    border-radius: 6px;
+    width: 55rem;
+}
+
+.book-title{
+    padding-top: 2rem
+}
+
+.book-image{
+    margin-left: 2rem;
+    margin-top: 1rem;
+}
+
+.book-author{
+    margin-top: 1rem;
+    margin-left: 3rem;
+}
+
+.cart-box{
+    border: 1px solid black;
+    border-radius: 6px;
+}
