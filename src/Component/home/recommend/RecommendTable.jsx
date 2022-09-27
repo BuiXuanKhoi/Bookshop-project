@@ -6,38 +6,10 @@ import Meta from "antd/es/card/Meta";
 import { Avatar, Card } from 'antd';
 import './RecommendTable.css'
 import Icon from "antd/es/icon";
+import {Link} from "react-router-dom";
 
 
-const menu = (
-    <Menu
-        items={[
-            {
-                key: '1',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                        1st menu item
-                    </a>
-                ),
-            },
-            {
-                key: '2',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                        2nd menu item
-                    </a>
-                ),
-            },
-            {
-                key: '3',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-                        3rd menu item
-                    </a>
-                ),
-            },
-        ]}
-    />
-);
+
 
 export default function RecommendTable(){
     const [bookCard ,setbookCard]= useState({
@@ -71,7 +43,32 @@ export default function RecommendTable(){
             </div>
         );
     }
+    const bookList = [{
+        url:'https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0',
+        bookName: 'The old man and the sea',
+        authorName: 'Hemingway',
+        price: 18.5,
+        },
+        {
+            url:'https://cdn0.fahasa.com/media/catalog/product/t/o/to_kill_a_mockingbird_1_2019_01_18_16_59_17.jpg',
+            bookName:'To Kill A Mockingbird',
+            authorName:'Harpen Lee',
+            price: 6.30,
 
+        },
+        {
+            url: 'https://images.thuvienpdf.com/dQtVi1.webp',
+            bookName: 'The hollowing hill',
+            authorName: 'Emily Bronte',
+            price: 14.7,
+        },
+        {
+            url: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/The_Great_Gatsby_cover_1925_%281%29.jpg',
+            bookName: 'The great Gatsby',
+            authorName: 'Fitzergald',
+            price: 21.9,
+        }
+    ]
     return(
 
         <div className={"recommend-table"} >
@@ -81,10 +78,10 @@ export default function RecommendTable(){
                     On Sale
                 </Col>
                 <Col span={5} pull={1}>
-                    <Dropdown overlay={menu} placement="bottomRight" arrow>
-                        <Button className={"viewAllButton"}>View all <CaretRightOutlined />
-                        </Button>
-                    </Dropdown>
+
+                    <Button className={"viewAllButton"}><a href={"/shop"}>View all <CaretRightOutlined /></a>
+                    </Button>
+
                 </Col>
             </Row>
 
@@ -93,93 +90,31 @@ export default function RecommendTable(){
                     <Button className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
                     </Button>
                 </Col>
-
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
+                {
+                    bookList.map(item =>(
+                        <Col span={5} >
+                            <div className="container">
+                                <div className="card">
+                                    <div className="card__header">
+                                        <img src={item.url} alt="card__image"
+                                             className="card__image" style={{ width:"300"}}/>
+                                    </div>
+                                    <div className="card__body">
+                                        <h4>{item.bookName}</h4>
+                                        <p>{item.authorName}</p>
+                                    </div>
+                                    <div className="card footer" style={{background:"#D8D8D8"}}>
+                                        <div className="user">
+                                            <div className="user__info">
+                                                <h5>${item.price}</h5>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </Col>
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
-
-                <Col span={5} >
-                    <div className="container">
-                        <div className="card">
-                            <div className="card__header">
-                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                     className="card__image" style={{ width:"300"}}/>
-                            </div>
-                            <div className="card__body">
-                                <h4>Book Name</h4>
-                                <p>Author name</p>
-                            </div>
-                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                <div className="user">
-                                    <div className="user__info">
-                                        <h5>$ Price</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Col>
+                        </Col>
+                    ))
+                }
 
                 <Col span={2} className={"displayItemInColumn"}>
                     <Button className={"buttonArrowDesign"} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
