@@ -31,6 +31,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.Collections;
 
 @Service
 @Transactional
@@ -157,11 +158,16 @@ public class BookServiceImpl implements BookService {
     public List<Books> findTopRecommend() {
         List<Books> listBookRecommend = this.bookRepository.findAll();
         ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
-        return listBookValid.ifNotEmpty()
-                            .stream()
-                            .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
-                            .limit(10)
-                            .collect(Collectors.toList());
+//        return listBookValid.ifNotEmpty()
+//                            .stream()
+//                            .sorted((b1, b2) -> Double.compare(b1.getRatingPoint(), b2.getRatingPoint()))
+//                            .limit(8) // There only 8 card for on loading session
+//                            .collect(Collectors.toList());
+        List<Books> listBookRecommendSorted = listBookValid.ifNotEmpty()
+                                                            .stream()
+                                                            .sorted(Comparator.comparingDouble(Books::getRatingPoint))
+                                                            .collect(Collectors.toList());
+        return listBookRecommendSorted;
     }
 
     private Pageable createPage(int page, String sortBy){
