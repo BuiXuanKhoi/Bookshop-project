@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.service.impl;
 
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.CartItemMapper;
 import com.example.ecommerce_web.model.dto.request.CartItemRequestDTO;
@@ -33,7 +34,6 @@ public class CartItemServiceImpl implements CartItemService {
     CartItemRepository cartItemRepository;
     BookRepository bookRepository;
     UserLocal userLocal;
-    ModelMapper modelMapper;
     UserRepository userRepository;
     CartItemMapper cartItemMapper;
     UserService userService;
@@ -41,12 +41,12 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Autowired
     public CartItemServiceImpl(CartItemRepository cartItemRepository, BookRepository bookRepository,
-                               UserLocal userLocal, ModelMapper modelMapper
-            , UserRepository userRepository, CartItemMapper cartItemMapper, UserService userService, BookService bookService){
+                               UserLocal userLocal, UserRepository userRepository,
+                               CartItemMapper cartItemMapper, UserService userService,
+                               BookService bookService){
         this.cartItemRepository=cartItemRepository;
         this.bookRepository = bookRepository;
         this.userLocal = userLocal;
-        this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.cartItemMapper = cartItemMapper;
         this.userService = userService;
@@ -62,21 +62,27 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem add(CartItemRequestDTO cartItemRequestDTO) {
         int bookId = cartItemRequestDTO.getBookId();
         String userName = userLocal.getLocalUserName();
-        int addedQuantity = cartItemRequestDTO.getQuantity();
         Users users = userService.findByUserName(userName);
-        Books books = bookService.getById(bookId);
-        CartItem cartItem = modelMapper.map(cartItemRequestDTO, CartItem.class);
-        updateAlreadyExist(users, books, cartItem, addedQuantity);
-        cartItem.setBooks(books);
+        CartItem cartItem = cartItemMapper.fromDTO(cartItemRequestDTO);
         cartItem.setUsers(users);
+
+        if(isExistCartItem(bookId)){
+            throw new ConstraintViolateException("Cannot Add To Cart Due To Already Existed Cart Item !!!");
+        }
         return this.cartItemRepository.save(cartItem);
     }
 
-    private void updateCartItem(int existedId, CartItem cartItem, int quantity){
-        int existedQuantity = cartItem.getQuantity();
-        int totalQuantity = existedQuantity + quantity;
-        cartItem.setQuantity(totalQuantity);
-        cartItem.setCartItemsID(existedId);
+
+    private boolean isExistCartItem(int bookId){
+        try
+        {
+            CartItem cartItem = bookService.getCartItemByBook(bookId);
+            return true;
+        }
+        catch (ResourceNotFoundException ex)
+        {
+            return false;
+        }
     }
 
 
@@ -86,7 +92,6 @@ public class CartItemServiceImpl implements CartItemService {
         Users users = userService.findByUserName(userName);
         List<CartItem> listCartItem = users.getCartItems();
         ListValidator<CartItem> listCartItemValid = ListValidator.ofList(listCartItem);
-
         return listCartItemValid.ifNotEmpty();
     }
 
@@ -97,13 +102,6 @@ public class CartItemServiceImpl implements CartItemService {
          this.cartItemRepository.delete(cartItem);
     }
 
-    @Override
-    public void updateAlreadyExist(Users users, Books books, CartItem cartItem, int addedQuantity) {
-        users.getCartItems().stream()
-                            .filter(item -> item.getBooks().equals(books))
-                            .findAny()
-                            .ifPresent(item ->  updateCartItem(item.getCartItemsID(),cartItem, addedQuantity));
-    }
 
     @Override
     public CartItem update(int cartId, int addedQuantity) {

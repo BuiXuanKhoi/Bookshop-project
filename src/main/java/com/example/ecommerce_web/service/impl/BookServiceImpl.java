@@ -89,30 +89,27 @@ public class BookServiceImpl implements BookService {
     public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page)
     {
         int[] listFilter;
+        int[] listAuthors;
         Pageable pageable = createPage(page, mode);
 
-        if(filter.equals("0"))
-        {
+        if(filter.equals("0")) {
             listFilter = this.categoryRepository.findAll().stream()
                     .mapToInt(Category::getCategoryId).toArray();
-        }else
-        {
+        }else {
             listFilter = Arrays.stream(filter.split(","))
                     .mapToInt(Integer::parseInt).toArray();
         }
 
         Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter);
 
-        if (listBookFeature.hasContent()){
-            return listBookFeature;
+        if (!listBookFeature.hasContent()){
+            throw new ResourceNotFoundException("This Page Is Empty !!!");
         }
-
-        throw new ResourceNotFoundException("This Page Is Empty !!!");
+        return listBookFeature;
     }
 
 
     @Override
-    @Transactional
     public Books add(BookRequestDTO bookRequestDTO) {
 
         int[] listCategoryId = bookRequestDTO.getListCategory();
@@ -120,10 +117,7 @@ public class BookServiceImpl implements BookService {
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
 
-        Author author = authorRepository.findById(authorId)
-                                        .orElseThrow(
-                                                () -> new ResourceNotFoundException("Not Found Author Witd ID: " + authorId)
-                                        );
+        Author author = authorService.getById(authorId);
 
         List<Classify> classifyList = Arrays.stream(listCategoryId)
                                             .boxed()

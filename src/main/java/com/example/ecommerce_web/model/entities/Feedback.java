@@ -33,6 +33,9 @@ public class Feedback {
     @CreationTimestamp
     private Date createDay;
 
+    @Column(name = "feedback_title")
+    private String title;
+
 
     @Column(name =  "rating_points")
     private float ratingPoint;

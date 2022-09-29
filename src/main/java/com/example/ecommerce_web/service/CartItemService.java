@@ -13,6 +13,5 @@ public interface CartItemService {
     CartItem add(CartItemRequestDTO cartItemRequestDTO);
     List<CartItem> getListCartItem();
     void deleteCartItem(int cartItemId);
-    void updateAlreadyExist(Users users, Books books, CartItem cartItem, int addedQuantity);
     CartItem update(int cartId, int addedQuantity);
 }

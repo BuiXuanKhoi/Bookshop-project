@@ -26,7 +26,6 @@ import javax.swing.text.html.HTML;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@SuppressWarnings("Deprecated ")
 @ComponentScan
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 

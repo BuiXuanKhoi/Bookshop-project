@@ -41,9 +41,7 @@ public class CartItemMapperImpl implements CartItemMapper{
     @Override
     public CartItem fromDTO(CartItemRequestDTO requestDTO) {
         int bookId = requestDTO.getBookId();
-        Books books = this.bookRepository.findById(bookId).orElseThrow(
-                () -> new ResourceNotFoundException("Not Found Book With ID: " + bookId)
-        );
+        Books books = bookService.getById(bookId);
         CartItem cartItem = modelMapper.map(requestDTO, CartItem.class);
         cartItem.setBooks(books);
         return cartItem;

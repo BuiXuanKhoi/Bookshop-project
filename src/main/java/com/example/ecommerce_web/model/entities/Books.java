@@ -60,7 +60,7 @@ public class Books {
     @UpdateTimestamp
     private Date updateDay;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 10000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

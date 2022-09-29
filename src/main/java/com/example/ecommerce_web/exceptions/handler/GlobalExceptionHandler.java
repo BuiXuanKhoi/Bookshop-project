@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.nio.file.AccessDeniedException;
@@ -96,5 +97,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                 .build();
 
         return new ResponseEntity<>(errorRespond, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+    protected ResponseEntity<?> handleMethodTypeMisMatchException(MethodArgumentTypeMismatchException ex){
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message("One of required parameters or path is missed. Please check it out !!!")
+                                                .statusCode(HttpStatus.BAD_REQUEST.value())
+                                                .build();
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
     }
 }
