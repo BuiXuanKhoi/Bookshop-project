@@ -4,6 +4,7 @@ import axios from "axios";
 import {Col, Row} from "antd";
 import '../shop/Shop.css';
 import './BookDetail.css'
+import FeedbackTable from "./FeedbackTable";
 
 export default function BookDetail(){
 
@@ -39,33 +40,34 @@ export default function BookDetail(){
 
     return(
         <div className='book-detail'>
-            <Row>
-                <Col span={16}>
-                    <div className='book-detail-box'>
-                        <Row>
-                            <Col span={6}>
-                                <img src='https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_38237.jpg' width='200px' height='200px' className='book-image' alt='example'/>
-                                <div className='book-author'> By Author {bookDetail.authorName}</div>
-                            </Col>
-                            <Col span={18}>
-                                <h2 className='book-title'>{bookDetail.bookName}</h2>
-                                <span>Book Description</span>
-                                <p className='book-description'>
-                                    {bookDetail.description}
-                                </p>
-                            </Col>
-                        </Row>
-                    </div>
-                    Hello !!!
+            <Col>
+                <Row>
+                    <Col span={16}>
+                        <div className='book-detail-box'>
+                            <Row>
+                                <Col span={6}>
+                                    <img src='https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_38237.jpg' width='200px' height='200px' className='book-image' alt='example'/>
+                                    <div className='book-author'> By Author {bookDetail.authorName}</div>
+                                </Col>
+                                <Col span={18}>
+                                    <h2 className='book-title'>{bookDetail.bookName}</h2>
+                                    <span>Book Description</span>
+                                    <p className='book-description'>
+                                        {bookDetail.description}
+                                    </p>
+                                </Col>
+                            </Row>
+                        </div>
+                    </Col>
+                    <Col span={8}>
+                        <div className='cart-box'>
+                            Cart
+                        </div>
 
-                </Col>
-                <Col span={8}>
-                    <div className='cart-box'>
-                        Cart
-                    </div>
-
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+                <FeedbackTable/>
+            </Col>
 
         </div>
     );
