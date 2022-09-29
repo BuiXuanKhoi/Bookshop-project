@@ -174,7 +174,13 @@ public class BookServiceImpl implements BookService {
                              .collect(Collectors.toList());
     }
 
-
+    @Override
+    public List<Books> findTopOnSale(){
+        return findAllBooks().stream()
+                                .sorted(Comparator.comparingDouble(Books::getBookPrice))
+                                .limit(10)
+                                .collect(Collectors.toList());
+    }
 
     @Override
     public List<Books> findTopRecommend() {

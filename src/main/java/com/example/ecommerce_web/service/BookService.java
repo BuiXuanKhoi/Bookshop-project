@@ -19,6 +19,7 @@ public interface BookService {
     List<Books> findAllBooks();
     List<Books> findTopPopular();
     List<Books> findTopRecommend();
+    List<Books> findTopOnSale();
     void delete(int bookId);
     CartItem getCartItemByBook(int bookId);
 }
