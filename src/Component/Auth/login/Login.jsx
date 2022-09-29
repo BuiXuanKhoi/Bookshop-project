@@ -1,16 +1,16 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import 'antd/dist/antd.min.css';
 import '../Signup/Signup.css';
 import {Button, Form, Modal} from "antd";
 import Input from "antd/es/input/Input";
 import axios from "axios";
 import "./Login.css"
-
 import {useForm} from "react-hook-form";
 import {getCookie} from 'react-use-cookie';
 import {Link, Redirect} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router";
+import {SecurityContext} from "../../../App";
 export default function Login(){
 
 
@@ -18,6 +18,9 @@ export default function Login(){
         userName: "",
         password: "",
     });
+
+    const [security, setSecurity] = useContext(SecurityContext);
+
 
     const {register, handleSubmit} = useForm();
     const[cookies, setCookies] = useCookies(['book-token']);
@@ -69,6 +72,7 @@ export default function Login(){
                     token : res.data.token,
                     type : res.data.tokenType
                 });
+                setSecurity(res.data);
                 successPopup("You can access shopping page now !!!");
             }).catch((err) => {
                 errorPopup(err.response.status, err.response.data.message);

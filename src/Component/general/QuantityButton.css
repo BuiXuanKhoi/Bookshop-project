@@ -1,0 +1,24 @@
+.quantity{
+   margin-left: 4.7em;
+   margin-right: 4.7em;
+   font-size: 1.6em;
+   color: white;
+}
+
+.change-quantity{
+   margin-top: 8em;
+   justify-content: center;
+   display: flex;
+   width: 21em;
+   background-color: #0096FF;
+   margin-left: 3em;
+   margin-right: 20em;
+}
+
+.active-button{
+   background-color: #0096FF;
+}
+
+.disable-button{
+   background-color: #73777B;
+}

@@ -4,13 +4,27 @@
 
 .book-detail-box{
     border: 1px solid black;
-    height: 20rem;
+    height: 25rem;
     border-radius: 6px;
-    width: 55rem;
+    /*width: 55rem;*/
+    margin-left: 1.3rem;
 }
 
 .book-title{
     padding-top: 2rem
+}
+
+.book-price-box{
+    background-color: #277BC0;
+    height: 4em;
+    border: #2C3333;
+}
+
+.book-price{
+    color: white;
+    margin: 0 auto !important;
+    float: none !important;
+    font-size: 2em;
 }
 
 .book-image{
@@ -26,4 +40,13 @@
 .cart-box{
     border: 1px solid black;
     border-radius: 6px;
+    height: 23em;
+    /*width: 38em;*/
+}
+
+.add-cart{
+    width: 21em;
+    margin-left: 3em;
+    margin-right: 20em;
+    margin-top: 2em;
 }
