@@ -7,23 +7,29 @@ import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import BookDetail from "../Component/books/BookDetail";
 import Report from "../Component/admin/manage/report/Report";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
+
 
 export const AdminRoute = [
 
     {
         path: '/report',
         component: <Report/>,
-        title: 'Report'
+        title: 'Report',
+        icon : <FontAwesomeIcon icon={faFileCircleCheck}/>
     },
     {
         path: '/users',
         component: <UserTable/>,
-        title: 'Manage User'
+        title: 'Manage User',
+        icon: <FontAwesomeIcon icon={faUserCheck}/>
     },
 
     {
         path: '/information',
         component: <InformationPage/>,
-        title: 'Information'
+        title: 'Information',
+        icon: <FontAwesomeIcon icon={faUser}/>
     }
 ]

@@ -7,7 +7,9 @@ import Login from "../../Auth/login/Login";
 import {Link} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router";
-
+import '@fortawesome/fontawesome-svg-core';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBroom, faReply, faRightFromBracket, faUser, faUserCheck, faUserGear} from "@fortawesome/free-solid-svg-icons";
 const NavMenu = (nav) => {
 
     const navigate = useNavigate();
@@ -17,22 +19,26 @@ const NavMenu = (nav) => {
     const handleClick = ({key}) => {
         if(key === 'logout'){
             logout();
+        }else{
+            navigate(key);
         }
-        navigate(key);
     }
+
+
 
     const logout = () => {
         removeCookies('book-token');
+        console.log("Log Out")
         window.location.reload();
     }
     return(
         <Menu onClick={handleClick}>
-            {nav.map((item) =>
-                    <Menu.Item  key={item.path}>{item.title}</Menu.Item>
+            {(nav).map((item) =>
+                    <Menu.Item icon={item.icon}  key={item.path}>{item.title}</Menu.Item>
             )}
 
-            <Divider style={{paddingTop:'0'}}/>
-            <Menu.Item style={{color:'red'}}key={'logout'} >Log out</Menu.Item>
+            <Divider/>
+            <Menu.Item icon={<FontAwesomeIcon icon={faRightFromBracket}/>} style={{color:'red'}}key={'logout'} >Log out</Menu.Item>
         </Menu>
     );
 }

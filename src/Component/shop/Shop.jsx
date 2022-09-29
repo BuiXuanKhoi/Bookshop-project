@@ -8,6 +8,7 @@ import ButtonArrow from "./ButtonArrow";
 import {DownOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router";
 import MyCard from "../general/MyCard";
+import Search from "antd/es/input/Search";
 
 const {Meta} = Card;
 
@@ -23,6 +24,7 @@ export default function Shop(){
     const [mode, setMode] = useState('na');
     const [id, setId] = useState();
     const navigate = useNavigate();
+    const[isLoading, setIsLoading] = useState(false);
 
     const displayBooks = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&mode=' + mode + '&searchCode=' + search + '&filter=' + categories)
@@ -35,9 +37,6 @@ export default function Shop(){
     }
 
     useEffect(() => displayBooks(), []);
-
-
-
 
     const updateAuthor = (e) => {
         if(e.target.checked)
@@ -62,10 +61,25 @@ export default function Shop(){
 
     useEffect(() => {
         displayBooks();
-    },[mode])
+        console.log(page)
+    },[mode, page])
+
+    useEffect(() =>{
+        displayBooks();
+        setIsLoading(false);
+    },[search])
 
     const handleChooseSort = (e) =>{
         setMode(e.key);
+    }
+
+    const handleSearch = (code) => {
+        setIsLoading(true);
+        setSearch(code);
+    }
+
+    const handleChangePage = (page) => {
+        setPage(page - 1);
     }
 
     const menu = (
@@ -110,9 +124,7 @@ export default function Shop(){
         />
     )
 
-    const handleOnClick = (id) => {
-        navigate('/books/' + id);
-    }
+
 
 
 
@@ -124,50 +136,40 @@ export default function Shop(){
                 Books
             </h1>
             <Row className='shop-except-header'>
-                <Dropdown overlay={menu} className='dropdown-sort'>
-                    <Button>
-                        <Space>
-                            Sort
-                            <DownOutlined/>
-                        </Space>
-                    </Button>
-                </Dropdown>
+                <div style={{display:'flex'}}>
+                    <Search
+                        placeholder="Input book name"
+                        allowClear
+                        onSearch={handleSearch}
+                        size="middle"
+                        enterButton="Search"
+                        style={{display:'inline-block', marginLeft:'76em'}}
+                        loading={isLoading}
+                        // className='dropdown-sort'
+                    />
+                    <Dropdown overlay={menu} className='dropdown-sort'>
+                        <Button>
+                            <Space>
+                                Sort
+                                <DownOutlined/>
+                            </Space>
+                        </Button>
+                    </Dropdown>
+                </div>
+
                 <Col span={18} push={6} className='display-column'>
                     <Row className='eachRow'>
-
                         {
                             pageBooks.map((book) =>
-
                                 <Col span={6} key={book.bookId} className='eachRow'>
-                                    {/*<Card*/}
-                                    {/*    style={{width: 200,*/}
-                                    {/*        borderRadius : '10px'}}*/}
-                                    {/*    key={book.bookId}*/}
-                                    {/*    cover={*/}
-                                    {/*        <img*/}
-                                    {/*            alt="example"*/}
-                                    {/*            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"*/}
-                                    {/*        />*/}
-                                    {/*    }*/}
-                                    {/*    actions={<ButtonArrow/>}*/}
-                                    {/*    onClick={ (e) => {*/}
-                                    {/*        handleOnClick(book.bookId);*/}
-                                    {/*    }}*/}
-                                    {/*>*/}
-                                    {/*    <Meta*/}
-                                    {/*        avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}*/}
-                                    {/*        title={book.bookName}*/}
-                                    {/*        description={book.bookPrice}*/}
-                                    {/*   />*/}
-                                    {/*    <ButtonArrow/>*/}
-                                    {/*</Card>*/}
+
                                     <MyCard item={book} url="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
                                 </Col>
                             )
                         }
                     </Row>
 
-                    <Pagination className='page-navigate' defaultCurrent={currentPage} defaultPageSize={20} total={totalElements} />
+                    <Pagination onChange={handleChangePage} className='page-navigate' defaultCurrent={currentPage} defaultPageSize={20} total={totalElements} />
 
                 </Col>
                 <Col span={6} pull={18} >
@@ -178,3 +180,27 @@ export default function Shop(){
         </div>
     );
 }
+
+
+{/*<Card*/}
+{/*    style={{width: 200,*/}
+{/*        borderRadius : '10px'}}*/}
+{/*    key={book.bookId}*/}
+{/*    cover={*/}
+{/*        <img*/}
+{/*            alt="example"*/}
+{/*            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"*/}
+{/*        />*/}
+{/*    }*/}
+{/*    actions={<ButtonArrow/>}*/}
+{/*    onClick={ (e) => {*/}
+{/*        handleOnClick(book.bookId);*/}
+{/*    }}*/}
+{/*>*/}
+{/*    <Meta*/}
+{/*        avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}*/}
+{/*        title={book.bookName}*/}
+{/*        description={book.bookPrice}*/}
+{/*   />*/}
+{/*    <ButtonArrow/>*/}
+{/*</Card>*/}

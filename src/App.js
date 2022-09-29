@@ -10,8 +10,8 @@ import Cart from "./Component/users/cart/Cart";
 import Order from "./Component/users/order/Order";
 import Header from "./Component/Header";
 import Footer from './Component/Footer';
-import NavigateBar from "./Component/shop/NavigateBar/NavigateBar";
-import {createContext, useEffect, useState} from "react";
+import NavigateBar from "./Component/general/NavigateBar/NavigateBar";
+import React, {createContext, useEffect, useState} from "react";
 import {getCookie} from "react-use-cookie";
 import {AdminRoute} from "./routes/AdminRoute";
 import {CustomerRoute} from "./routes/CustomerRoute";
@@ -19,14 +19,14 @@ import RoutesDefine from "./routes/RoutesDefine";
 import {BasicRoutes} from "./routes/BasicRoutes";
 import {UserRoute} from "./routes/UserRoute";
 
-export const Context = createContext();
+export const SecurityContext = createContext();
 
 function App()  {
 
     const [loginData, setLoginData] = useState({
         role : '',
         userName: '',
-        token : '',
+        token : 'dggdgdf',
         tokenType: 'Bearer'
     });
 
@@ -41,22 +41,24 @@ function App()  {
 
   return (
     <BrowserRouter>
-        {loginData.role === 'CUSTOMER' ? (
-            <div>
-                <NavigateBar menu={CustomerRoute}/>
-                <RoutesDefine routes={BasicRoutes(CustomerRoute)}/>
-            </div>
-        ) : loginData.role === 'ADMIN' ? (
-            <div>
-                <NavigateBar menu={AdminRoute}/>
-                <RoutesDefine routes={BasicRoutes(AdminRoute)}/>
-            </div>
-        ) : (
-            <div>
-                <NavigateBar menu={null}/>
-                <RoutesDefine routes={UserRoute}/>
-            </div>
-        )}
+        <SecurityContext.Provider value={[loginData, setLoginData]}>
+            {loginData.role === 'CUSTOMER' ? (
+                <div>
+                    <NavigateBar menu={CustomerRoute}/>
+                    <RoutesDefine routes={BasicRoutes(CustomerRoute)}/>
+                </div>
+            ) : loginData.role === 'ADMIN' ? (
+                <div>
+                    <NavigateBar menu={AdminRoute}/>
+                    <RoutesDefine routes={BasicRoutes(AdminRoute)}/>
+                </div>
+            ) : (
+                <div>
+                    <NavigateBar menu={null}/>
+                    <RoutesDefine routes={UserRoute}/>
+                </div>
+            )}
+        </SecurityContext.Provider>
     </BrowserRouter>
 
   );

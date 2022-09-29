@@ -22,5 +22,10 @@ export const BasicRoutes = (routes) =>  [
         path: '/books/:id',
         component: <BookDetail/>,
         title: 'Book Detail'
+    },
+    {
+        path: '/login',
+        component: <Login/>,
+        title : 'Login'
     }
 ]
