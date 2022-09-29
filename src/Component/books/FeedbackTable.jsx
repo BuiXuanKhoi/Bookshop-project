@@ -1,5 +1,5 @@
-import React from "react";
-import {Row, Col, Menu, Dropdown, Button, Input, Select} from "antd";
+import React, {useState} from "react";
+import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
@@ -155,8 +155,10 @@ const reviewTitle = () => {
     );
 }
 
-const customerReviewPost = () =>{
+const customerReviewPost = (props) =>{
+
     return (
+
         <Col span={24}>
             <Row >
                 <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>
@@ -201,13 +203,10 @@ const customerReviewPost = () =>{
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{paddingBlock:"0.25em"}}>
                 <Col span={24}>
-                    <Select value="1 Star" style={{marginLeft:"4%",width:"90%",borderRadius:"3px"}} size={"default"}>
-                        <Option>1 Star</Option>
-                        <Option>2 Star</Option>
-                        <Option>3 Star</Option>
-                        <Option>4 Star</Option>
-                        <Option>5 Star</Option>
-                    </Select>
+                    <span style={{marginLeft:"5%"}}>
+                        <Rate tooltips={props.desc} onChange={props.setRatingPoint} value={props.ratingPoint}/>
+                        {props.ratingPoint ? <span className="ant-rate-text">{props.desc[props.ratingPoint - 1]}</span>  : ''}
+                    </span>
                 </Col>
             </Row>
 
@@ -219,7 +218,7 @@ const customerReviewPost = () =>{
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{marginBottom:"2%"}}>
                 <Col span={20} offset={2}>
-                    <Button style={{background:"#CFD2CF",width:"100%"}}>
+                    <Button style={{background:"#CFD2CF",width:"100%",paddingBottom:"10%"}}>
                         <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
                             Submit Review
                         </p>
@@ -231,6 +230,9 @@ const customerReviewPost = () =>{
 }
 
 export default function FeedbackTable () {
+    const [ratingPoint, setRatingPoint] = useState(3);
+    const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+
     return (
         <Row style={{marginTop:"3%"}}>
             <Row className={"customerReviewList"} >
@@ -252,13 +254,13 @@ export default function FeedbackTable () {
                     </Row>
 
                     <Row style={{paddingBlock:"1.5em",}}>
-                        {reviewTitle()}
+                        {reviewTitle(ratingPoint)}
                     </Row>
 
                 </Col>
             </Row>
             <Row className={"customerReviewPost"}>
-                {customerReviewPost()}
+                {customerReviewPost({ratingPoint,setRatingPoint,desc})}
             </Row>
         </Row>
         )
