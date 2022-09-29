@@ -108,6 +108,6 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = findById(cartId);
         int existedQuantity = cartItem.getQuantity();
         cartItem.setQuantity(existedQuantity + addedQuantity);
-        return cartItem;
+        return this.cartItemRepository.save(cartItem);
     }
 }
