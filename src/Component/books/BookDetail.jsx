@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import axios from "axios";
 import {Button, Col, Comment, Empty, Modal, Row} from "antd";
@@ -11,6 +11,7 @@ import QuantityButton from "../general/QuantityButton";
 import {getCookie} from "react-use-cookie";
 import {useNavigate} from "react-router";
 import {useCookies} from "react-cookie";
+import {SecurityContext} from "../../App";
 export default function BookDetail(){
 
     const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
@@ -20,12 +21,21 @@ export default function BookDetail(){
 
 
     const [session, setSession] = useState(false);
+    const [loginData, setLoginData] = useContext(SecurityContext);
     const [isOpenSession, setIsOpenSession] = useState(false);
-    const [isCloseSession, setIsCloseSession] = useState(false);
     const [isOpenSuccess, setIsOpenSuccess] = useState(false);
+    const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+    const [isExistCart, setIsExistCart] = useState(false);
     const navigate = useNavigate();
 
-    let config = '';
+    const [cartId, setCartId] = useState(0);
+
+    const config = {
+        headers: {Authorization: `Bearer ` + loginData.token}
+    };
+
+
+
 
     const closeSucessModal = () => {
         setQuantity(0);
@@ -34,6 +44,23 @@ export default function BookDetail(){
 
     const openSuccessModal = () => {
         setIsOpenSuccess(true);
+    }
+
+    const openUpdateSuccessModal = () => {
+        setIsUpdateSuccess(true);
+
+    }
+
+    const closeUpdateSuccessModal = () => {
+        setIsUpdateSuccess(false);
+    }
+
+    const openWarningModal = () => {
+        setIsExistCart(true);
+    }
+
+    const closeWarningModal = () => {
+        setIsExistCart(false);
     }
 
     const bookId = useParams();
@@ -75,13 +102,47 @@ export default function BookDetail(){
 
     const [isFeedback, setIsFeedback] = useState(false);
 
-    const addBookCart = () => {
 
-        if(authorize !== ''){
-            config = {
-                headers : {Authorization: `Bearer ` + JSON.parse(authorize).token }
+    const getCarItem = () => {
+
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id +  '/cart', config )
+            .then((res) => {
+                setCartId(res.data.cartItemsID) ;
+                openWarningModal();
+            }).catch((err) => {
+
+                console.log(err)
+
+                if(err.response.data.statusCode === 404){
+                    addBookCart();
+                }
+                console.log(err);
+        })
+
+    }
+
+    const updateCart = () => {
+        console.log(cartId)
+        axios.put('https://ecommerce-web0903.herokuapp.com/api/carts/' + cartId + '?quantity=' + quantity, null,
+            config)
+            .then((res) => {
+                openUpdateSuccessModal();
+            }).catch((err) =>
+
+        {
+            if(err.response.data.statusCode === 401)
+            {
+                if(err.response.data.message === 'Expired JWT Token')
+                {
+                    setIsOpenSession(true);
+                }else if (err.response.data.message === 'Cannot determine error'){
+                    navigate('/login');
+                }
             }
-        }
+        })
+    }
+
+    const addBookCart = () => {
 
         axios.post('https://ecommerce-web0903.herokuapp.com/api/carts',{
             quantity : quantity,
@@ -137,8 +198,30 @@ export default function BookDetail(){
 
 
     return(
-
-        <>
+    <>
+        <Modal
+            title="Update Success"
+            centered
+            open={isUpdateSuccess}
+            onOk={() => closeUpdateSuccessModal()}
+            onCancel={() => closeUpdateSuccessModal()}
+            width={400}
+        >
+            <span>Update Cart Item Success !!!</span>
+        </Modal>
+        <Modal
+            title="Warning"
+            centered
+            open={isExistCart}
+            onOk={() => {
+                closeWarningModal();
+                updateCart()
+            }}
+            onCancel={() => closeWarningModal()}
+            width={400}
+        >
+            <span>This Book Is Already In Your Cart. Wanna Buy More ?</span>
+        </Modal>
             <Modal
                 title="Authentication Error"
                 centered
@@ -150,7 +233,7 @@ export default function BookDetail(){
                     setIsOpenSession(false);
                 }}
                 afterClose={closeSession}
-                width={600}
+                width={400}
             >
                 <p>Your Session is expired. Please Login again !!!</p>
             </Modal>
@@ -160,7 +243,7 @@ export default function BookDetail(){
                 open={isOpenSuccess}
                 onOk={() => closeSucessModal()}
                 onCancel={() => closeSucessModal()}
-                width={600}
+                width={400}
             >
                 <span>Add {bookDetail.bookName} To Cart Success. </span>
             </Modal>
@@ -198,30 +281,16 @@ export default function BookDetail(){
                         />
                         <Button className='add-cart'
                                 type='primary'
-                                onClick={handleAddCart}
+                                onClick={getCarItem}
                         >
                             Add To Cart
                         </Button>
                     </div>
 
-                    </Col>
-                </Row>
-                <FeedbackTable/>
-            </Col>
-
-                    </div>
-                </Col>
-                <Col span={6} pull={1} push={1}>
-                    {/*<Empty*/}
-                    {/*    description={*/}
-                    {/*        <span>*/}
-                    {/*            There's no comment here !!!*/}
-                    {/*        </span>*/}
-                    {/*    }*/}
-                    {/*        />*/}
                 </Col>
             </Row>
-        </div>
-        </>
+                <FeedbackTable/>
+            </div>
+     </>
     );
 }

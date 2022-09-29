@@ -3,6 +3,7 @@ import {Row, Col, Menu, Dropdown, Button, Input, Select} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
+import TextArea from "antd/es/input/TextArea";
 
 const menu = (
     <Menu
@@ -187,7 +188,7 @@ const customerReviewPost = () =>{
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{paddingBlock:"0.25em"}}>
                 <Col offset={1} span={22}>
-                    <Input style={{height:"7vw"}}></Input>
+                    <TextArea cols={30} rows={5}></TextArea>
                 </Col>
             </Row>
 
