@@ -1,0 +1,32 @@
+.customerReviewList{
+    border-style: ridge;
+    width: 57%;
+    border-color:#D8D8D8;
+    margin-left: 5%;
+    background: #F6F6F6;
+}
+
+.customerReviewPost{
+    border-style: ridge;
+    width: 30%;
+    border-color: #D8D8D8;
+    margin-left: 3%;
+    height: 26%;
+}
+
+.positionForChar{
+    margin-top:0;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+
+.editButton{
+    border-radius: 4px;
+    background: #434a52;
+    color: white;
+    font-size: 1.2vw;
+    border-block: 0.6em;
+    margin-left: 10%;
+    padding-bottom: 14%;
+}

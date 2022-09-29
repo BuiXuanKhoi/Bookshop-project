@@ -57,7 +57,7 @@ export default function Login(){
             content: mes
         })
 
-        navigate('/shop');
+        navigate('/');
     }
 
 

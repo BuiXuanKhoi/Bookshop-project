@@ -4,6 +4,7 @@ import axios from "axios";
 import {Button, Col, Comment, Empty, Modal, Row} from "antd";
 import '../shop/Shop.css';
 import './BookDetail.css'
+import FeedbackTable from "./FeedbackTable";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
 import QuantityButton from "../general/QuantityButton";
@@ -203,27 +204,10 @@ export default function BookDetail(){
                         </Button>
                     </div>
 
-                </Col>
-            </Row>
-            <Row style={{paddingTop:'2rem'}}>
-                <Col span={16} >
-                    <div className='book-detail-box'>
-                        <h3>Customer Review</h3>
-                        <span>(Filter by stars)</span>
-                        <ul>
-                            {
-                                bookFeedback.map((item) =>
-                                <li>
-                                    <Comment
-                                        content={(<span>{item.comment}</span>)}
-                                        author={item.userName}
-                                        avatar={<FontAwesomeIcon icon={faUser}/>}
-                                        datetime={item.createDay}
-                                    />
-                                </li>
-                                )
-                            }
-                        </ul>
+                    </Col>
+                </Row>
+                <FeedbackTable/>
+            </Col>
 
                     </div>
                 </Col>

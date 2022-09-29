@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Divider, Row, Col, Button, Menu, Dropdown} from "antd";
 import Cart from "../../users/cart/Cart";
 import {CaretLeftOutlined,SettingOutlined, EditOutlined, EllipsisOutlined,CaretRightOutlined} from "@ant-design/icons";
@@ -7,54 +7,48 @@ import { Avatar, Card } from 'antd';
 import './RecommendTable.css'
 import Icon from "antd/es/icon";
 import {Link} from "react-router-dom";
-import MyCard from "../../general/MyCard";
+import axios from "axios";
+import {set} from "react-hook-form";
 
-
-
-
-const books = [
-    {
-        bookId: 9,
-        url: 'https://cdn-amz.woka.io/images/I/71dUEXcxJzL.jpg',
-        authorName : 'Hemingway',
-        bookName : 'The Man And The Sea',
-        bookPrice: 15.8
-    },
-    {
-        bookId: 10,
-        url:'https://static.8cache.com/cover/eJzLyTDWz8nJLtH1KvFKTk0pCzeMCjeJCHbyMggxLg7ziSqo8CqrDEoPKUnKTC_JzwoKNHHJMLQ0qQjwqzRKz_coTPQ1DPDxzsxzqUzMMPfOTzQtcM_wLrctNgAAYsoejA==/sherlock-holmes-toan-tap.jpg',
-        authorName: 'Conan Doyle',
-        bookName: 'Sherlock Holmes',
-        bookPrice: 30.2
-    },
-    {
-        bookId: 11,
-        url: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1466912744l/30752004._SY475_.jpg',
-        authorName: 'Nguyen Nhat Anh',
-        bookName: 'Mat Biec',
-        bookPrice: 12.6
-    },
-    {
-        bookId: 12,
-        url:'https://upload.wikimedia.org/wikipedia/vi/b/b7/Doraemon1.jpg',
-        authorName: 'Fujiko F Fujio',
-        bookName:'Doraemon',
-        bookPrice: 14.4
-    }
-
-]
-
+let number = 0;
 
 export default function RecommendTable(){
+    const [bookListOnSales ,setBookListOnSales]= useState([]);
+    const [saveList, setSaveList] = useState([]);
+    const [position,setPosition]=useState(0);
+    useEffect(()=>{
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/onsale")
+                .then((res)=>{
+                    localStorage.setItem("bookListOnSales",JSON.stringify(res.data))
+                })
+    },[]);
 
-    const [bookCard ,setbookCard]= useState({
-        url: '',
-        authorName:'',
-        bookName:'',
-        price:'',
-    });
+    useEffect(()=>{
+            const saved = localStorage.getItem("bookListOnSales");
+            const initialValue = JSON.parse(saved);
+            setBookListOnSales(initialValue.slice(0,4));
+            setSaveList(initialValue)
+    },[])
+    useEffect(()=>{
+        console.log("Yes")
+        console.log(position)
+        }
+    ,[position])
+    const handleOnClickOfRightButton = () => {
+        if(number<6){
+            number+=1;
+        }
+        setPosition(number)
+        setBookListOnSales(saveList.slice(number,number+4))
+    }
 
-
+    const handleOnClickOfLeftButton = () => {
+        if(number>0){
+            number -=1;
+        }
+        setPosition(number)
+        setBookListOnSales(saveList.slice(number,number+4))
+    }
 
     return(
 
@@ -74,20 +68,38 @@ export default function RecommendTable(){
 
             <Row className={"onSaleCardList"} >
                 <Col span={2} className={"displayItemInColumn"}>
-                    <Button className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
+                    <Button onClick={handleOnClickOfLeftButton} className={"buttonArrowDesign"} icon={<CaretLeftOutlined className={"arrowPointerInList"}/>}>
                     </Button>
                 </Col>
 
                 {
-                    books.map(item =>(
-                        <Col span={5}>
-                            <MyCard item={item} url={item.url}/>
+                    bookListOnSales.map(item =>(
+                        <Col span={5} >
+                            <div className="container">
+                                <div className="card">
+                                    <div className="card__header">
+                                        <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
+                                             className="card__image" style={{ width:"300"}}/>
+                                    </div>
+                                    <div className="card__body">
+                                        <h4>{item.bookName}</h4>
+                                        <p>{item.authorName}</p>
+                                    </div>
+                                    <div className="card footer" style={{background:"#D8D8D8"}}>
+                                        <div className="user">
+                                            <div className="user__info">
+                                                <h5>${item.bookPrice}</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </Col>
                     ))
                 }
 
                 <Col span={2} className={"displayItemInColumn"}>
-                    <Button className={"buttonArrowDesign"} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
+                    <Button className={"buttonArrowDesign"} onClick={handleOnClickOfRightButton} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
                     {/*<CaretRightOutlined  className={"arrowPointerInList"}/>*/}
                     </Button>
                 </Col>
