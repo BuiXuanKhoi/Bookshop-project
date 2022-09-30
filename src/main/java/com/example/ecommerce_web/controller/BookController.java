@@ -73,7 +73,7 @@ public class BookController {
             @RequestParam(name = "mode", required = false, defaultValue = "na") String mode,
             @RequestParam(name = "author", required = false, defaultValue = "0") String author){
         int pageConverted = Integer.parseInt(page);
-        return this.bookService.getPageBook(searchCode,filter,mode,pageConverted);
+        return this.bookService.getPageBook(searchCode,filter,mode,pageConverted, author);
     }
 
     @GetMapping("/recommend")

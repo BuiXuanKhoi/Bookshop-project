@@ -17,4 +17,6 @@ public class BookFeatureRespondDTO {
     private float ratingPoint;
 
     private String imageLink;
+
+    private String authorName;
 }

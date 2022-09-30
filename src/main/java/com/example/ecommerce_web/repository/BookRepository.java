@@ -18,16 +18,19 @@ public interface BookRepository extends BasicRepository<Books> {
 
 
     @Query(value = "select distinct NEW com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO(" +
-            "bkk.bookId, bkk.bookName, bkk.bookPrice, bkk.ratingPoint, bkk.imageLink) " +
+            "bkk.bookId, bkk.bookName, bkk.bookPrice, bkk.ratingPoint, bkk.imageLink, au.authorName) " +
             "from Books bkk " +
             "join bkk.classifies cls " +
+            "join bkk.authors au " +
             "where " +
             "bkk.bookName like %:searchCode% " +
             "and " +
             "bkk.bookState = 'AVAILABLE' " +
             "and " +
-            "cls.category.categoryId in :filter ")
-    Page<BookFeatureRespondDTO> getPageBook(Pageable pageable, String searchCode, int[] filter);
+            "cls.category.categoryId in :filter " +
+            "and " +
+            "au.authorID in :author")
+    Page<BookFeatureRespondDTO> getPageBook(Pageable pageable, String searchCode, int[] filter, int[] author);
 }
 
 
