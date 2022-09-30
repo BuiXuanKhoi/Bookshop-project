@@ -34,8 +34,6 @@ function App()  {
     useEffect(() =>{
         if(getCookie('book-token') !== ''){
             setLoginData(JSON.parse(getCookie('book-token')))
-        }else{
-            setLoginData(null);
         }
     },[loginData.token])
 

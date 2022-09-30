@@ -125,28 +125,8 @@ export default function BookDetail(){
 
     }
 
-    const updateCart = () => {
-        console.log(cartId)
-        axios.put('https://ecommerce-web0903.herokuapp.com/api/carts/' + cartId + '?quantity=' + quantity, null,
-            config)
-            .then((res) => {
-                openUpdateSuccessModal();
-            }).catch((err) =>
 
-        {
-            if(err.response.data.statusCode === 401)
-            {
-                if(err.response.data.message === 'Expired JWT Token')
-                {
-                    setIsOpenSession(true);
-                }else if (err.response.data.message === 'Cannot determine error'){
-                    navigate('/login');
-                }
-            }
-        })
-    }
 
-    const addBookCart = () => {
 
     const updateCart = () => {
         console.log(cartId)
@@ -229,26 +209,26 @@ export default function BookDetail(){
                     <Row>
                         <Col span ={8}>
                             <Row >
-                                <img src='https://www.lesmurray.org/wp-content/uploads/2020/12/war-and-peace.png'/>
+                                <img src={bookDetail.imageLink}/>
                             </Row>
                             <Row >
                                 <Col span={17}>
                                     <p className={"wordDesign"}> By (author)</p>
                                 </Col>
                                 <Col span={7}>
-                                    <p style={{fontWeight:"bolder",color:"#576F72"}}> Leo Toystol </p>
+                                    <p style={{fontWeight:"bolder",color:"#576F72"}}> {bookDetail.authorName} </p>
                                 </Col>
                             </Row>
                         </Col>
                         {/*--------------------------------------------------------------------------------*/}
                         <Col span={14} offset={1} pull={0.5} style={{color:"#7F8487"}}>
                             <Row>
-                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}> Book title</p>
+                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}> {bookDetail.bookName}</p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
-                                <p className={"positionForChar"}>Book description</p>
-                                <p className={"positionForChar"}>This was a VERY long book, but I would say it was mostly worth it. I Just want to put it out there that Tolstoy is simply brilliant! The chief reason this book is long is probably because of the careful detail he put into it- from every single character to the historical events.However,after reading literally hundreds of chapters and still not being done I began to feel like some of the detail was really not necessary(mostly the description of war strategies and general military things)but given the title of the book I'd say it was warranted. </p>
+                                <p className={"description"}>Book description</p>
+                                <p className={"positionForChar"}>{bookDetail.description} </p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row style={{paddingBlock:"4%"}}>
@@ -300,7 +280,7 @@ export default function BookDetail(){
         >
             <span>This Book Is Already In Your Cart. Wanna Buy More ?</span>
         </Modal>
-            <Modal
+        <Modal
                 title="Authentication Error"
                 centered
                 open={isOpenSession}
@@ -312,20 +292,19 @@ export default function BookDetail(){
                 }}
                 afterClose={closeSession}
                 width={400}
-            >
+        >
                 <p>Your Session is expired. Please Login again !!!</p>
-            </Modal>
-            <Modal
+        </Modal>
+        <Modal
                 title="Buying Success !!!"
                 centered
                 open={isOpenSuccess}
                 onOk={() => closeSucessModal()}
                 onCancel={() => closeSucessModal()}
                 width={400}
-            >
+        >
                 <span>Add {bookDetail.bookName} To Cart Success. </span>
-            </Modal>
-        <div className='book-detail'>
+        </Modal>
 
             <Row style={{paddingTop:"10%",fontFamily:"Arial"}}>
 
@@ -428,6 +407,7 @@ export default function BookDetail(){
             </Row>
 
             <FeedbackTable/>
+
         </>
     );
 }

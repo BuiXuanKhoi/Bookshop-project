@@ -1,16 +1,101 @@
-.logo {
-    height: 32px;
-    margin: 16px;
-    background: rgba(255, 255, 255, 0.2);
+
+
+.background-container{
+    background-color:#f5f5f5 ;
+    height:580px;
 }
 
-.site-layout-sub-header-background {
-    background: #fff;
+.info-container{
+    /*display: flex;*/
+    position: relative;
+    top: 120px;
+    background-color: #f5f5f5;
 }
 
-.site-layout-background {
-    background: #fff;
+.menu{
+    margin-block-start: 45px;
+    background-color: #f5f5f5;
 }
-[data-theme="dark"] .site-layout-sub-header-background {
-    background: #141414;
+
+.detail-container{
+    display: flex;
+    margin-block-start: 20px;
+    margin-left: 20px;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    border-radius: 14px;
+    height: 560px;
+    width: 1040px;
+}
+
+.info-select-column{
+    display: block;
+    margin-left: 15px;
+
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+}
+
+.user-avatar-placeholder{
+    box-sizing: border-box;
+    width: 50%;
+    position: relative;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.user-avatar{
+    /*margin-right: 270px;*/
+    width: 100%;
+    height: 100%;
+    display: block;
+    /*position: absolute;*/
+}
+
+.user-avatar-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.user-name-box{
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
+    margin-block-start: 50px;
+}
+
+.user-name{
+
+    font-family: Helvetica, Serif;
+    font-size: 15px;
+    font-weight: bold;
+
+}
+
+.user-avatar-placeholder .icon-undified-user{
+    stroke: #c6c6c6;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2rem;
+}
+svg{
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+h2{
+    font-family: Helvetica, Serif;
+    margin-left: 20px;
+}
+
+.form-container{
+
 }

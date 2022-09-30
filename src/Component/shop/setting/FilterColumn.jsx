@@ -3,7 +3,6 @@ import 'antd/dist/antd.min.css';
 import {Tree} from 'antd';
 import './SettingColumn.css';
 import axios from "axios";
-import GeneralFunction from "../../../GeneralFunction";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import '../Shop.css';
 

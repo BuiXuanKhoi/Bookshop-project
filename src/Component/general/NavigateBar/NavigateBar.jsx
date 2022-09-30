@@ -48,7 +48,6 @@ export default function NavigateBar({menu}) {
 
 
     return(
-        <>
         <div className={"nah"}>
             <BookFilled className={"book-icon"}/>
             <Link className={"text-next-to-icon"} to={'/'} >Book Shop</Link>
@@ -71,6 +70,5 @@ export default function NavigateBar({menu}) {
                 </div>
             )}
         </div>
-        </>
     );
 }
