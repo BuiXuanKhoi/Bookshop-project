@@ -1,0 +1,36 @@
+.customerReviewList{
+    border-style: ridge;
+    width: 57%;
+    border-color:#D8D8D8;
+    margin-left: 5%;
+    background: #F6F6F6;
+    border-radius: 6px;
+}
+
+.customerReviewPost{
+    border-style: ridge;
+    width: 30%;
+    background: #F6F6F6 ;
+    border-color: #D8D8D8;
+    margin-left: 3%;
+    height: 26%;
+    border-radius: 6px;
+}
+
+.positionForChar{
+    font-size: 1.2vw;
+    font-weight: bolder;
+    padding-block: 1.0em;
+}
+.positionForTitle{
+    font-size: 2vw;
+    font-weight: bolder;
+    margin-left: 3%;
+    margin-top:50%;
+}
+.positionForTitle2{
+    font-size: 2vw;
+    font-weight: bolder;
+    margin-left: 3%;
+    margin-top:64%;
+}

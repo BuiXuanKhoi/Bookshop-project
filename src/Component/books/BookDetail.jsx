@@ -20,9 +20,6 @@ export default function BookDetail(){
     const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
     let authorize = getCookie('book-token');
 
-
-
-
     const [session, setSession] = useState(false);
     const [isOpenSession, setIsOpenSession] = useState(false);
     const [isCloseSession, setIsCloseSession] = useState(false);
