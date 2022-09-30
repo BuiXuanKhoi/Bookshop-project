@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping( "/password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequestDTO){
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequestDTO){
         return this.userService.changePassword(changePasswordRequestDTO);
     }
 
