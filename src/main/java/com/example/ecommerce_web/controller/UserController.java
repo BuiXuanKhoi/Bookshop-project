@@ -40,7 +40,7 @@ public class UserController {
         return informationMapper.toDTO(information);
     }
 
-    @PutMapping(value = "/password")
+    @PutMapping( "/password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequestDTO){
         return this.userService.changePassword(changePasswordRequestDTO);
     }
