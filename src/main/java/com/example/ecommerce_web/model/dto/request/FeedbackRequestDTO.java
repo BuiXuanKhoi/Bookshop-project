@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackRequestDTO {
-
+    private String title;
     private String comment;
     private float ratingPoint;
 }

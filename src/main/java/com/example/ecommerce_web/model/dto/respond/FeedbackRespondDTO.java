@@ -17,5 +17,4 @@ public class FeedbackRespondDTO {
     private Date CreateDay;
     private String comment;
     private float ratingPoint;
-
 }
