@@ -13,7 +13,6 @@ public class ModifyUserRequestDTO {
 
 
     @NotNull(message = "date of birth is required")
-    @NotEmpty(message = "date of birth must not be empty")
     private Date dateOfBirth;
 
     @Pattern(regexp = "[A-Za-z]+", message = "First name cannot be number or special characters")

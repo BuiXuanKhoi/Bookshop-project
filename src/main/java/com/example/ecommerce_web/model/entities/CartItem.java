@@ -25,8 +25,6 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
-    @NotEmpty(message = "users is required")
-    @NotNull(message = "users must not be null")
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)

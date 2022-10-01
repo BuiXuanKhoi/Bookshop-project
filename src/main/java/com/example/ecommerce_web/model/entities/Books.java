@@ -52,8 +52,6 @@ public class Books {
     @Column(name = "review")
     private String review;
 
-
-
     @Column(name = "image_link")
     private String imageLink;
 

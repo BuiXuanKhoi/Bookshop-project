@@ -37,14 +37,10 @@ public class Users {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "roles")
-    @NotEmpty(message = "role is required")
-    @NotNull(message = "role must not be null")
     private Role role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "states")
-    @NotEmpty(message = "user state is required")
-    @NotNull(message = "user state must not be null")
     private UserState userState;
 
     @Column(name = "lock_time")

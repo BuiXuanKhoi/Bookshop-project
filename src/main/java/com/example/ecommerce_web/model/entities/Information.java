@@ -28,8 +28,6 @@ public class Information {
     private int informationId;
 
     @Column(name = "date_of_birth")
-    @NotEmpty(message = "date of birth is required")
-    @NotNull(message = "date of birth must not be null")
     private Date dateOfBirth;
 
     @Enumerated(EnumType.STRING)
@@ -50,8 +48,6 @@ public class Information {
 
     @OneToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id")
-    @NotEmpty(message = "users is required")
-    @NotNull(message = "users must not be null")
     private Users users;
 
     @Column(name = "first_name")

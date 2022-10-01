@@ -16,13 +16,11 @@ public class ModifyBookRequestDTO {
     @NotNull(message = "book name must not be null")
     private String bookName;
 
-    @NotEmpty(message = "book price is required")
     @NotNull(message = "book price must not be null")
     @Min(value = 1, message = "Book Price must have at least 1.")
     private float bookPrice;
 
 
-    @NotEmpty(message = "quantity is required")
     @NotNull(message = "quantity must not be null")
     @Min(value = 1, message = "Quantity must have at least 1. ")
     private int quantity;

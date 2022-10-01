@@ -43,19 +43,15 @@ public class Feedback {
     private String title;
 
     @Column(name =  "rating_points")
-    @NotEmpty(message = "rating point is required")
-    @NotNull(message = "rating point must not be null")
     private float ratingPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NotEmpty(message = "users is required")
-    @NotNull(message = "users must not be null")
+
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    @NotEmpty(message = "book is required")
-    @NotNull(message = "book must not be null")
+
     private Books books;
 }
