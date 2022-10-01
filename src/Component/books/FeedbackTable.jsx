@@ -159,6 +159,80 @@ const reviewTitle = () => {
     );
 }
 
+const customerReviewPost = (props) =>{
+
+    return (
+
+        <Col span={24}>
+            <Row >
+                <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>
+            </Row>
+            {/*--------------------------------------------------------------------------------*/}
+            <Row>
+                <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}>
+
+                </Col>
+            </Row>
+
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{marginTop:"5%"}}>
+                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>Add a title</p>
+            </Row>
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{paddingBlock:"0.25em"}}>
+                <Col offset={1} span={22}>
+                    <Input style={{height:"3vw"}}></Input>
+                </Col>
+            </Row>
+
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{marginTop:"10%"}}>
+                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>
+                    Details please! Your review helps other shoppers
+                </p>
+            </Row>
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{paddingBlock:"0.25em"}}>
+                <Col offset={1} span={22}>
+                    <TextArea cols={30} rows={5}></TextArea>
+                </Col>
+            </Row>
+
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{marginTop:"10%"}}>
+                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>
+                    Select a rating star
+                </p>
+            </Row>
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{paddingBlock:"0.25em"}}>
+                <Col span={24}>
+                    <span style={{marginLeft:"5%"}}>
+                        <Rate tooltips={props.desc} onChange={props.setRatingPoint} value={props.ratingPoint}/>
+                        {props.ratingPoint ? <span className="ant-rate-text">{props.desc[props.ratingPoint - 1]}</span>  : ''}
+                    </span>
+                </Col>
+            </Row>
+
+            {/*--------------------------------------------------------------------------------*/}
+            <Row>
+                <Col span={24} style={{borderStyle:"ridge",marginTop:"5%",marginBottom:"2%",borderColor:"#F6F6F6"}}>
+                </Col>
+            </Row>
+            {/*--------------------------------------------------------------------------------*/}
+            <Row style={{marginBottom:"2%"}}>
+                <Col span={20} offset={2}>
+                    <Button style={{background:"#CFD2CF",width:"100%",paddingBottom:"10%"}}>
+                        <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
+                            Submit Review
+                        </p>
+                    </Button>
+                </Col>
+            </Row>
+        </Col>
+    );
+}
+
 export default function FeedbackTable () {
 
     return (

@@ -131,8 +131,8 @@ export default function Shop(){
 
 
     return(
-        <div className={'shop'}>
-            <h1 style={{position:'fixed'}}>
+        <div className={'shop-container'}>
+            <h1 >
                 Books
             </h1>
             <Row className='shop-except-header'>
@@ -143,9 +143,8 @@ export default function Shop(){
                         onSearch={handleSearch}
                         size="middle"
                         enterButton="Search"
-                        style={{display:'inline-block', marginLeft:'76em'}}
+                        style={{display:'flex', marginLeft:'76em'}}
                         loading={isLoading}
-                        // className='dropdown-sort'
                     />
                     <Dropdown overlay={menu} className='dropdown-sort'>
                         <Button>
@@ -158,16 +157,17 @@ export default function Shop(){
                 </div>
 
                 <Col span={18} push={6} className='display-column'>
-                    <Row className='eachRow'>
+                    <Row className="container">
                         {
                             pageBooks.map((book) =>
-                                <Col span={6} key={book.bookId} className='eachRow'>
+                                <Col span={6} key={book.bookId}>
 
-                                    <MyCard item={book} url="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
+                                    <MyCard item={book} url="https://lzd-img-global.slatic.net/g/p/253feee285ffe2ab1356806a389879b9.jpg_720x720q80.jpg_.webp"/>
                                 </Col>
                             )
                         }
                     </Row>
+
 
                     <Pagination onChange={handleChangePage} className='page-navigate' defaultCurrent={currentPage} defaultPageSize={20} total={totalElements} />
 
@@ -176,31 +176,8 @@ export default function Shop(){
                     <FilterColumn changeAuthorFilter={updateAuthor} changeCategoryFilter={updateCategories}/>
                 </Col>
             </Row>
-
         </div>
     );
 }
 
 
-{/*<Card*/}
-{/*    style={{width: 200,*/}
-{/*        borderRadius : '10px'}}*/}
-{/*    key={book.bookId}*/}
-{/*    cover={*/}
-{/*        <img*/}
-{/*            alt="example"*/}
-{/*            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"*/}
-{/*        />*/}
-{/*    }*/}
-{/*    actions={<ButtonArrow/>}*/}
-{/*    onClick={ (e) => {*/}
-{/*        handleOnClick(book.bookId);*/}
-{/*    }}*/}
-{/*>*/}
-{/*    <Meta*/}
-{/*        avatar={<Avatar src="https://joeschmoe.io/api/v1/random"/>}*/}
-{/*        title={book.bookName}*/}
-{/*        description={book.bookPrice}*/}
-{/*   />*/}
-{/*    <ButtonArrow/>*/}
-{/*</Card>*/}

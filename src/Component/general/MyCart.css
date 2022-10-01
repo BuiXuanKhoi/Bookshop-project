@@ -1,0 +1,60 @@
+.card-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-bottom: 24px;
+    background-color: white;
+    border-radius: 6px;
+    height: 400px;
+}
+
+.card-image{
+    position: relative;
+    height: 200px;
+}
+
+.card-image-container{
+    display: flex;
+    justify-content: center;
+}
+
+.card-rating{
+    font-family: Helvetica, serif;
+
+}
+
+.card-detail-container{
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.card-name{
+    text-align: center;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    font-family: Helvetica, serif;
+    font-weight: bold;
+
+}
+
+
+.card-price{
+    color: #424242;
+    text-align: left;
+    font-size: 16px;
+    line-height: 24px;
+    /*margin-left: 5px;*/
+    font-family: Helvetica, serif;
+    margin-top: 20px;
+}
+
+.rating{
+    stroke: currentColor;
+    stroke-width: 0;
+    fill: currentColor;
+    height: 14px;
+    width: 14px;
+    color: #fdd836;
+}

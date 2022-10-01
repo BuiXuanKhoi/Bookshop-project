@@ -1,7 +1,9 @@
-.shop{
+.shop-container{
     /*position: relative;*/
     /*top: 6em;*/
     padding-top: 5em;
+    display: flex;
+    flex-direction: column;
 }
 
 .shop-except-header{
@@ -22,10 +24,13 @@
     justify-content: center;
 }
 
-.eachRow{
-    margin-bottom: 3.5rem;
+.container{
+    display: flex;
+    flex-direction: row;
+    background-color: #f5f5f5;
 }
 
 .display{
-    position: fixed;
+    display: flex;
+    /*position: fixed;*/
 }

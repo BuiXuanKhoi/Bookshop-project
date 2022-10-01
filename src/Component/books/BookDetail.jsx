@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import axios from "axios";
 import {Button, Col, Comment, Empty, Input, Modal, Rate, Row} from "antd";
@@ -16,27 +16,26 @@ import TextArea from "antd/es/input/TextArea";
 import {MinusOutlined,PlusOutlined} from "@ant-design/icons";
 import ReviewSubmit from "./ReviewSubmit";
 
+import {SecurityContext} from "../../App";
 export default function BookDetail(){
 
     const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
     let authorize = getCookie('book-token');
 
     const [session, setSession] = useState(false);
+    const [loginData, setLoginData] = useContext(SecurityContext);
     const [isOpenSession, setIsOpenSession] = useState(false);
-    const [isCloseSession, setIsCloseSession] = useState(false);
     const [isOpenSuccess, setIsOpenSuccess] = useState(false);
+    const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+    const [isExistCart, setIsExistCart] = useState(false);
     const navigate = useNavigate();
 
-    let config = '';
+    const [cartId, setCartId] = useState(0);
 
-    const closeSucessModal = () => {
-        setQuantity(0);
-        setIsOpenSuccess(false);
-    }
+    const config = {
+        headers: {Authorization: `Bearer ` + loginData.token}
+    };
 
-    const openSuccessModal = () => {
-        setIsOpenSuccess(true);
-    }
 
     const bookId = useParams();
     const [quantity,setQuantity] = useState(0);
@@ -63,6 +62,34 @@ export default function BookDetail(){
     })
 
 
+
+
+    const closeSucessModal = () => {
+        setQuantity(0);
+        setIsOpenSuccess(false);
+    }
+
+    const openSuccessModal = () => {
+        setIsOpenSuccess(true);
+    }
+
+    const openUpdateSuccessModal = () => {
+        setIsUpdateSuccess(true);
+
+    }
+
+    const closeUpdateSuccessModal = () => {
+        setIsUpdateSuccess(false);
+    }
+
+    const openWarningModal = () => {
+        setIsExistCart(true);
+    }
+
+    const closeWarningModal = () => {
+        setIsExistCart(false);
+    }
+
     const handleAddQuantity = () => {
         setQuantity(quantity + 1);
     }
@@ -77,13 +104,51 @@ export default function BookDetail(){
 
     const [isFeedback, setIsFeedback] = useState(false);
 
-    const addBookCart = () => {
 
-        if(authorize !== ''){
-            config = {
-                headers : {Authorization: `Bearer ` + JSON.parse(authorize).token }
+    const getCarItem = () => {
+
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id +  '/cart', config )
+            .then((res) => {
+                setCartId(res.data.cartItemsID) ;
+                openWarningModal();
+            }).catch((err) => {
+
+                console.log(err)
+
+                if(err.response.data.statusCode === 404){
+                    addBookCart();
+                }
+                console.log(err);
+        })
+
+    }
+
+
+
+
+    const updateCart = () => {
+        console.log(cartId)
+        axios.put('https://ecommerce-web0903.herokuapp.com/api/carts/' + cartId + '?quantity=' + quantity, null,
+            config)
+            .then((res) => {
+                openUpdateSuccessModal();
+            }).catch((err) =>
+
+        {
+            console.log(err)
+            if(err.response.data.statusCode === 401)
+            {
+                if(err.response.data.message === 'Expired JWT Token')
+                {
+                    setIsOpenSession(true);
+                }else if (err.response.data.message === 'Cannot determine error'){
+                    navigate('/login');
+                }
             }
-        }
+        })
+    }
+
+    const addBookCart = () => {
 
         axios.post('https://ecommerce-web0903.herokuapp.com/api/carts',{
             quantity : quantity,
@@ -93,6 +158,7 @@ export default function BookDetail(){
                 openSuccessModal();
             }).catch((err) =>
         {
+            console.log(err);
                 if(err.response.data.statusCode === 401)
                 {
                     if(err.response.data.message === 'Expired JWT Token')
@@ -127,9 +193,6 @@ export default function BookDetail(){
         navigate('/login');
     }
 
-    const handleAddCart = () => {
-        addBookCart();
-    }
 
     useEffect(() => {
         getBookDetail();
@@ -143,26 +206,26 @@ export default function BookDetail(){
                     <Row>
                         <Col span ={8}>
                             <Row >
-                                <img src='https://www.lesmurray.org/wp-content/uploads/2020/12/war-and-peace.png'/>
+                                <img src={bookDetail.imageLink}/>
                             </Row>
                             <Row >
                                 <Col span={17}>
                                     <p className={"wordDesign"}> By (author)</p>
                                 </Col>
                                 <Col span={7}>
-                                    <p style={{fontWeight:"bolder",color:"#576F72"}}>{bookDetail.authorName} </p>
+                                    <p style={{fontWeight:"bolder",color:"#576F72"}}> {bookDetail.authorName} </p>
                                 </Col>
                             </Row>
                         </Col>
                         {/*--------------------------------------------------------------------------------*/}
                         <Col span={14} offset={1} pull={0.5} style={{color:"#7F8487"}}>
                             <Row>
-                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}>{bookDetail.bookName}</p>
+                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}> {bookDetail.bookName}</p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
-                                <p className={"positionForChar"}>Book description</p>
-                                <p className={"positionForChar"}>{bookDetail.description}</p>
+                                <p className={"description"}>Book description</p>
+                                <p className={"positionForChar"}>{bookDetail.description} </p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row style={{paddingBlock:"4%"}}>
@@ -190,8 +253,31 @@ export default function BookDetail(){
     }
 
     return(
-        <>
-            <Modal
+    <>
+        <Modal
+            title="Update Success"
+            centered
+            open={isUpdateSuccess}
+            onOk={() => closeUpdateSuccessModal()}
+            onCancel={() => closeUpdateSuccessModal()}
+            width={400}
+        >
+            <span>Update Cart Item Success !!!</span>
+        </Modal>
+        <Modal
+            title="Warning"
+            centered
+            open={isExistCart}
+            onOk={() => {
+                closeWarningModal();
+                updateCart()
+            }}
+            onCancel={() => closeWarningModal()}
+            width={400}
+        >
+            <span>This Book Is Already In Your Cart. Wanna Buy More ?</span>
+        </Modal>
+        <Modal
                 title="Authentication Error"
                 centered
                 open={isOpenSession}
@@ -202,20 +288,20 @@ export default function BookDetail(){
                     setIsOpenSession(false);
                 }}
                 afterClose={closeSession}
-                width={600}
-            >
+                width={400}
+        >
                 <p>Your Session is expired. Please Login again !!!</p>
-            </Modal>
-            <Modal
+        </Modal>
+        <Modal
                 title="Buying Success !!!"
                 centered
                 open={isOpenSuccess}
                 onOk={() => closeSucessModal()}
                 onCancel={() => closeSucessModal()}
-                width={600}
-            >
+                width={400}
+        >
                 <span>Add {bookDetail.bookName} To Cart Success. </span>
-            </Modal>
+        </Modal>
 
             <Row style={{paddingTop:"10%",fontFamily:"Arial"}}>
 
@@ -245,15 +331,15 @@ export default function BookDetail(){
                             <Col span={20} offset={2}>
                                 <Row style={{background:"#CFD2CF"}}>
                                     <Col span={10} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
-                                        <Button style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
+                                        <Button style={{background:"#CFD2CF"}} onClick={handleLessQuantity} icon={<MinusOutlined />}></Button>
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={4} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",textAlign:"center"}}>
-                                        <p style={{marginTop:"5%",marginBottom:"5%",fontWeight:"bolder",fontSize:"1.5vw"}}>1</p>
+                                        <p style={{marginTop:"5%",marginBottom:"5%",fontWeight:"bolder",fontSize:"1.5vw"}}>{quantity}</p>
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={10} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                        <Button  style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
+                                        <Button  style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}></Button>
                                     </Col>
                                 </Row>
 
@@ -262,7 +348,7 @@ export default function BookDetail(){
                         {/*--------------------------------------------------------------------------------*/}
                         <Row style={{marginTop:"10%",marginBottom:"15%"}}>
                             <Col span={20} offset={2}>
-                                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}}>
+                                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
                                     <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
                                         Add to cart
                                     </p>
@@ -279,6 +365,17 @@ export default function BookDetail(){
                 <FeedbackTable/>
                 <ReviewSubmit bookID={bookId.id} config={config}/>
             </Row>
+
+<<<<<<< HEAD
+
+            <Row style={{marginTop:"3%"}}>
+                <FeedbackTable/>
+                <ReviewSubmit bookID={bookId.id} config={config}/>
+            </Row>
+=======
+            <FeedbackTable/>
+
+>>>>>>> 805855f3d56ffd7ec27bbf5f41b1ff34687d8ca6
         </>
     );
 }

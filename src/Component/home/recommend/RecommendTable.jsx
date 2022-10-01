@@ -16,19 +16,24 @@ export default function RecommendTable(){
     const [bookListOnSales ,setBookListOnSales]= useState([]);
     const [saveList, setSaveList] = useState([]);
     const [position,setPosition]=useState(0);
+    const [isExistData, setIsExistData] = useState(false);
     useEffect(()=>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/onsale")
                 .then((res)=>{
+                    console.log("Sure");
                     localStorage.setItem("bookListOnSales",JSON.stringify(res.data))
+                    setIsExistData(true);
+
                 })
     },[]);
 
     useEffect(()=>{
-            const saved = localStorage.getItem("bookListOnSales");
-            const initialValue = JSON.parse(saved);
-            setBookListOnSales(initialValue.slice(0,4));
-            setSaveList(initialValue)
-    },[])
+        const saved = localStorage.getItem("bookListOnSales");
+        const initialValue = JSON.parse(saved);
+        setBookListOnSales(initialValue.slice(0,4));
+        setSaveList(initialValue)
+
+    },[isExistData])
     useEffect(()=>{
         console.log("Yes")
         console.log(position)

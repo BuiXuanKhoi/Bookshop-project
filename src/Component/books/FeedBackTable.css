@@ -22,6 +22,15 @@
     margin-right: 0;
 }
 
+.description{
+    margin-top:0;
+    margin-bottom: 0;
+    margin-right: 0;
+    color: black;
+    font-size: 1.5em;
+
+}
+
 
 .editButton{
     border-radius: 4px;
