@@ -46,7 +46,7 @@ const cartItem = (url) => {
                             <Button style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
                         </Col>
                         {/*--------------------------------------------------------------------------------*/}
-                        <Col span={2} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",textAlign:"center"}}>
+                        <Col span={2} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",alignItems:"center",textAlign:"center"}}>
                             <p style={{marginTop:"5%",marginBottom:"5%",fontSize:"1.2vw"}}>1</p>
                         </Col>
                         {/*--------------------------------------------------------------------------------*/}
@@ -72,22 +72,22 @@ const bookTable = () => {
             {/*---------------------------Header--------------------------------*/}
             <Row>
                 <Col span={10} offset={1} >
-                    <p className={"positionForChar"}>
+                    <p className={"positionForChar2"}>
                         Product
                     </p>
                 </Col>
                 <Col span={4} >
-                    <p className={"positionForChar"}>
+                    <p className={"positionForChar2"}>
                         Price
                     </p>
                 </Col>
                 <Col span={4} >
-                    <p className={"positionForChar"}>
+                    <p className={"positionForChar2"}>
                         Quantity
                     </p>
                 </Col>
                 <Col span={4} >
-                    <p className={"positionForChar"}>
+                    <p className={"positionForChar2"}>
                         Total
                     </p>
                 </Col>
@@ -105,7 +105,7 @@ const cartTotal = () => {
             <Col span={24} style={{justifyContent:"center",textAlign:"center"}}>
                 <Row style={{background:"#F6F6F6"}}>
                     <Col span={20} offset={2}>
-                        <p className="positionForChar" style={{fontSize:"1.5vw"}}> Cart totals</p>
+                        <p className="positionForChar2" style={{fontSize:"1.5vw"}}> Cart totals</p>
                     </Col>
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}

@@ -14,6 +14,7 @@ import {useCookies} from "react-cookie";
 import './FeedBackTable.css'
 import TextArea from "antd/es/input/TextArea";
 import {MinusOutlined,PlusOutlined} from "@ant-design/icons";
+import ReviewSubmit from "./ReviewSubmit";
 
 export default function BookDetail(){
 
@@ -149,19 +150,19 @@ export default function BookDetail(){
                                     <p className={"wordDesign"}> By (author)</p>
                                 </Col>
                                 <Col span={7}>
-                                    <p style={{fontWeight:"bolder",color:"#576F72"}}> Leo Toystol </p>
+                                    <p style={{fontWeight:"bolder",color:"#576F72"}}>{bookDetail.authorName} </p>
                                 </Col>
                             </Row>
                         </Col>
                         {/*--------------------------------------------------------------------------------*/}
                         <Col span={14} offset={1} pull={0.5} style={{color:"#7F8487"}}>
                             <Row>
-                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}> Book title</p>
+                                <p style={{fontSize:"2vw", fontWeight:"bolder",color:"black"}}>{bookDetail.bookName}</p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
                                 <p className={"positionForChar"}>Book description</p>
-                                <p className={"positionForChar"}>This was a VERY long book, but I would say it was mostly worth it. I Just want to put it out there that Tolstoy is simply brilliant! The chief reason this book is long is probably because of the careful detail he put into it- from every single character to the historical events.However,after reading literally hundreds of chapters and still not being done I began to feel like some of the detail was really not necessary(mostly the description of war strategies and general military things)but given the title of the book I'd say it was warranted. </p>
+                                <p className={"positionForChar"}>{bookDetail.description}</p>
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row style={{paddingBlock:"4%"}}>
@@ -271,52 +272,13 @@ export default function BookDetail(){
                     </Col>
                 </Row>
 
-                {/*<Col span={22} offset={1} style={{borderStyle:"ridge"}}>*/}
-                {/*    <Row>*/}
-                {/*        <Col span={15} style={{borderStyle:"ridge"}}>*/}
-
-                {/*            <Row>*/}
-                {/*                <Col span={6}>*/}
-                {/*                    <img src='https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_38237.jpg' width='200px' height='200px' className='book-image' alt='example'/>*/}
-                {/*                    <div className='book-author'> By Author {bookDetail.authorName}</div>*/}
-                {/*                </Col>*/}
-                {/*                <Col span={15} >*/}
-                {/*                    <h2 className='book-title'>{bookDetail.bookName}</h2>*/}
-                {/*                    {bookDetail.categoryName.map((name) => (*/}
-                {/*                        <span> {name},</span>*/}
-                {/*                    ))}*/}
-                {/*                    <p className='book-description'>*/}
-                {/*                        {bookDetail.description}*/}
-                {/*                    </p>*/}
-                {/*                </Col>*/}
-                {/*            </Row>*/}
-
-                {/*        </Col>*/}
-                {/*        <Col span={9} >*/}
-                {/*            <div className='cart-box'>*/}
-                {/*                <Row className='book-price-box'>*/}
-                {/*                    <span className='book-price'>${bookDetail.bookPrice}</span>*/}
-                {/*                </Row>*/}
-                {/*                <QuantityButton*/}
-                {/*                    handleAdd={handleAddQuantity}*/}
-                {/*                    handleLess={handleLessQuantity}*/}
-                {/*                    quantity={quantity}*/}
-                {/*                />*/}
-                {/*                <Button className='add-cart'*/}
-                {/*                        type='primary'*/}
-                {/*                        onClick={handleAddCart}*/}
-                {/*                >*/}
-                {/*                    Add To Cart*/}
-                {/*                </Button>*/}
-                {/*            </div>*/}
-
-                {/*        </Col>*/}
-
-                {/*    </Row>*/}
-                {/*</Col>*/}
             </Row>
 
-            <FeedbackTable/>
+
+            <Row style={{marginTop:"3%"}}>
+                <FeedbackTable/>
+                <ReviewSubmit bookID={bookId.id} config={config}/>
+            </Row>
         </>
     );
 }
