@@ -24,17 +24,10 @@ public class FeedbackMapperImpl implements FeedbackMapper{
     public FeedbackRespondDTO toDTO(Feedback entity) {
         Users users = entity.getUsers();
         String userName = users.getUserName();
-        Date createDay = entity.getCreateDay();
-        String comment = entity.getComment();
-        float ratingPoint = entity.getRatingPoint();
+        FeedbackRespondDTO respondDTO = modelMapper.map(entity, FeedbackRespondDTO.class);
+        respondDTO.setUserName(userName);
 
-
-        return FeedbackRespondDTO.builder()
-                                 .userName(userName)
-                                 .comment(comment)
-                                 .ratingPoint(ratingPoint)
-                                 .CreateDay(createDay)
-                                 .build();
+        return respondDTO;
     }
 
     @Override

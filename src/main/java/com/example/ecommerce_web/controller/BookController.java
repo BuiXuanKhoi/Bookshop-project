@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
+@CrossOrigin(maxAge = 3600, origins = "*")
 public class BookController {
 
     BookService bookService;
@@ -69,9 +70,10 @@ public class BookController {
             @RequestParam(name = "filter", required = false, defaultValue = "0") String filter,
             @RequestParam(name = "searchCode", required = false, defaultValue = "") String searchCode,
             @RequestParam(name = "page", required = false, defaultValue = "0") String page,
-            @RequestParam(name = "mode", required = false, defaultValue = "na") String mode){
+            @RequestParam(name = "mode", required = false, defaultValue = "na") String mode,
+            @RequestParam(name = "author", required = false, defaultValue = "0") String author){
         int pageConverted = Integer.parseInt(page);
-        return this.bookService.getPageBook(searchCode,filter,mode,pageConverted);
+        return this.bookService.getPageBook(searchCode,filter,mode,pageConverted, author);
     }
 
     @GetMapping("/recommend")
@@ -85,9 +87,9 @@ public class BookController {
     @GetMapping(value = "/popular")
     public List<BookRespondDTO> getListPopular() {
         return this.bookService.findTopPopular()
-                .stream()
-                .map(bookMapper::toDTO)
-                .collect(Collectors.toList());
+                               .stream()
+                               .map(bookMapper::toDTO)
+                               .collect(Collectors.toList());
     }
 
     @GetMapping(value = "/onsale")
@@ -108,13 +110,16 @@ public class BookController {
     }
 
     @GetMapping("/{id}/feedbacks")
-    public List<FeedbackRespondDTO> getListFeedback(@PathVariable int id){
-        List<Feedback> listFeedback = this.feedbackService.getListFeedback(id);
-
-        return listFeedback.stream()
-                           .map(feedbackMapper::toDTO)
-                           .collect(Collectors.toList());
+    public Page<FeedbackRespondDTO> getPageFeedback(
+            @PathVariable int id,
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+            @RequestParam(name = "mode", defaultValue = "a", required = false) char mode,
+            @RequestParam(name = "filter", defaultValue = "0", required = false) float filter){
+        return this.feedbackService.getPageFeedback(page, size, mode, filter, id);
     }
+
+
 
     @GetMapping("/{id}")
     public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){

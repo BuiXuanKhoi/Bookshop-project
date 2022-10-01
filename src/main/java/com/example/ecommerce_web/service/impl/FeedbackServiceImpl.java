@@ -19,6 +19,10 @@ import com.example.ecommerce_web.validator.ListValidator;
 import com.example.ecommerce_web.validator.Validator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -76,8 +80,31 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> getListFeedback(int bookId) {
         Books books = bookService.getById(bookId);
         List<Feedback> listFeedback = books.getFeedbacks();
-        ListValidator<Feedback> listFeebackValidator = ListValidator.ofList(listFeedback);
-        return listFeebackValidator.ifNotEmpty();
+        ListValidator<Feedback> listFeedbackValidator = ListValidator.ofList(listFeedback);
+        return listFeedbackValidator.ifNotEmpty();
+    }
+
+    @Override
+    public Page<FeedbackRespondDTO> getPageFeedback(int page, int size, char mode, float filter, int bookId) {
+        Pageable pageable = createPage(page, size, mode);
+
+        Page<FeedbackRespondDTO> pageFeedback = this.feedbackRepository.getPageFeedback(pageable, filter, bookId);
+
+        if(!pageFeedback.hasContent()){
+            throw new ResourceNotFoundException("Page is Empty");
+        }
+
+        return pageFeedback;
+    }
+
+    private Pageable createPage(int page, int size, char mode){
+
+        Sort sort = switch (mode){
+            case 'a' -> Sort.by(Sort.Direction.ASC, "createDay");
+            case 'd' -> Sort.by(Sort.Direction.DESC, "createDay");
+            default -> throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
+        };
+        return PageRequest.of(page, size, sort);
     }
 
     private void ifNotExistThenContinue(List<Feedback> listFeedbackUser, Books books){

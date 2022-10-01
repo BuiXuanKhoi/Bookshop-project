@@ -86,33 +86,26 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page)
+    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page, String authors)
     {
-        int[] listFilter;
+        int[] listFilter = getCategoriesFilter(filter);
+        int[] listAuthors = getAuthorsFilter(authors);
         Pageable pageable = createPage(page, mode);
 
-        if(filter.equals("0"))
-        {
-            listFilter = this.categoryRepository.findAll().stream()
-                    .mapToInt(Category::getCategoryId).toArray();
-        }else
-        {
-            listFilter = Arrays.stream(filter.split(","))
-                    .mapToInt(Integer::parseInt).toArray();
+
+
+
+
+        Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter, listAuthors);
+
+        if (!listBookFeature.hasContent()){
+            throw new ResourceNotFoundException("This Page Is Empty !!!");
         }
-
-        Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter);
-
-        if (listBookFeature.hasContent()){
-            return listBookFeature;
-        }
-
-        throw new ResourceNotFoundException("This Page Is Empty !!!");
+        return listBookFeature;
     }
 
 
     @Override
-    @Transactional
     public Books add(BookRequestDTO bookRequestDTO) {
 
         int[] listCategoryId = bookRequestDTO.getListCategory();
@@ -120,10 +113,7 @@ public class BookServiceImpl implements BookService {
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
 
-        Author author = authorRepository.findById(authorId)
-                                        .orElseThrow(
-                                                () -> new ResourceNotFoundException("Not Found Author Witd ID: " + authorId)
-                                        );
+        Author author = authorService.getById(authorId);
 
         List<Classify> classifyList = Arrays.stream(listCategoryId)
                                             .boxed()
@@ -215,6 +205,36 @@ public class BookServiceImpl implements BookService {
         };
 
         return PageRequest.of(page, 20, sort);
+    }
+
+    private int[] getAuthorsFilter(String authors){
+
+        if (authors.equals("0")){
+            return this.authorRepository.findAll()
+                                        .stream()
+                                        .mapToInt(Author::getAuthorID)
+                                        .toArray();
+        }
+
+        return Arrays.stream(authors.split(","))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+
+
+
+    }
+
+    private int[] getCategoriesFilter(String filter){
+
+        if(filter.equals("0")) {
+            return this.categoryRepository.findAll().stream()
+                                                    .mapToInt(Category::getCategoryId)
+                                                    .toArray();
+        }
+
+        return Arrays.stream(filter.split(","))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
     }
 
 }

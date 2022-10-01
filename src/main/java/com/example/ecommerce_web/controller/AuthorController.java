@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/authors")
+@CrossOrigin(maxAge = 3600, origins = "*")
 public class AuthorController {
     AuthorService authorService;
     AuthorMapper authorMapper;

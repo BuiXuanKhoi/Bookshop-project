@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/carts")
+@CrossOrigin(maxAge = 3600, origins = "*")
 public class CartController {
 
     CartItemService cartItemService;

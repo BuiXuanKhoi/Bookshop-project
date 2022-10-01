@@ -33,7 +33,7 @@ public class Feedback {
     @CreationTimestamp
     private Date createDay;
 
-    @Column(name="title")
+    @Column(name = "feedback_title")
     private String title;
 
     @Column(name =  "rating_points")

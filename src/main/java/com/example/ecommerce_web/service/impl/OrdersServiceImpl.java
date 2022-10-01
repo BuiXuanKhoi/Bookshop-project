@@ -72,7 +72,7 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderState(OrderState.PREPARED);
         Orders savedOrder = this.ordersRepository.save(orders);
 //        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
-        listCarItem.stream().forEach(cartItem -> cartItemRepository.delete(cartItem));
+        listCarItem.forEach(cartItem -> cartItemRepository.delete(cartItem));
         return savedOrder;
     }
 

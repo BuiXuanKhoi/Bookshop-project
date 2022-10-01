@@ -26,7 +26,6 @@ import javax.swing.text.html.HTML;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@SuppressWarnings("Deprecated ")
 @ComponentScan
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -78,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/information").hasAnyAuthority("CUSTOMER", "ADMIN")
-                .antMatchers(HttpMethod.PUT,"api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT,"api/books").hasAuthority("ADMIN")

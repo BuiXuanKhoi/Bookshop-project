@@ -15,10 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(maxAge = 3600, origins = "*")
 public class UserController {
 
     UserService userService;
@@ -39,8 +41,8 @@ public class UserController {
         return informationMapper.toDTO(information);
     }
 
-    @PutMapping(value = "/password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequestDTO changePasswordRequestDTO){
+    @PutMapping( "/password")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequestDTO){
         return this.userService.changePassword(changePasswordRequestDTO);
     }
 

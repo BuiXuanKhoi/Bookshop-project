@@ -1,8 +1,11 @@
 package com.example.ecommerce_web.model.dto.request;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -10,9 +13,11 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 public class ChangePasswordRequestDTO {
 
-    @Min(value = 6, message = "Password must has at least 6 characters")
+    @Length(min = 6, max = 15, message = "Password must be around 6 and 15 characters")
+    @NotEmpty(message = "Old password is required")
     private String oldPassword;
 
-    @Min(value = 6, message = "Password must has at least 6 characters")
+    @Length(min = 6, max = 15, message = "New Password must be around 6 and 15 characters")
+    @NotEmpty(message = "New Password is required")
     private String newPassword;
 }
