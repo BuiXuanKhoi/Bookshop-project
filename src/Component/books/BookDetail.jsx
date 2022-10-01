@@ -36,6 +36,31 @@ export default function BookDetail(){
     };
 
 
+    const bookId = useParams();
+    const [quantity,setQuantity] = useState(0);
+    const [bookFeedback, setBookFeedback] = useState([{
+        userName : '',
+        comment: '',
+        ratingPoint : 0.0,
+        createDay: ''
+    }]);
+
+    const [bookDetail, setBookDetail] = useState({
+        bookName: '',
+        description: '',
+        bookPrice: 0.0,
+        quantity : 0,
+        authorName: '',
+        categoryName : [],
+        ratingPoint : 0.0,
+        review : '',
+        imageLink: '',
+        createDay : '',
+        updateDay: '',
+        bookState: ''
+    })
+
+
 
 
     const closeSucessModal = () => {
@@ -63,31 +88,6 @@ export default function BookDetail(){
     const closeWarningModal = () => {
         setIsExistCart(false);
     }
-
-    const bookId = useParams();
-    const [quantity,setQuantity] = useState(0);
-    const [bookFeedback, setBookFeedback] = useState([{
-        userName : '',
-        comment: '',
-        ratingPoint : 0.0,
-        createDay: ''
-    }]);
-
-    const [bookDetail, setBookDetail] = useState({
-        bookName: '',
-        description: '',
-        bookPrice: 0.0,
-        quantity : 0,
-        authorName: '',
-        categoryName : [],
-        ratingPoint : 0.0,
-        review : '',
-        imageLink: '',
-        createDay : '',
-        updateDay: '',
-        bookState: ''
-    })
-
 
     const handleAddQuantity = () => {
         setQuantity(quantity + 1);
@@ -134,6 +134,7 @@ export default function BookDetail(){
             }).catch((err) =>
 
         {
+            console.log(err)
             if(err.response.data.statusCode === 401)
             {
                 if(err.response.data.message === 'Expired JWT Token')
@@ -156,6 +157,7 @@ export default function BookDetail(){
                 openSuccessModal();
             }).catch((err) =>
         {
+            console.log(err);
                 if(err.response.data.statusCode === 401)
                 {
                     if(err.response.data.message === 'Expired JWT Token')
@@ -190,9 +192,6 @@ export default function BookDetail(){
         navigate('/login');
     }
 
-    const handleAddCart = () => {
-        addBookCart();
-    }
 
     useEffect(() => {
         getBookDetail();
@@ -331,15 +330,15 @@ export default function BookDetail(){
                             <Col span={20} offset={2}>
                                 <Row style={{background:"#CFD2CF"}}>
                                     <Col span={10} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
-                                        <Button style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
+                                        <Button style={{background:"#CFD2CF"}} onClick={handleLessQuantity} icon={<MinusOutlined />}></Button>
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={4} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",textAlign:"center"}}>
-                                        <p style={{marginTop:"5%",marginBottom:"5%",fontWeight:"bolder",fontSize:"1.5vw"}}>1</p>
+                                        <p style={{marginTop:"5%",marginBottom:"5%",fontWeight:"bolder",fontSize:"1.5vw"}}>{quantity}</p>
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={10} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                        <Button  style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
+                                        <Button  style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}></Button>
                                     </Col>
                                 </Row>
 
@@ -348,7 +347,7 @@ export default function BookDetail(){
                         {/*--------------------------------------------------------------------------------*/}
                         <Row style={{marginTop:"10%",marginBottom:"15%"}}>
                             <Col span={20} offset={2}>
-                                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}}>
+                                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
                                     <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
                                         Add to cart
                                     </p>

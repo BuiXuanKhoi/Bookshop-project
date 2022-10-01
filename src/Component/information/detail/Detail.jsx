@@ -10,16 +10,14 @@ import 'react-moment';
 import moment from "moment";
 
 
-export default function Detail(){
+export default function Detail({config}){
 
     const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
     const navigate = useNavigate();
 
     const [form] = Form.useForm();
     const [isOpenSession, setIsOpenSession] = useState(false);
-    const config = {
-        headers: {Authorization: 'Bearer ' + JSON.parse(getCookie('book-token')).token}
-    }
+
 
     const [userDetail, setUserDetail] = useState({
         dateOfBirth : '',
@@ -222,6 +220,12 @@ export default function Detail(){
                 style={{
                     width: '100%'
                 }}
+                rules={[
+                    {
+                        required: true,
+                        message: "Date Of Birth is required"
+                    }
+                ]}
             >
                 <DatePicker/>
             </Form.Item>

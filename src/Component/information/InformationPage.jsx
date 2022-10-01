@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {Col, Form, Layout, Menu, Modal, Row, Slider} from "antd";
 import './InformationPage.css';
 import Detail from "./detail/Detail";
@@ -6,13 +6,18 @@ import Password from "./password/Password";
 import '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleInfo, faLock} from "@fortawesome/free-solid-svg-icons";
+import {getCookie} from "react-use-cookie";
+import {SecurityContext} from "../../App";
 
 
 export default function InformationPage(){
 
     const[isOpenChangePassword, setIsOpenChangePassword] = useState(false);
-    const [newPassword, setNewPassword] = useState('');
-    const [oldPassword, setOldPassword] = useState('');
+    const [loginData, setLoginData] = useContext(SecurityContext);
+    const config = {
+        headers: {Authorization: 'Bearer ' + JSON.parse(getCookie('book-token')).token}
+    }
+
 
     const openChangePasswordModal = () => {
         setIsOpenChangePassword(true);
@@ -22,25 +27,15 @@ export default function InformationPage(){
         setIsOpenChangePassword(false);
     }
 
-    const changePassword = (values) => {
-
-    }
     return(
         <div className="background-container">
-            <Modal
-                title="Change Password"
-                centered
-                open={isOpenChangePassword}
-                onCancel={closeChangePasswordModal}
-            >
-                <Password isOpen={isOpenChangePassword}/>
-            </Modal>
+            <Password config={config} isOpen={isOpenChangePassword} closeChangePasswordModal={closeChangePasswordModal}/>
             <div className="info-container">
                 <Row>
                     <Col span={18} push={6}>
                         <h2>Account Information</h2>
                         <div className="detail-container">
-                            <Detail/>
+                            <Detail config={config}/>
                         </div>
                     </Col>
                     <Col span={6} pull={18}>
@@ -50,7 +45,7 @@ export default function InformationPage(){
                                     <img className="user-avatar" src="https://cf.shopee.vn/file/bf14a6d977125636cd97110271911699_tn" alt={"User Avatar"}/>
                                 </div>
                                 <div className="user-name-box">
-                                    <div className="user-name"> Bui Xuan Khoi's Information</div>
+                                    <div className="user-name"> {loginData.userName}'s Information</div>
                                 </div>
                             </div>
                             <Menu mode="inline" className="menu">
