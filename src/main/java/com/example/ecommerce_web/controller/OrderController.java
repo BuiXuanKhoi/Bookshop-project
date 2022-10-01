@@ -27,13 +27,13 @@ public class OrderController {
 
     @PostMapping
     public OrderRespondDTO addOrders(){
-        Orders orders =  this.ordersService.createOrder();
+        Orders orders =  this.ordersService.add();
         return orderMapper.toDTO(orders);
     }
 
     @GetMapping
     public List<OrderRespondDTO> getListOrder(){
-        return this.ordersService.getListOrder()
+        return this.ordersService.findAllByLocalUser()
                                  .stream()
                                  .map(orderMapper::toDTO)
                                  .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public OrderRespondDTO updateOrderState(@PathVariable int id){
-        Orders orders =  this.ordersService.updateOrderState(id);
+        Orders orders =  this.ordersService.updateState(id);
         return orderMapper.toDTO(orders);
     }
 }

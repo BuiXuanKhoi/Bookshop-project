@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (lockTime.isPresent()){
             if (lockTime.get().before(now)){
-                userService.unblockUser(users.getUserId());
+                userService.unblock(users.getUserId());
             }
         }
 
@@ -109,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
-        Users users = userService.createUser(userRequestDTO);
+        Users users = userService.add(userRequestDTO);
         Information information = informationService.createInformationByExistedUser(userRequestDTO, users);
         String password = users.getPassword();
         System.out.println(password);

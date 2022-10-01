@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface OrderItemService {
     OrderItems getById(int id);
-    OrderItems create(CartItem cartItem);
+    OrderItems add(CartItem cartItem);
     void saveOrderItemWith(Orders orders, List<OrderItems> orderItemsList);
 }

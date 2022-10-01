@@ -25,6 +25,6 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
             "from Users usa " +
             "join usa.information inf"
             )
-    Page<UserRespondDTO> getPageUser(Pageable pageable);
+    Page<UserRespondDTO> getPage(Pageable pageable);
 
 }

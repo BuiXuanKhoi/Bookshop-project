@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface BookService {
-    Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page, String authors);
+    Page<BookFeatureRespondDTO> getPage(String searchCode, String filter, String mode, int page, String authors);
     Books getById(int bookId);
     Books add(BookRequestDTO bookRequestDTO);
     Books update(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
-    List<Books> findAllBooks();
+    List<Books> findAll();
     List<Books> findTopPopular();
     List<Books> findTopRecommend();
     List<Books> findTopOnSale();

@@ -61,7 +61,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public Feedback giveFeedback(FeedbackRequestDTO feedbackRequestDTO, int bookId) {
+    public Feedback add(FeedbackRequestDTO feedbackRequestDTO, int bookId) {
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
         Books books = bookService.getById(bookId);
@@ -77,7 +77,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public List<Feedback> getListFeedback(int bookId) {
+    public List<Feedback> findAll(int bookId) {
         Books books = bookService.getById(bookId);
         List<Feedback> listFeedback = books.getFeedbacks();
         ListValidator<Feedback> listFeedbackValidator = ListValidator.ofList(listFeedback);
@@ -85,15 +85,11 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public Page<FeedbackRespondDTO> getPageFeedback(int page, int size, char mode, float filter, int bookId) {
+    public Page<FeedbackRespondDTO> getPageByBook(int page, int size, char mode, float filter, int bookId) {
         Pageable pageable = createPage(page, size, mode);
-
         Page<FeedbackRespondDTO> pageFeedback = this.feedbackRepository.getPageFeedback(pageable, filter, bookId);
 
-        if(!pageFeedback.hasContent()){
-            throw new ResourceNotFoundException("Page is Empty");
-        }
-
+        if(!pageFeedback.hasContent())  throw new ResourceNotFoundException("Page is Empty");
         return pageFeedback;
     }
 

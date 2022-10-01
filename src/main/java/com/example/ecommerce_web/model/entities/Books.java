@@ -10,7 +10,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -33,14 +35,20 @@ public class Books {
     @Column(name = "book_name")
     @NotNull
     @NotBlank(message = "Book name cannot be empty")
+    @NotEmpty(message = "book name is required")
+    @NotNull(message = "book name must not be null")
     private String bookName;
 
+    @NotEmpty(message = "book price is required")
+    @NotNull(message = "book price must not be null")
     @Column(name = "book_price")
     private float bookPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @CreatedBy
+    @NotEmpty(message = "creator is required")
+    @NotNull(message = "creator must not be null")
     private Users users;
 
     @Column(name = "rating")
@@ -49,6 +57,9 @@ public class Books {
     @Column(name = "review")
     private String review;
 
+
+    @NotEmpty(message = "image link is required")
+    @NotNull(message = "image link must not be null")
     @Column(name = "image_link")
     private String imageLink;
 
@@ -60,18 +71,28 @@ public class Books {
     @UpdateTimestamp
     private Date updateDay;
 
+
+    @NotEmpty(message = "description is required")
+    @NotNull(message = "description must not be null")
     @Column(name = "description", length = 10000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id")
+    @NotEmpty(message = "author is required")
+    @NotNull(message = "author must not be null")
     private Author authors;
 
+
+    @NotEmpty(message = "quantity is required")
+    @NotNull(message = "quantity must not be null")
     @Column(name = "quantity")
     private int quantity;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
+    @NotEmpty(message = "state is required")
+    @NotNull(message = "state must not be null")
     private BookState bookState;
 
     @OneToMany(mappedBy = "books", fetch = FetchType.LAZY,cascade = CascadeType.ALL)

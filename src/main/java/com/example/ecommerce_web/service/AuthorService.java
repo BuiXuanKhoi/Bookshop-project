@@ -10,5 +10,5 @@ import java.util.List;
 public interface AuthorService {
     Author add(Author author);
     Author getById(int id);
-    List<Author> getListAuthor();
+    List<Author> findAll();
 }

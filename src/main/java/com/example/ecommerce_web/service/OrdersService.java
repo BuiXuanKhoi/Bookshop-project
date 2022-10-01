@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface OrdersService {
-    Orders createOrder();
-    List<Orders> getListOrder();
-    Orders updateOrderState(int orderId);
+    Orders add();
+    List<Orders> findAllByLocalUser();
+    Orders updateState(int orderId);
 }

@@ -66,9 +66,8 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = cartItemMapper.fromDTO(cartItemRequestDTO);
         cartItem.setUsers(users);
 
-        if(isExistCartItem(bookId)){
-            throw new ConstraintViolateException("Cannot Add To Cart Due To Already Existed Cart Item !!!");
-        }
+        if(isExistCartItem(bookId)) throw new ConstraintViolateException("Cannot Add To Cart Due To Already Existed Cart Item !!!");
+
         return this.cartItemRepository.save(cartItem);
     }
 
@@ -87,7 +86,7 @@ public class CartItemServiceImpl implements CartItemService {
 
 
     @Override
-    public List<CartItem> getListCartItem() {
+    public List<CartItem> getAllByLocalUser() {
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
         List<CartItem> listCartItem = users.getCartItems();
@@ -97,7 +96,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     @Modifying
-    public void deleteCartItem(int cartItemId) {
+    public void delete(int cartItemId) {
          CartItem cartItem = findById(cartItemId);
          this.cartItemRepository.delete(cartItem);
     }

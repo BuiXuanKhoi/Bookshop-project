@@ -78,7 +78,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Books> findAllBooks() {
+    public List<Books> findAll() {
         List<Books> listBookRecommend = this.bookRepository.findAll();
         ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
         return listBookValid.ifNotEmpty();
@@ -86,21 +86,15 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Page<BookFeatureRespondDTO> getPageBook(String searchCode, String filter, String mode, int page, String authors)
+    public Page<BookFeatureRespondDTO> getPage(String searchCode, String filter, String mode, int page, String authors)
     {
         int[] listFilter = getCategoriesFilter(filter);
         int[] listAuthors = getAuthorsFilter(authors);
         Pageable pageable = createPage(page, mode);
-
-
-
-
-
         Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter, listAuthors);
 
-        if (!listBookFeature.hasContent()){
-            throw new ResourceNotFoundException("This Page Is Empty !!!");
-        }
+        if (!listBookFeature.hasContent()) throw new ResourceNotFoundException("This Page Is Empty !!!");
+
         return listBookFeature;
     }
 
@@ -164,26 +158,26 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Books> findTopPopular() {
-        return findAllBooks().stream()
-                             .sorted(Comparator.comparingInt(Books::getQuantity))
-                             .limit(8)
-                             .collect(Collectors.toList());
+        return findAll().stream()
+                        .sorted(Comparator.comparingInt(Books::getQuantity))
+                        .limit(8)
+                        .collect(Collectors.toList());
     }
 
     @Override
     public List<Books> findTopOnSale(){
-        return findAllBooks().stream()
-                                .sorted(Comparator.comparingDouble(Books::getBookPrice))
-                                .limit(10)
-                                .collect(Collectors.toList());
+        return findAll().stream()
+                        .sorted(Comparator.comparingDouble(Books::getBookPrice))
+                        .limit(10)
+                        .collect(Collectors.toList());
     }
 
     @Override
     public List<Books> findTopRecommend() {
-        return findAllBooks().stream()
-                             .sorted(Comparator.comparingDouble(Books::getRatingPoint).reversed())
-                             .limit(8)
-                             .collect(Collectors.toList());
+        return findAll().stream()
+                        .sorted(Comparator.comparingDouble(Books::getRatingPoint).reversed())
+                        .limit(8)
+                        .collect(Collectors.toList());
     }
 
     private Pageable createPage(int page, String sortBy){

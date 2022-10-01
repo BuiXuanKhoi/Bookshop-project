@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> blockUser(int userId) {
+    public ResponseEntity<?> block(int userId) {
         long THREE_MINUTES = 180000;
         // Because of fast testing, You just have to waiting for 3 minutes and log in again, the account will be available again.
 
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> unblockUser(int userID){
+    public ResponseEntity<?> unblock(int userID){
 
         Users users = findById(userID);
 
@@ -119,11 +119,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserRespondDTO> getUserList(int page){
+    public Page<UserRespondDTO> getPage(int page){
 
         Pageable pageable = PageRequest.of(page,10);
 
-        Page<UserRespondDTO> userList = this.userRepository.getPageUser(pageable);
+        Page<UserRespondDTO> userList = this.userRepository.getPage(pageable);
 
         if(userList.hasContent()){
             return userList;
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users createUser(UserRequestDTO userRequestDTO) {
+    public Users add(UserRequestDTO userRequestDTO) {
         Date dateOfBirth = userRequestDTO.getDateOfBirth();
         String userName = userRequestDTO.getUserName();
         String roleName = userRequestDTO.getRole();

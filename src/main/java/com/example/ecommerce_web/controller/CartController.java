@@ -36,7 +36,7 @@ public class CartController {
 
     @GetMapping
     public List<CartItemRespondDTO> getListCartItem(){
-        return this.cartItemService.getListCartItem()
+        return this.cartItemService.getAllByLocalUser()
                                    .stream()
                                    .map(cartItemMapper::toDTO)
                                    .collect(Collectors.toList());
@@ -52,7 +52,7 @@ public class CartController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCartItem( @PathVariable("id") int id){
-        this.cartItemService.deleteCartItem(id);
+        this.cartItemService.delete(id);
         MessageRespond messageRespond = new MessageRespond(HttpStatus.OK.value(), "Delete Cart Item Successfully !!!");
         return ResponseEntity.ok(messageRespond);
     }

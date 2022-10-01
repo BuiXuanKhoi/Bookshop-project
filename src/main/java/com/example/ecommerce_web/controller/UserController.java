@@ -50,7 +50,7 @@ public class UserController {
     public Page<UserRespondDTO> getUserList(
             @RequestParam(name = "page",required = false,defaultValue = "0") String page){
         int pageConvert = Integer.parseInt(page);
-        return this.userService.getUserList(pageConvert);
+        return this.userService.getPage(pageConvert);
     }
 
     @GetMapping("/information")
@@ -61,9 +61,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> blockUser(@PathVariable("id") int id){
-        return this.userService.blockUser(id);
+        return this.userService.block(id);
     }
 
     @PutMapping(value = "/{id}/state")
-    public ResponseEntity<?>  unblockUser(@PathVariable("id") int id) {return this.userService.unblockUser(id);}
+    public ResponseEntity<?>  unblockUser(@PathVariable("id") int id) {return this.userService.unblock(id);}
 }

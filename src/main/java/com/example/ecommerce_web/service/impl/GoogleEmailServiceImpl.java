@@ -28,7 +28,7 @@ public class GoogleEmailServiceImpl implements EmailService {
 //    }
 
     @Override
-    public ResponseEntity<?> sendEmail(String password, String receiver) {
+    public ResponseEntity<?> sendWelcomeEmail(String password, String receiver) {
 //            SimpleMailMessage mailMessage = new SimpleMailMessage();
 //
 //            String message = "Thanks for join our E-commerce project. Your password here: " +  password +

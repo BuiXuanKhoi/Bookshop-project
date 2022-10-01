@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CartItemService {
     CartItem add(CartItemRequestDTO cartItemRequestDTO);
-    List<CartItem> getListCartItem();
-    void deleteCartItem(int cartItemId);
+    List<CartItem> getAllByLocalUser();
+    void delete(int cartItemId);
     CartItem update(int cartId, int addedQuantity);
 }

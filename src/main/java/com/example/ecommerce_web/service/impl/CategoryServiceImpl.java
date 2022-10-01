@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getListCategory() {
+    public List<Category> findAll() {
         List<Category> listCategory =  this.categoryRepository.findAll();
         ListValidator<Category> listValidator = ListValidator.ofList(listCategory);
         return listValidator.ifNotEmpty();

@@ -6,6 +6,8 @@ import lombok.*;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -24,17 +26,25 @@ public class Users {
     private int userId;
 
     @Column(name = "user_name")
+    @NotEmpty(message = "user name is required")
+    @NotNull(message = "user name must not be null")
     private String userName;
 
     @Column(name = "password")
+    @NotEmpty(message = "password is required")
+    @NotNull(message = "password must not be null")
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "roles")
+    @NotEmpty(message = "role is required")
+    @NotNull(message = "role must not be null")
     private Role role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "states")
+    @NotEmpty(message = "user state is required")
+    @NotNull(message = "user state must not be null")
     private UserState userState;
 
     @Column(name = "lock_time")

@@ -73,7 +73,7 @@ public class BookController {
             @RequestParam(name = "mode", required = false, defaultValue = "na") String mode,
             @RequestParam(name = "author", required = false, defaultValue = "0") String author){
         int pageConverted = Integer.parseInt(page);
-        return this.bookService.getPageBook(searchCode,filter,mode,pageConverted, author);
+        return this.bookService.getPage(searchCode,filter,mode,pageConverted, author);
     }
 
     @GetMapping("/recommend")
@@ -95,9 +95,9 @@ public class BookController {
     @GetMapping(value = "/onsale")
     public List<BookRespondDTO> getListOnSales(){
         return this.bookService.findTopOnSale()
-                    .stream()
-                    .map(bookMapper::toDTO)
-                    .collect(Collectors.toList());
+                               .stream()
+                               .map(bookMapper::toDTO)
+                               .collect(Collectors.toList());
     }
 
     @PostMapping("/{id}/feedbacks")
@@ -105,7 +105,7 @@ public class BookController {
             @PathVariable("id") int bookId,
             @RequestBody FeedbackRequestDTO feedbackRequestDTO
     ){
-        Feedback savedFeedback = this.feedbackService.giveFeedback(feedbackRequestDTO, bookId);
+        Feedback savedFeedback = this.feedbackService.add(feedbackRequestDTO, bookId);
         return feedbackMapper.toDTO(savedFeedback);
     }
 
@@ -116,7 +116,7 @@ public class BookController {
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
             @RequestParam(name = "mode", defaultValue = "a", required = false) char mode,
             @RequestParam(name = "filter", defaultValue = "0", required = false) float filter){
-        return this.feedbackService.getPageFeedback(page, size, mode, filter, id);
+        return this.feedbackService.getPageByBook(page, size, mode, filter, id);
     }
 
 

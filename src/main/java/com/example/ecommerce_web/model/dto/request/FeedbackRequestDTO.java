@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,5 +15,8 @@ import lombok.Setter;
 public class FeedbackRequestDTO {
 
     private String comment;
+
     private float ratingPoint;
+
+    private String title;
 }

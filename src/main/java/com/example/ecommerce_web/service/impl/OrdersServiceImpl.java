@@ -54,17 +54,16 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Orders createOrder() {
+    public Orders add() {
         String userName = userLocal.getLocalUserName();
         Users users = this.userRepository.findUserByUserName(userName).get();
         List<CartItem> listCarItem = users.getCartItems();
 
-        if (listCarItem.isEmpty()){
-            throw new ResourceNotFoundException("You don't have any cart item to pay ");
-        }
+        if (listCarItem.isEmpty()) throw new ResourceNotFoundException("You don't have any cart item to pay ");
+
 
         List<OrderItems> listOrderItems = listCarItem.stream()
-                                                     .map(cartItem -> orderItemService.create(cartItem))
+                                                     .map(cartItem -> orderItemService.add(cartItem))
                                                      .collect(Collectors.toList());
         Orders orders = new Orders();
         orders.setUsers(users);
@@ -77,7 +76,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public List<Orders> getListOrder() {
+    public List<Orders> findAllByLocalUser() {
         String userName = userLocal.getLocalUserName();
         Users users = this.userRepository.findUserByUserName(userName).get();
         List<Orders> listOrder = users.getOrders();
@@ -85,7 +84,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Orders updateOrderState(int orderId) {
+    public Orders updateState(int orderId) {
         Orders orders = findById(orderId);
         OrderState orderState = orders.getOrderState();
         OrderState nextOrderState = OrderState.nextOf(orderState);

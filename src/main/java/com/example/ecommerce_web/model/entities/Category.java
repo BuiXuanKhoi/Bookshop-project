@@ -7,6 +7,7 @@ import lombok.*;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -24,10 +25,12 @@ public class Category {
 
     @Column(name = "category_name")
     @NotNull(message = "category name must not be null")
-    @NotBlank(message = "category name is required")
+    @NotEmpty(message = "category name is required")
     private String categoryName;
 
     @Column(name = "category_description")
+    @NotNull(message = "category description must not be null")
+    @NotEmpty(message = "category description is required")
     private String categoryDescription;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)

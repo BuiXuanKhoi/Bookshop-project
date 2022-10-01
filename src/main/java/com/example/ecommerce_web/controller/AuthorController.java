@@ -32,7 +32,7 @@ public class AuthorController {
 
     @GetMapping
     public List<AuthorRespondDTO> getListAuthor(){
-        return  this.authorService.getListAuthor()
+        return  this.authorService.findAll()
                                   .stream()
                                   .map(authorMapper::toDTO)
                                   .collect(Collectors.toList());

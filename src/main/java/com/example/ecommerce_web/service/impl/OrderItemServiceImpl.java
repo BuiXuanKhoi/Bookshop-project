@@ -33,7 +33,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public OrderItems create(CartItem cartItem) {
+    public OrderItems add(CartItem cartItem) {
         OrderItems orderItems = modelMapper.map(cartItem, OrderItems.class);
         float price = cartItem.getBooks().getBookPrice();
         orderItems.setPrice(price);
