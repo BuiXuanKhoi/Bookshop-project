@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryRespondDTO addCategory( @RequestBody Category category){
+    public CategoryRespondDTO addCategory( @RequestBody @Valid Category category){
         Category savedCategory =  this.categoryService.add(category);
         return categoryMapper.toDTO(savedCategory);
     }

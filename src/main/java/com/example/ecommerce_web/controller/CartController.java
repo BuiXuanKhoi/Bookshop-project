@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class CartController {
     }
 
     @PostMapping
-    public CartItemRespondDTO addToCart(@RequestBody CartItemRequestDTO cartItemRequestDTO){
+    public CartItemRespondDTO addToCart(@RequestBody @Valid CartItemRequestDTO cartItemRequestDTO){
         CartItem cartItem = this.cartItemService.add(cartItemRequestDTO);
         return cartItemMapper.toDTO(cartItem);
     }

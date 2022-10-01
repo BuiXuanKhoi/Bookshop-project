@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookRespondDTO addNewBook(@RequestBody BookRequestDTO bookRequestDTO){
+    public BookRespondDTO addNewBook(@RequestBody @Valid BookRequestDTO bookRequestDTO){
         Books books = this.bookService.add(bookRequestDTO);
         return bookMapper.toDTO(books);
     }
@@ -54,7 +55,7 @@ public class BookController {
     @PutMapping("/{id}")
     public BookRespondDTO editBook(
             @PathVariable int id,
-            @RequestBody ModifyBookRequestDTO modifyBookRequestDTO){
+            @RequestBody @Valid ModifyBookRequestDTO modifyBookRequestDTO){
         Books books = this.bookService.update(id, modifyBookRequestDTO);
         return bookMapper.toDTO(books);
     }
@@ -103,7 +104,7 @@ public class BookController {
     @PostMapping("/{id}/feedbacks")
     public FeedbackRespondDTO giveFeedback(
             @PathVariable("id") int bookId,
-            @RequestBody FeedbackRequestDTO feedbackRequestDTO
+            @RequestBody @Valid FeedbackRequestDTO feedbackRequestDTO
     ){
         Feedback savedFeedback = this.feedbackService.add(feedbackRequestDTO, bookId);
         return feedbackMapper.toDTO(savedFeedback);

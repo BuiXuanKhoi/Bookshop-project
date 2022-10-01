@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -13,9 +15,11 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class CartItemRequestDTO {
 
-    @NotEmpty(message = "quantity is required")
+    @Min(value = 1, message = "Quantity is required")
+    @NotNull(message = "quantity must not be null")
     private int quantity;
 
-    @NotEmpty(message = "book id is required")
+    @Min(value = 1, message = "Book id is required")
+    @NotNull(message = " id must not be null")
     private int bookId;
 }

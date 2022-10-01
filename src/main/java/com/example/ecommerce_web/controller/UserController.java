@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping ("/information" )
-    public InformationRespondDTO modifyInformation(@RequestBody ModifyUserRequestDTO modifyUserRequestDTO){
+    public InformationRespondDTO modifyInformation(@RequestBody @Valid ModifyUserRequestDTO modifyUserRequestDTO){
         Information information =  this.informationService.update(modifyUserRequestDTO);
         return informationMapper.toDTO(information);
     }

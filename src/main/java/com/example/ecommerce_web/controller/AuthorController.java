@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class AuthorController {
     }
 
     @PostMapping
-    public AuthorRespondDTO addAuthor(@RequestBody Author author){
+    public AuthorRespondDTO addAuthor(@RequestBody @Valid Author author){
         Author savedAuthor = this.authorService.add(author);
         return authorMapper.toDTO(savedAuthor);
     }

@@ -21,8 +21,6 @@ public class CartItem {
     private int cartItemsID ;
 
     @Column(name = "quantity")
-    @NotEmpty(message = "quantity is required")
-    @NotNull(message = "quantity must not be null")
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +31,5 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    @NotEmpty(message = "book is required")
-    @NotNull(message = "book must not be null")
     private Books books;
 }
