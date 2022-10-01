@@ -18,5 +18,4 @@ public class FeedbackRespondDTO {
     private String comment;
     private float ratingPoint;
     private String title;
-
 }

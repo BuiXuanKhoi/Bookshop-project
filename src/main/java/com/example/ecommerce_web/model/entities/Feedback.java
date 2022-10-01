@@ -42,7 +42,6 @@ public class Feedback {
     @NotNull(message = "title must not be null")
     private String title;
 
-
     @Column(name =  "rating_points")
     @NotEmpty(message = "rating point is required")
     @NotNull(message = "rating point must not be null")

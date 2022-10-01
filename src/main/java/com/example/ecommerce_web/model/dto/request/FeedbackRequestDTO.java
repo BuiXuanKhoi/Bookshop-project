@@ -13,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedbackRequestDTO {
-
+    private String title;
     private String comment;
 
     private float ratingPoint;
