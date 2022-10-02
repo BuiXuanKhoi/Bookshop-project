@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate, Form} from "antd";
+import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate, Form,Modal} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
@@ -115,12 +115,28 @@ export default function ReviewSubmit ({bookID,config}) {
         console.log(reviewSubmit);
         handleSendReview();
     },[reviewSubmit])
+
     const handleSendReview = () => {
-        axios.post("https://ecommerce-web0903.herokuapp.com/api/books"+bookID+"/feedbacks",reviewSubmit,config)
+        axios.post("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks",reviewSubmit,config)
             .then((response)=>{
-                console.log(response)
-            }).catch((error)=>{console.log(error)})
+                handleSuccess();
+            }).catch((error)=>{
+                if (error.response.data.statusCode === 400) {
+                    handleError();
+                }
+        })
     }
+    const handleSuccess = () =>{
+        Modal.success({
+            content: 'Succeeded in submitting your review',
+        });
+    }
+    const handleError = () => {
+        Modal.error({
+            title: 'Error',
+            content: 'Can not submit two feedbacks for one book',
+        });
+    };
     return (
         <>
             {customerReviewPost({ratingPoint,setRatingPoint,desc,reviewSubmit,setReviewSubmitting,handleSendReview,form})}

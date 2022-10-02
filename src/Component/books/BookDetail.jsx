@@ -100,8 +100,6 @@ export default function BookDetail(){
         }
     }
 
-
-
     const [isFeedback, setIsFeedback] = useState(false);
 
 
@@ -122,8 +120,6 @@ export default function BookDetail(){
         })
 
     }
-
-
 
 
     const updateCart = () => {
@@ -361,21 +357,12 @@ export default function BookDetail(){
             </Row>
 
 
-            <Row style={{marginTop:"3%"}}>
-                <FeedbackTable/>
-                <ReviewSubmit bookID={bookId.id} config={config}/>
-            </Row>
 
-<<<<<<< HEAD
 
             <Row style={{marginTop:"3%"}}>
                 <FeedbackTable/>
                 <ReviewSubmit bookID={bookId.id} config={config}/>
             </Row>
-=======
-            <FeedbackTable/>
-
->>>>>>> 805855f3d56ffd7ec27bbf5f41b1ff34687d8ca6
-        </>
+      </>
     );
 }
