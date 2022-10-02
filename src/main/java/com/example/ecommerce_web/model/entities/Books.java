@@ -37,7 +37,6 @@ public class Books {
     @NotBlank(message = "Book name cannot be empty")
     private String bookName;
 
-
     @Column(name = "book_price")
     private float bookPrice;
 
@@ -63,16 +62,12 @@ public class Books {
     @UpdateTimestamp
     private Date updateDay;
 
-
-
     @Column(name = "description", length = 10000)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="author_id")
     private Author authors;
-
-
 
     @Column(name = "quantity")
     private int quantity;

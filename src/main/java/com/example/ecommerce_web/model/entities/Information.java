@@ -32,7 +32,6 @@ public class Information {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "address")
-    @NotEmpty(message = "address is required")
     @NotNull(message = "address must not be null")
     private Location address;
 

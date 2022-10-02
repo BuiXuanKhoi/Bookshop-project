@@ -33,7 +33,7 @@ public class Category {
     @NotEmpty(message = "category description is required")
     private String categoryDescription;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Classify> classifies;
 
     public Category(String categoryName, String categoryDescription){

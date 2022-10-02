@@ -26,7 +26,7 @@ public class Author {
     @NotNull(message = "author name must not be null")
     private String authorName;
 
-    @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Books> books;
 
     public Author(String authorName){

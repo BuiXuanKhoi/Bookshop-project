@@ -69,6 +69,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteAll() {
+        this.userRepository.deleteAll();
+    }
+
+    @Override
     public ResponseEntity<?> changePassword(ChangePasswordRequestDTO changePasswordRequestDTO){
 
         String newPassword = changePasswordRequestDTO.getNewPassword();

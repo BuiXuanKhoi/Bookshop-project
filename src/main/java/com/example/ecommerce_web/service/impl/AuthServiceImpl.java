@@ -112,19 +112,11 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
         Users users = userService.add(userRequestDTO);
         Information information = informationService.createInformationByExistedUser(userRequestDTO, users);
-
-        this.userRepository.findByEmail(information.getEmail())
-                                                   .ifPresent( s ->{
-                                                        throw new ConstraintViolateException("Already Exist Email !!!");
-                                                    });
         String password = users.getPassword();
-        System.out.println(password);
         String passwordEncode = encoder.encode(password);
         users.setPassword(passwordEncode);
         this.userRepository.save(users);
         this.informationRepository.save(information);
-        String receiver = information.getEmail();
-//        emailService.sendEmail(password, receiver);
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
     }
 
