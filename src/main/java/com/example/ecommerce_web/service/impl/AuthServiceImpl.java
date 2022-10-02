@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
 import com.example.ecommerce_web.model.dto.request.EmailDetail;
@@ -111,6 +112,11 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> signup(UserRequestDTO userRequestDTO) {
         Users users = userService.add(userRequestDTO);
         Information information = informationService.createInformationByExistedUser(userRequestDTO, users);
+
+        this.userRepository.findByEmail(information.getEmail())
+                                                   .ifPresent( s ->{
+                                                        throw new ConstraintViolateException("Already Exist Email !!!");
+                                                    });
         String password = users.getPassword();
         System.out.println(password);
         String passwordEncode = encoder.encode(password);

@@ -19,21 +19,21 @@ public class UserRespondDTO {
 
     private String userName;
 
-    private String userEmail;
+    private String email;
 
-    private Location userLocation;
+    private Location location;
 
-    private Date userCreateDay;
+    private Date createDate;
 
-    private Date userEditDay;
+    private Date updateDate;
 
-    private String userFirstName;
+    private String firstName;
 
-    private String userLastName;
+    private String lastName;
 
-    private String userPhoneNumber;
+    private String phoneNumber;
 
-    private Role roleName;
+    private Role role;
 
     private UserState userState;
 }

@@ -27,4 +27,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
             )
     Page<UserRespondDTO> getPage(Pageable pageable);
 
+    @Query(value = "select urs from Users urs where urs.information.email = :email ", nativeQuery = false)
+    Optional<Users> findByEmail(String email);
+
 }

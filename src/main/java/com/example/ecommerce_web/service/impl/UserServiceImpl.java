@@ -15,6 +15,7 @@ import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.EmailService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.utils.MyDateUtil;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -144,6 +145,7 @@ public class UserServiceImpl implements UserService {
         if(usersOptional.isPresent()){
             throw new ConstraintViolateException("User name already exist !!!!");
         }
+        
         return Users.builder()
                     .userName(userName)
                     .password(password)
