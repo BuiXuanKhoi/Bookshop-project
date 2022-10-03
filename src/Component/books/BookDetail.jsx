@@ -221,24 +221,7 @@ export default function BookDetail(){
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
                                 <p className={"description"}>Book description</p>
-                                <p className={"positionForChar"}>{bookDetail.description} </p>
-                            </Row>
-                            {/*--------------------------------------------------------------------------------*/}
-                            <Row style={{paddingBlock:"4%"}}>
-                                <div>
-                                    <p className={"positionForChar"}>"The multi-million copy bestseller"</p>
-                                    <p className={"positionForChar"}>Soon to be a major film</p>
-                                    <p className={"positionForChar"}>A Number One New York Times Bestseller</p>
-                                </div>
-                            </Row>
-                            {/*--------------------------------------------------------------------------------*/}
-                            <Row style={{paddingBlock:"4%"}}>
-                                <div>
-                                    <p className={"positionForChar"}>"The multi-million copy bestseller"</p>
-                                    <p className={"positionForChar"}>Soon to be a major film</p>
-                                    <p className={"positionForChar"}>A Number One New York Times Bestseller</p>
-                                    <p className={"positionForChar"}> I have never read such a brilliant book. You learn very quickly that this man must have been a really clever man.</p>
-                                </div>
+                                <p className={"positionForChar"} style={{marginTop:"5%"}}>{bookDetail.description} </p>
                             </Row>
                         </Col>
                     </Row>
@@ -360,7 +343,7 @@ export default function BookDetail(){
 
 
             <Row style={{marginTop:"3%"}}>
-                <FeedbackTable/>
+                <FeedbackTable bookID={bookId.id} config={config}/>
                 <ReviewSubmit bookID={bookId.id} config={config}/>
             </Row>
       </>

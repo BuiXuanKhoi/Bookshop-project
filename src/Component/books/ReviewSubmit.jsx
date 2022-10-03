@@ -121,6 +121,7 @@ export default function ReviewSubmit ({bookID,config}) {
             .then((response)=>{
                 handleSuccess();
             }).catch((error)=>{
+                console.log(error)
                 if (error.response.data.statusCode === 400) {
                     handleError();
                 }
