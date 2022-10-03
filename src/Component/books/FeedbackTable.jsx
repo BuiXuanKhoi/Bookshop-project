@@ -1,37 +1,82 @@
-import React, {useState} from "react";
-import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate} from "antd";
+import React, {useEffect, useState} from "react";
+import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate, Pagination} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
 import {Option} from "antd/es/mentions";
 import TextArea from "antd/es/input/TextArea";
+import axios from "axios";
 
-const menu = (
-    <Menu
-        items={[
-            {
-                key: '1',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                        Sort by date: newest to oldest
-                    </a>
-                ),
-            },
-            {
-                key: '2',
-                label: (
-                    <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-                        Sort by date: oldest to newest
-                    </a>
-                ),
-            },
+import ReviewSubmit from "./ReviewSubmit";
 
-        ]}
-    />
-);
 
-const customerReview = () =>{
+
+const customerReview = (props) =>{
+    const handleOnClickSort = (values) =>{
+        props.setMode(values.key)
+    }
+    const handleOnClickChangeNumber = (values) => {
+        props.setSize(values.key);
+        props.setDefaultPageSize(values.key);
+        props.setShowNumber(values.key);
+    }
+    const menu = (
+        <Menu
+            onClick={handleOnClickSort}
+            items={[
+                {
+                    key: 'a',
+                    label: (
+                        <a target="_blank"  rel="noopener noreferrer" >
+                            Sort by date: newest to oldest
+                        </a>
+                    ),
+                },
+                {
+                    key: 'd',
+                    label: (
+                        <a target="_blank" rel="noopener noreferrer"    >
+                            Sort by date: oldest to newest
+                        </a>
+                    ),
+                },
+
+            ]}
+        />
+    );
+
+    const menuForNumber = (
+        <Menu
+            onClick={handleOnClickChangeNumber}
+            items={[
+                {
+                    key: '10',
+                    label: (
+                        <a target="_blank" rel="noopener noreferrer" >
+                            Show 10
+                        </a>
+                    ),
+                },
+                {
+                    key: '20',
+                    label: (
+                        <a target="_blank" rel="noopener noreferrer" >
+                            Show 20
+                        </a>
+                    ),
+                },
+                {
+                    key: '30',
+                    label: (
+                        <a target="_blank" rel="noopener noreferrer">
+                            Show 30
+                        </a>
+                    ),
+                },
+            ]}
+        />
+    );
+
     return (
-
             <Col span={24} >
                 {/*--------------------------------------------------------------------------------*/}
                 <Row>
@@ -54,40 +99,40 @@ const customerReview = () =>{
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{fontSize:"1vw"}}>
-                    <Col  span={3} >
+                    <Col span={3} >
                         <p className={"positionForChar"} style={{marginLeft:"20%",fontWeight:"bolder",textDecoration:"underline"}}>
-                            Point
+                            number
                         </p>
                     </Col>
 
                     <Col span={2.5} >
-                        <p className={"positionForChar"} style={{textDecoration:"underline"}}>
+                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
                             5 star (200) |
-                        </p>
+                        </a>
                     </Col>
 
                     <Col span={2.5} >
-                        <p className={"positionForChar"} style={{textDecoration:"underline"}}>
+                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
                             4 star (100) |
-                        </p>
+                        </a>
                     </Col>
 
                     <Col span={2.5} >
-                        <p className={"positionForChar"} style={{textDecoration:"underline"}}>
+                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
                             3 star (20) |
-                        </p>
+                        </a>
                     </Col>
 
                     <Col span={2.5} >
-                        <p className={"positionForChar"} style={{textDecoration:"underline"}}>
+                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
                             2 star (10) |
-                        </p>
+                        </a>
                     </Col>
 
                     <Col span={11}>
-                        <p className={"positionForChar"} style={{textDecoration:"underline"}}>
+                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
                             1 star (10) |
-                        </p>
+                        </a>
                     </Col>
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
@@ -98,17 +143,17 @@ const customerReview = () =>{
                         </p>
                     </Col>
 
-                    <Col span={6} >
+                    <Col span={6}>
                         <Dropdown overlay={menu} placement={"bottomLeft"}>
                             <Button className={"editButton"} >
                                 Sort by on sale <CaretDownOutlined/>
                             </Button>
                         </Dropdown>
                     </Col>
-                    <Col span={6} >
-                        <Dropdown overlay={menu} placement={"bottomLeft"} >
+                    <Col span={6}>
+                        <Dropdown overlay={menuForNumber} placement={"bottomLeft"} >
                             <Button className={"editButton"} >
-                                Show 20 <CaretDownOutlined />
+                                Show {props.showNumber} <CaretDownOutlined />
                             </Button>
                         </Dropdown>
                     </Col>
@@ -118,34 +163,34 @@ const customerReview = () =>{
     );
 }
 
-const reviewTitle = () => {
+const reviewTitle = (ratingPoint, comment, title,userName, createdDay) => {
     return (
         <Col span={24}>
             {/*--------------------------------------------------------------------------------*/}
-            <Row style={{paddingBlock:"0.25em"}}>
-                <Col span={6} >
-                    <p className={"positionForChar"} style={{marginLeft:"8%",fontSize:"2vw",fontWeight:"bolder"}}>Review Title</p>
-                </Col>
-                <Col span={18}>
-                    <p className={"positionForChar"} style={{marginTop:"1.7%"}}>| 5 star</p>
-                </Col>
+            <Row style={{paddingBlock:"0.25em",marginLeft:"2%",display:"flex",justifyContent:"left",textAlign:"center",alignContent:"center"}}>
+                <div className={"container-for-title"}>
+                    <p className={"positionForChar"} style={{padding:"1px",fontSize:"2vw",fontWeight:"bolder"}}>{title}</p>
+                    <p className={"positionForChar"} style={{display:"flex",justifyContent:"left",textAlign:"left",padding:"1px"}}>| {ratingPoint}</p>
+                </div>
             </Row>
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{paddingBlock:"0.25em"}}>
                 <Col span={23}>
                     <p className={"positionForChar"} style={{fontSize:"1.2vw",marginLeft:"2%"}}>
-                        Such an incredibility complex story! I had to buy it because there was a waiting list of 30+ at the local library for this book.
-                        Thrilled that i made the purchase.
+                        {comment}
                     </p>
                 </Col>
 
             </Row>
             {/*--------------------------------------------------------------------------------*/}
-            <Row style={{paddingBlock:"0.25em"}}>
-                <p className={"positionForChar"} style={{fontSize:"1vw",marginLeft:"2%"}}>
-                    April 12,2021
-                </p>
+            <Row style={{padding:"0.1em"}}>
+                <div className={"container"}>
+                    <p className={"positionForCharComment"}>{userName}</p>
+                    <p className={"positionForCharComment"}> - </p>
+                    <p className={"positionForCharComment"}> {createdDay} </p>
+                </div>
             </Row>
+
             <Row>
                 <Col span={22}  style={{marginLeft:"2%",paddingBlock:"0.25em",borderBottomStyle:"ridge",borderColor:"gray"}}>
 
@@ -155,113 +200,60 @@ const reviewTitle = () => {
     );
 }
 
-const customerReviewPost = (props) =>{
+
+export default function FeedbackTable ({bookID,config}) {
+    const [page,setPage] = useState(0);
+    const [size,setSize] = useState(10);
+    const [mode, setMode] = useState('a');
+    const [filter,setFilter] = useState(0);
+    const [pageBook, setPageBook] = useState([]);
+    const [currentPage,setCurrentPage] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [defaultPageSize,setDefaultPageSize] = useState(10);
+    const [showNumber, setShowNumber] = useState(10);
+    const initReviewFeedback = () => {
+
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks?page="+page+"&size="+size+"&mode="+mode+"&filter="+filter)
+            .then((response)=>{
+                setPageBook(response.data.content);
+                setCurrentPage(response.data.number);
+                setTotalElements(response.data.totalElements);
+                setDefaultPageSize(response.data.pageable.pageSize)
+                console.log(response)
+            })
+            .catch((error) =>{
+                console.log("Error");
+                console.log(error);
+            })
+    }
+
+    const handleOnChange = (m) =>{
+        setPage(m-1);
+    }
+    useEffect( ()=>{initReviewFeedback()},[page,mode,size]);
 
     return (
-
-        <Col span={24}>
-            <Row >
-                <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>
-            </Row>
-            {/*--------------------------------------------------------------------------------*/}
-            <Row>
-                <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}>
-
-                </Col>
-            </Row>
-
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{marginTop:"5%"}}>
-                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>Add a title</p>
-            </Row>
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{paddingBlock:"0.25em"}}>
-                <Col offset={1} span={22}>
-                    <Input style={{height:"3vw"}}></Input>
-                </Col>
-            </Row>
-
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{marginTop:"10%"}}>
-                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>
-                    Details please! Your review helps other shoppers
-                </p>
-            </Row>
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{paddingBlock:"0.25em"}}>
-                <Col offset={1} span={22}>
-                    <TextArea cols={30} rows={5}></TextArea>
-                </Col>
-            </Row>
-
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{marginTop:"10%"}}>
-                <p className="positionForChar" style={{marginLeft:"4%",fontSize:"1.2vw"}}>
-                    Select a rating star
-                </p>
-            </Row>
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{paddingBlock:"0.25em"}}>
-                <Col span={24}>
-                    <span style={{marginLeft:"5%"}}>
-                        <Rate tooltips={props.desc} onChange={props.setRatingPoint} value={props.ratingPoint}/>
-                        {props.ratingPoint ? <span className="ant-rate-text">{props.desc[props.ratingPoint - 1]}</span>  : ''}
-                    </span>
-                </Col>
-            </Row>
-
-            {/*--------------------------------------------------------------------------------*/}
-            <Row>
-                <Col span={24} style={{borderStyle:"ridge",marginTop:"5%",marginBottom:"2%",borderColor:"#F6F6F6"}}>
-                </Col>
-            </Row>
-            {/*--------------------------------------------------------------------------------*/}
-            <Row style={{marginBottom:"2%"}}>
-                <Col span={20} offset={2}>
-                    <Button style={{background:"#CFD2CF",width:"100%",paddingBottom:"10%"}}>
-                        <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
-                            Submit Review
-                        </p>
-                    </Button>
-                </Col>
-            </Row>
-        </Col>
-    );
-}
-
-export default function FeedbackTable () {
-    const [ratingPoint, setRatingPoint] = useState(3);
-    const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
-
-    return (
-        <Row style={{marginTop:"3%"}}>
-            <Row className={"customerReviewList"} >
-                <Col span={24}>
-                    <Row style={{marginTop:"4%"}}>
-                        {customerReview()}
-                    </Row>
-
-                    <Row style={{paddingBlock:"1.5em",}}>
-                        {reviewTitle()}
-                    </Row>
-
-                    <Row style={{paddingBlock:"1.5em",}}>
-                        {reviewTitle()}
-                    </Row>
-
-                    <Row style={{paddingBlock:"1.5em",}}>
-                        {reviewTitle()}
-                    </Row>
-
-                    <Row style={{paddingBlock:"1.5em",}}>
-                        {reviewTitle(ratingPoint)}
-                    </Row>
-
-                </Col>
-            </Row>
-            <Row className={"customerReviewPost"}>
-                {customerReviewPost({ratingPoint,setRatingPoint,desc})}
-            </Row>
-        </Row>
+            <>
+                <Row className={"customerReviewList"} >
+                    <Col span={24}>
+                        {/*--------------------------------------------------------------------------------*/}
+                        <Row style={{paddingTop:"5%"}}>
+                            {customerReview({setMode,mode,size,setSize,defaultPageSize,setDefaultPageSize,setShowNumber,showNumber})}
+                        </Row>
+                        {/*--------------------------------------------------------------------------------*/}
+                        { pageBook.map((feedback) =>
+                            <Row style={{paddingBlock:"1.0em"}} key={bookID}>
+                                {reviewTitle(feedback.ratingPoint, feedback.comment,feedback.title,feedback.userName,feedback.createDay)}
+                            </Row>
+                        )}
+                        {/*--------------------------------------------------------------------------------*/}
+                        <Row>
+                            <Col span={24} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+                                <Pagination onChange={handleOnChange} defaultCurrent={currentPage} pageSize={defaultPageSize}  total={totalElements}/>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+            </>
         )
 }

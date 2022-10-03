@@ -14,6 +14,7 @@ import {useCookies} from "react-cookie";
 import './FeedBackTable.css'
 import TextArea from "antd/es/input/TextArea";
 import {MinusOutlined,PlusOutlined} from "@ant-design/icons";
+import ReviewSubmit from "./ReviewSubmit";
 
 import {SecurityContext} from "../../App";
 export default function BookDetail(){
@@ -99,8 +100,6 @@ export default function BookDetail(){
         }
     }
 
-
-
     const [isFeedback, setIsFeedback] = useState(false);
 
 
@@ -121,8 +120,6 @@ export default function BookDetail(){
         })
 
     }
-
-
 
 
     const updateCart = () => {
@@ -224,24 +221,7 @@ export default function BookDetail(){
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
                                 <p className={"description"}>Book description</p>
-                                <p className={"positionForChar"}>{bookDetail.description} </p>
-                            </Row>
-                            {/*--------------------------------------------------------------------------------*/}
-                            <Row style={{paddingBlock:"4%"}}>
-                                <div>
-                                    <p className={"positionForChar"}>"The multi-million copy bestseller"</p>
-                                    <p className={"positionForChar"}>Soon to be a major film</p>
-                                    <p className={"positionForChar"}>A Number One New York Times Bestseller</p>
-                                </div>
-                            </Row>
-                            {/*--------------------------------------------------------------------------------*/}
-                            <Row style={{paddingBlock:"4%"}}>
-                                <div>
-                                    <p className={"positionForChar"}>"The multi-million copy bestseller"</p>
-                                    <p className={"positionForChar"}>Soon to be a major film</p>
-                                    <p className={"positionForChar"}>A Number One New York Times Bestseller</p>
-                                    <p className={"positionForChar"}> I have never read such a brilliant book. You learn very quickly that this man must have been a really clever man.</p>
-                                </div>
+                                <p className={"positionForChar"} style={{marginTop:"5%"}}>{bookDetail.description} </p>
                             </Row>
                         </Col>
                     </Row>
@@ -357,53 +337,15 @@ export default function BookDetail(){
                     </Col>
                 </Row>
 
-                {/*<Col span={22} offset={1} style={{borderStyle:"ridge"}}>*/}
-                {/*    <Row>*/}
-                {/*        <Col span={15} style={{borderStyle:"ridge"}}>*/}
-
-                {/*            <Row>*/}
-                {/*                <Col span={6}>*/}
-                {/*                    <img src='https://cdn0.fahasa.com/media/catalog/product/i/m/image_195509_1_38237.jpg' width='200px' height='200px' className='book-image' alt='example'/>*/}
-                {/*                    <div className='book-author'> By Author {bookDetail.authorName}</div>*/}
-                {/*                </Col>*/}
-                {/*                <Col span={15} >*/}
-                {/*                    <h2 className='book-title'>{bookDetail.bookName}</h2>*/}
-                {/*                    {bookDetail.categoryName.map((name) => (*/}
-                {/*                        <span> {name},</span>*/}
-                {/*                    ))}*/}
-                {/*                    <p className='book-description'>*/}
-                {/*                        {bookDetail.description}*/}
-                {/*                    </p>*/}
-                {/*                </Col>*/}
-                {/*            </Row>*/}
-
-                {/*        </Col>*/}
-                {/*        <Col span={9} >*/}
-                {/*            <div className='cart-box'>*/}
-                {/*                <Row className='book-price-box'>*/}
-                {/*                    <span className='book-price'>${bookDetail.bookPrice}</span>*/}
-                {/*                </Row>*/}
-                {/*                <QuantityButton*/}
-                {/*                    handleAdd={handleAddQuantity}*/}
-                {/*                    handleLess={handleLessQuantity}*/}
-                {/*                    quantity={quantity}*/}
-                {/*                />*/}
-                {/*                <Button className='add-cart'*/}
-                {/*                        type='primary'*/}
-                {/*                        onClick={handleAddCart}*/}
-                {/*                >*/}
-                {/*                    Add To Cart*/}
-                {/*                </Button>*/}
-                {/*            </div>*/}
-
-                {/*        </Col>*/}
-
-                {/*    </Row>*/}
-                {/*</Col>*/}
             </Row>
 
-            <FeedbackTable/>
 
-        </>
+
+
+            <Row style={{marginTop:"3%"}}>
+                <FeedbackTable bookID={bookId.id} config={config}/>
+                <ReviewSubmit bookID={bookId.id} config={config}/>
+            </Row>
+      </>
     );
 }
