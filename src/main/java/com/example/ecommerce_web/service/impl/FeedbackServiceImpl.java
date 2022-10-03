@@ -8,29 +8,20 @@ import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.Feedback;
 import com.example.ecommerce_web.model.entities.Users;
-import com.example.ecommerce_web.repository.BookRepository;
 import com.example.ecommerce_web.repository.FeedbackRepository;
-import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.FeedbackService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.validator.ListValidator;
-import com.example.ecommerce_web.validator.Validator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
