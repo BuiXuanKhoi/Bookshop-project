@@ -1,0 +1,24 @@
+.usertable-container{
+    top: 120px;
+    position: relative;
+}
+
+.logo-placeholder{
+    width: 130%;
+    display: flex;
+}
+
+.logo-container{
+    width: 60%;
+    height: 100%;
+    display: block;
+}
+
+.manage-user-menu{
+    margin-top: 40px;
+}
+
+.manager-user-menu-item{
+    display: flex;
+    justify-content: center;
+}

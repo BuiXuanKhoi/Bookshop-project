@@ -28,7 +28,6 @@ const NavMenu = (nav) => {
 
     const logout = () => {
         removeCookies('book-token');
-        console.log("Log Out")
         window.location.reload();
     }
     return(
@@ -38,7 +37,7 @@ const NavMenu = (nav) => {
             )}
 
             <Divider/>
-            <Menu.Item icon={<FontAwesomeIcon icon={faRightFromBracket}/>} style={{color:'red'}}key={'logout'} >Log out</Menu.Item>
+            <Menu.Item icon={<FontAwesomeIcon icon={faRightFromBracket}/>} style={{color:'red'}} key={'logout'} >Log out</Menu.Item>
         </Menu>
     );
 }

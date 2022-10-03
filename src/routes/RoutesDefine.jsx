@@ -1,6 +1,5 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import Report from "../Component/admin/manage/report/Report";
 import BlankPage from "../Component/BlankPage";
 import {Space} from "antd";
 
