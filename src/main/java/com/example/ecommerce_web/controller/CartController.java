@@ -43,11 +43,19 @@ public class CartController {
                                    .collect(Collectors.toList());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/increase")
     public CartItemRespondDTO updateCart(@PathVariable int id,
                                          @RequestParam(name = "quantity", defaultValue = "1")String addedQuantity){
         int quantityConverted = Integer.parseInt(addedQuantity);
         CartItem cartItem = this.cartItemService.update(id, quantityConverted);
+        return cartItemMapper.toDTO(cartItem);
+    }
+
+    @PutMapping(value = "/{id}/change")
+    public CartItemRespondDTO changeQuantity(@PathVariable int id,
+                                               @RequestParam(name = "quantity",defaultValue = "1")String editQuantity){
+        int quantityConverted = Integer.parseInt(editQuantity);
+        CartItem cartItem = this.cartItemService.change(id, quantityConverted);
         return cartItemMapper.toDTO(cartItem);
     }
 

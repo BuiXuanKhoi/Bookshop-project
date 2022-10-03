@@ -12,4 +12,5 @@ public interface FeedbackService {
     Feedback add(FeedbackRequestDTO feedbackRequestDTO, int bookId);
     List<Feedback> findAll(int bookId);
     Page<FeedbackRespondDTO> getPageByBook(int page, int size, char mode, float filter, int bookId);
+
 }

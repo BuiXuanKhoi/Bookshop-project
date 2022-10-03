@@ -109,4 +109,10 @@ public class CartItemServiceImpl implements CartItemService {
         cartItem.setQuantity(existedQuantity + addedQuantity);
         return this.cartItemRepository.save(cartItem);
     }
+    @Override
+    public CartItem change(int cartId, int decreaseQuantity){
+        CartItem cartItem = findById(cartId);
+        cartItem.setQuantity(decreaseQuantity);
+        return this.cartItemRepository.save(cartItem);
+    }
 }

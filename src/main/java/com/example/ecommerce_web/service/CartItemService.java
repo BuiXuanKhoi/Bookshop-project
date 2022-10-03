@@ -14,4 +14,5 @@ public interface CartItemService {
     List<CartItem> getAllByLocalUser();
     void delete(int cartItemId);
     CartItem update(int cartId, int addedQuantity);
+    CartItem change(int cartId, int decreaseQuantity);
 }
