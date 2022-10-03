@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/**","/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/books/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/authors").permitAll()
-                .antMatchers(HttpMethod.GET,"api/users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/users").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.GET, "/api/users/information").hasAnyAuthority("ADMIN", "CUSTOMER")
                 .antMatchers(HttpMethod.GET, "/api/categories").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT,"api/books").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/books").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/carts").hasAuthority("CUSTOMER")
                 .antMatchers(HttpMethod.POST, "/api/categories").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
@@ -88,8 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/carts").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/carts/**").hasAnyAuthority("CUSTOMER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE,"api/books").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.POST,"api/authors").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/books").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/api/authors").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
