@@ -2,6 +2,8 @@ package com.example.ecommerce_web.security.jwt;
 
 import com.example.ecommerce_web.security.service.UserDetail;
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ public class JwtUtils {
     private final String SECRET_KEY;
 
     private final int EXPIRATION;
+
+    private static Logger logger =  LoggerFactory.getLogger(JwtUtils.class);
 
     public JwtUtils( @Value("${ecommerce.app.jwtSecret}") final String SECRET_KEY,
                      @Value("${ecommerce.app.jwtExpirationMs}") final int EXPIRATION) {
