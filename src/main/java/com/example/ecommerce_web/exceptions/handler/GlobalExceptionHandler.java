@@ -3,6 +3,7 @@ package com.example.ecommerce_web.exceptions.handler;
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.MethodNotImplementedException;
+import com.example.ecommerce_web.exceptions.RefreshTokenExpiredException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
 import org.springframework.http.HttpHeaders;
@@ -107,5 +108,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                 .build();
 
         return new ResponseEntity<>(errorRespond, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({RefreshTokenExpiredException.class})
+    protected ResponseEntity<?> handleRefreshTokenExpiredException(RefreshTokenExpiredException ex){
+        ErrorRespond errorRespond = ErrorRespond.builder()
+                                                .message("Your refresh token is expired. Please make another login")
+                                                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                                                .build();
+
+        return new ResponseEntity<>(errorRespond, HttpStatus.UNAUTHORIZED);
     }
 }

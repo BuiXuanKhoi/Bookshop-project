@@ -17,4 +17,9 @@ public interface CartItemRepository extends BasicRepository<CartItem> {
 
     @Query(value = "select * from cart_items where user_id = :userId and book_id = :bookId", nativeQuery = true)
     Optional<CartItem> getCartItemByBooksAndUsers(int userId, int bookId);
+
+
+    @Modifying
+    @Query(value = "delete from cart_items where cart_item_id = :cartId", nativeQuery = true)
+    void deleteByCartId(int cartId);
 }

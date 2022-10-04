@@ -13,6 +13,7 @@ import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.OrderItemService;
 import com.example.ecommerce_web.service.OrdersService;
+import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.validator.ListValidator;
 import com.example.ecommerce_web.validator.Validator;
 import org.hibernate.criterion.Order;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,18 +36,20 @@ public class OrdersServiceImpl implements OrdersService {
     OrderItemsRepository orderItemsRepository;
     CartItemRepository cartItemRepository;
     OrderItemService orderItemService;
+    UserService userService;
 
     @Autowired
     public OrdersServiceImpl(OrdersRepository ordersRepository, UserRepository userRepository,
                              UserLocal userLocal,
                              OrderItemsRepository orderItemsRepository,
-                             CartItemRepository cartItemRepository, OrderItemService orderItemService){
+                             CartItemRepository cartItemRepository, OrderItemService orderItemService, UserService userService){
         this.ordersRepository = ordersRepository;
         this.userLocal = userLocal;
         this.userRepository = userRepository;
         this.orderItemsRepository = orderItemsRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderItemService = orderItemService;
+        this.userService = userService;
     }
 
     private Orders findById(int id){
@@ -54,9 +58,9 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    @Transactional
     public Orders add() {
-        String userName = userLocal.getLocalUserName();
-        Users users = this.userRepository.findUserByUserName(userName).get();
+        Users users = userService.findLocalUser();
         List<CartItem> listCarItem = users.getCartItems();
 
         if (listCarItem.isEmpty()) throw new ResourceNotFoundException("You don't have any cart item to pay ");
@@ -70,15 +74,14 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setOrderItems(listOrderItems);
         orders.setOrderState(OrderState.PREPARED);
         Orders savedOrder = this.ordersRepository.save(orders);
-//        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
-        listCarItem.forEach(cartItem -> cartItemRepository.delete(cartItem));
+        orderItemService.saveOrderItemWith(savedOrder, listOrderItems);
+        listCarItem.forEach(cartItem -> cartItemRepository.deleteByCartId(cartItem.getCartItemsID()));
         return savedOrder;
     }
 
     @Override
     public List<Orders> findAllByLocalUser() {
-        String userName = userLocal.getLocalUserName();
-        Users users = this.userRepository.findUserByUserName(userName).get();
+        Users users = userService.findLocalUser();
         List<Orders> listOrder = users.getOrders();
         return ListValidator.ofList(listOrder).ifNotEmpty();
     }

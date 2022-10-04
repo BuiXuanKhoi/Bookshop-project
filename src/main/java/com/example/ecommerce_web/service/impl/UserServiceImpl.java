@@ -63,9 +63,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users findByUserName(String userName) {
-        return this.userRepository.findUserByUserName(userName)
+        return this.userRepository.findByUserName(userName)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Not Found User With Name: " + userName));
+    }
+
+    @Override
+    public Users findLocalUser() {
+        String userName = userLocal.getLocalUserName();
+        return findByUserName(userName);
     }
 
     @Override
@@ -145,7 +151,7 @@ public class UserServiceImpl implements UserService {
         String password = generatePassword(userName, dateOfBirth);
         Role role = Role.getRole(roleName);
 
-        Optional<Users> usersOptional = this.userRepository.findUserByUserName(userName);
+        Optional<Users> usersOptional = this.userRepository.findByUserName(userName);
 
         if(usersOptional.isPresent()){
             throw new ConstraintViolateException("User name already exist !!!!");

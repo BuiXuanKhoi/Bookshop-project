@@ -9,5 +9,7 @@ public interface AuthService {
     LoginRespondDTO login(LoginRequestDTO loginRequestDTO);
     ResponseEntity<?> signup(UserRequestDTO userRequestDTO);
 
+    ResponseEntity<?> logout();
+
 
 }

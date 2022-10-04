@@ -24,7 +24,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> usersOptional = userRepository.findUserByUserName(username);
+        Optional<Users> usersOptional = userRepository.findByUserName(username);
 
         usersOptional.orElseThrow(
                 () -> new ResourceNotFoundException("Account not exist !!!!")

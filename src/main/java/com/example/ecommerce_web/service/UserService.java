@@ -20,5 +20,6 @@ public interface UserService {
     Page<UserRespondDTO> getPage(int page);
     Users add(UserRequestDTO userRequestDTO);
     Users findByUserName(String userName);
+    Users findLocalUser();
     void deleteAll();
 }

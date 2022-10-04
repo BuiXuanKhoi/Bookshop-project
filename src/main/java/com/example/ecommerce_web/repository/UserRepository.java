@@ -5,6 +5,7 @@ import com.example.ecommerce_web.model.entities.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +17,7 @@ import java.util.List;
 @Transactional
 public interface UserRepository extends JpaRepository<Users, Integer> {
 
-    @Query(value = "select * from users where user_name = :userName", nativeQuery = true)
-    Optional<Users> findUserByUserName(String userName);
+    Optional<Users> findByUserName(String userName);
 
     @Query(value = "select NEW com.example.ecommerce_web.model.dto.respond.UserRespondDTO( " +
             "usa.userId, usa.userName, inf.email, inf.address, inf.createDate, inf.updateDate," +
@@ -29,5 +29,8 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
     @Query(value = "select urs from Users urs where urs.information.email = :email ", nativeQuery = false)
     Optional<Users> findByEmail(String email);
+
+    @Modifying
+    void deleteByUserName(String userName);
 
 }

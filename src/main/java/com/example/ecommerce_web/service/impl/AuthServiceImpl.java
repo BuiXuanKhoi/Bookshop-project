@@ -14,14 +14,12 @@ import com.example.ecommerce_web.repository.InformationRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
-import com.example.ecommerce_web.service.AuthService;
-import com.example.ecommerce_web.service.EmailService;
-import com.example.ecommerce_web.service.InformationService;
-import com.example.ecommerce_web.service.UserService;
+import com.example.ecommerce_web.service.*;
 import com.example.ecommerce_web.utils.MyDateUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,6 +46,9 @@ public class AuthServiceImpl implements AuthService {
     JwtUtils jwtUtils;
     UserService userService;
     InformationService informationService;
+    RefreshTokenService refreshTokenService;
+    private final int EXPIRATION;
+
 
 
     @Autowired
@@ -55,7 +56,8 @@ public class AuthServiceImpl implements AuthService {
                            InformationRepository informationRepository, MyDateUtil myDateUtil,
                            ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
                            AuthenticationManager authenticationManager,
-                           UserService userService, InformationService informationService
+                           UserService userService, InformationService informationService, RefreshTokenService refreshTokenService,
+                           @Value("${ecommerce.app.jwtExpirationMs}") final int EXPIRATION
                            ) {
         this.userRepository = userRepository;
         this.informationRepository = informationRepository;
@@ -66,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.informationService = informationService;
+        this.refreshTokenService = refreshTokenService;
+        this.EXPIRATION = EXPIRATION;
     }
 
     @Override
@@ -87,21 +91,29 @@ public class AuthServiceImpl implements AuthService {
             }
         }
 
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getUserName(), loginRequestDTO.getPassword())
         );
 
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateToken(authentication);
+        long expirationTime = new Date().getTime() + EXPIRATION;
         UserDetail userDetail = (UserDetail) authentication.getPrincipal();
 
         String roleName = userDetail.getAuthorities().stream()
                                                      .map(GrantedAuthority::getAuthority)
                                                      .collect(Collectors.toList()).get(0);
 
+
+        String refreshToken = refreshTokenService.createByUserName(users.getUserName()).getToken();
+
         return LoginRespondDTO.builder()
                               .role(roleName)
                               .token(jwt)
+                              .expires(new Date(expirationTime))
+                              .refreshToken(refreshToken)
                               .userId(userDetail.getUserId())
                               .userName(userDetail.getUsername())
                               .tokenType("Bearer")
@@ -118,6 +130,12 @@ public class AuthServiceImpl implements AuthService {
         this.userRepository.save(users);
         this.informationRepository.save(information);
         return ResponseEntity.ok(new MessageRespond(HttpStatus.CREATED.value(), "Create Account Successfully !!!!"));
+    }
+
+    @Override
+    public ResponseEntity<?> logout() {
+        this.refreshTokenService.deleteByLocalUsers();
+        return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Log out Success !!!"));
     }
 
 

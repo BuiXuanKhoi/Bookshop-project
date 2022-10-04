@@ -33,11 +33,23 @@ public class JwtUtils {
         long expirationTime = new Date().getTime() + EXPIRATION;
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(expirationTime))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
-                .compact();
+                   .setSubject(userPrincipal.getUsername())
+                   .setIssuedAt(new Date())
+                   .setExpiration(new Date(expirationTime))
+                   .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                   .compact();
+    }
+
+    public String generateTokenByUserName(String userName){
+        long expirationTime = new Date().getTime() + EXPIRATION;
+
+        return Jwts.builder()
+                   .setSubject(userName)
+                   .setIssuedAt(new Date())
+                   .setExpiration(new Date(expirationTime))
+                   .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                   .compact();
+
     }
 
     public String getUserNameFromToken(String token) {
@@ -67,9 +79,9 @@ public class JwtUtils {
         {
             request.setAttribute("unsupported", unsupportException.getMessage());
         }
-        catch (IllegalArgumentException jwtEmtyException)
+        catch (IllegalArgumentException jwtEmptyException)
         {
-            request.setAttribute("empty", jwtEmtyException.getMessage());
+            request.setAttribute("empty", jwtEmptyException.getMessage());
         }
         catch (Exception e)
         {
