@@ -161,8 +161,10 @@ export default function Shop(){
                         {
                             pageBooks.map((book) =>
                                 <Col span={6} key={book.bookId}>
+                                    <a>
+                                        <MyCard item={book} url={book.imageLink}/>
+                                    </a>
 
-                                    <MyCard item={book} url="https://lzd-img-global.slatic.net/g/p/253feee285ffe2ab1356806a389879b9.jpg_720x720q80.jpg_.webp"/>
                                 </Col>
                             )
                         }

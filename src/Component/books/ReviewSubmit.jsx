@@ -9,6 +9,7 @@ import axios from "axios";
 const customerReviewPost = (props) =>  {
 
     const setUpSubmit = (values) => {
+        console.log("Setup");
         props.setReviewSubmitting({
             title : values.title,
             comment : values.description,
@@ -21,7 +22,7 @@ const customerReviewPost = (props) =>  {
         <Row className={"customerReviewPost"}>
             <Col span={24}>
                 <Form title={"feedback"}
-                        form = {props.form}
+                      form = {props.form}
                       onFinish={setUpSubmit}
                     >
                     <Row >
@@ -106,9 +107,9 @@ export default function ReviewSubmit ({bookID,config}) {
     const [form] = Form.useForm();
     const state = useRef(false);
     const [reviewSubmit, setReviewSubmitting] = useState({
-        title: "",
-        comment:"",
-        ratingPoint: "",
+        title: '',
+        comment:'',
+        ratingPoint: 0.0,
     })
     useEffect(()=>{
         if(state.current){
@@ -128,10 +129,21 @@ export default function ReviewSubmit ({bookID,config}) {
                 }
         })
     }
+
+    useEffect(()=>{
+        if(state.current){
+            handleSendReview();
+        }else{
+            state.current = true;
+        }
+    },[reviewSubmit])
+
     const handleSuccess = () =>{
         Modal.success({
             content: 'Succeeded in submitting your review',
         });
+
+        window.location.reload();
     }
     const handleError = () => {
         Modal.error({

@@ -109,7 +109,6 @@ export default function Detail({config}){
 
     return(
         <>
-
         <Modal
             title="Authentication Error"
             centered
