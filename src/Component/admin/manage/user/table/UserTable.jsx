@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import './UserTable.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSort} from "@fortawesome/free-solid-svg-icons";
+import {faBan, faPenToSquare, faSort, faTrash, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import {CreateToken} from "../../../../general/ManageCookies";
 import {getCookie} from "react-use-cookie";
-import {Drawer, Form, Pagination} from "antd";
+import {Button, Drawer, Form, Pagination} from "antd";
 import Input from "antd/lib/input/Input";
+import Modal from "antd/es/modal/Modal";
 
 
 export default function UserTable({config, token}){
@@ -18,7 +19,7 @@ export default function UserTable({config, token}){
     }
 
     const [totalElements, setTotalElements] = useState(0);
-    const[currentPage, setCurrentPage] = useState(0);
+    const [isOpenDetail, setIsOpenDetail] = useState(false);
 
     const [users, setUsers] = useState([{
         userId: 0,
@@ -34,6 +35,20 @@ export default function UserTable({config, token}){
         userState : ''
     }])
 
+    const [detail, setDetail] = useState({
+        userId: 0,
+        userName : '',
+        email: '',
+        location : '',
+        createDate : '',
+        updateDate : '',
+        firstName : '',
+        lastName : '',
+        phoneNumber : '',
+        role : '',
+        userState : ''
+    })
+
 
     const getUserPage = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/users?page=' + page, authorize )
@@ -43,6 +58,14 @@ export default function UserTable({config, token}){
                 setUsers(res.data.content)
             })
             .catch((err) => console.log(err))
+    }
+
+    const openDetailModal = () => {
+        setIsOpenDetail(true);
+    }
+
+    const closeDetailModal = () => {
+        setIsOpenDetail(false);
     }
 
     const changePage = (number) => {
@@ -57,12 +80,54 @@ export default function UserTable({config, token}){
         getUserPage();
     },[])
 
+    const handleEdit = (id) => {
+        console.log(id)
+    }
+
+    const handleDelete = (id) => {
+        closeDetailModal();
+        console.log(id)
+    }
+
+    const handleBlock = (id) => {
+        console.log(id)
+    }
+
+    const handleUnlock = (id) => {
+        console.log(id);
+    }
+
+    const handleFind = (user) => {
+        setDetail(user);
+        openDetailModal();
+    }
 
 
 
 
     return(
         <div>
+            <Modal
+                title="Detail Information"
+                open={isOpenDetail}
+                closable={true}
+                footer={null}
+                onCancel={closeDetailModal}
+            >
+                <div>{detail.userName}</div>
+                <div>{detail.firstName}  {detail.lastName}</div>
+                <div>{detail.userId}</div>
+                <div>{detail.userState}</div>
+                <div>{detail.createDate}</div>
+                <div>{detail.email}</div>
+                <div>{detail.role}</div>
+
+            </Modal>
+            <Modal
+                title="Are you sure ?"
+            >
+                <span>Are you sure to delete this user ?</span>
+            </Modal>
             <table className="user-table-container">
                 <thead className="user-table-column">
                     <th className="user-table-column-container">User name</th>
@@ -74,12 +139,34 @@ export default function UserTable({config, token}){
                 <tbody>
                 {
                     users.map((user) => (
-                        <tr  className="user-table-row-container" >
-                            <td className="user-table-data">{user.userName}</td>
-                            <td>{user.firstName}</td>
-                            <td>{user.lastName}</td>
-                            <td>{user.email}</td>
-                            <td>{user.createDate}</td>
+                        <tr className="user-table-row-container"  >
+                            <td onClick={() => handleFind(user)}>{user.userName}</td>
+                            <td onClick={() => handleFind(user)}>{user.firstName}</td>
+                            <td onClick={() => handleFind(user)}>{user.lastName}</td>
+                            <td onClick={() => handleFind(user)}>{user.email}</td>
+                            <td onClick={() => handleFind(user)}>{user.createDate}</td>
+                            <td>
+                                <Button className="btn-style">
+                                    <FontAwesomeIcon icon={faPenToSquare} onClick={() =>handleEdit(user.userId)}/>
+                                </Button>
+                            </td>
+                            <td>
+                                <Button className="btn-style">
+                                    <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(user.userId)}/>
+                                </Button>
+                            </td>
+                            <td>
+                                <Button className="btn-style">
+                                    {
+                                        user.userState === 'UNBLOCK' ? (
+                                            <FontAwesomeIcon icon={faBan} onClick={() => handleBlock(user.userId)}/>
+                                        ) :
+                                            (
+                                                <FontAwesomeIcon icon={faUnlock} onClick={() => handleUnlock(user.userId)}/>
+                                            )
+                                    }
+                                </Button>
+                            </td>
                         </tr>
                     ))
                 }

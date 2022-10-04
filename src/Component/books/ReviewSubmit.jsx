@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate, Form,Modal} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
@@ -9,6 +9,7 @@ import axios from "axios";
 const customerReviewPost = (props) =>  {
 
     const setUpSubmit = (values) => {
+        console.log("Setup");
         props.setReviewSubmitting({
             title : values.title,
             comment : values.description,
@@ -21,7 +22,7 @@ const customerReviewPost = (props) =>  {
         <Row className={"customerReviewPost"}>
             <Col span={24}>
                 <Form title={"feedback"}
-                        form = {props.form}
+                      form = {props.form}
                       onFinish={setUpSubmit}
                     >
                     <Row >
@@ -104,17 +105,13 @@ export default function ReviewSubmit ({bookID,config}) {
     const [ratingPoint, setRatingPoint] = useState(3);
     const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
     const [form] = Form.useForm();
+    const state = useRef(false);
 
     const [reviewSubmit, setReviewSubmitting] = useState({
-        title: "",
-        comment:"",
-        ratingPoint: "",
+        title: '',
+        comment:'',
+        ratingPoint: 0.0,
     })
-    useEffect(()=>{
-        console.log("no")
-        console.log(reviewSubmit);
-        handleSendReview();
-    },[reviewSubmit])
 
     const handleSendReview = () => {
         axios.post("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks",reviewSubmit,config)
@@ -127,10 +124,21 @@ export default function ReviewSubmit ({bookID,config}) {
                 }
         })
     }
+
+    useEffect(()=>{
+        if(state.current){
+            handleSendReview();
+        }else{
+            state.current = true;
+        }
+    },[reviewSubmit])
+
     const handleSuccess = () =>{
         Modal.success({
             content: 'Succeeded in submitting your review',
         });
+
+        window.location.reload();
     }
     const handleError = () => {
         Modal.error({

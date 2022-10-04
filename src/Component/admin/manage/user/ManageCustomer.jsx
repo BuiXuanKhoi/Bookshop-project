@@ -73,17 +73,12 @@ export default function ManageCustomer(){
 
     const onChange = (sorter) => {
         console.log(sorter);
-
     }
 
     return(
         <div className="usertable-container">
             <Row>
-                <Col span={18} push={6}>
-                    <CreateUser isOpen={isOpen} close={closeCreateAdminForm}/>
-                    <UserTable config={config} token={token}/>
-                </Col>
-                <Col span={6} pull={18}>
+                <Col span={5} >
                     <div>
                         <div className="logo-placeholder">
                             <img className="logo-container" src="https://s.tmimgcdn.com/scr/1200x750/242600/book-shop-modern-logo-template_242604-original.jpg"/>
@@ -95,6 +90,10 @@ export default function ManageCustomer(){
                             </Menu>
                         </div>
                     </div>
+                </Col>
+                <Col span={19}>
+                    <CreateUser isOpen={isOpen} close={closeCreateAdminForm}/>
+                    <UserTable config={config} token={token}/>
                 </Col>
             </Row>
         </div>

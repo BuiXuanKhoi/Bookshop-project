@@ -6,7 +6,7 @@ import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import BookDetail from "../Component/books/BookDetail";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
+import {faBook, faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
 import ManageBook from "../Component/admin/manage/book/ManageBook";
 import ManageCustomer from "../Component/admin/manage/user/ManageCustomer";
 
@@ -17,7 +17,7 @@ export const AdminRoute = [
         path: '/manage/book',
         component: <ManageBook/>,
         title: 'Manage Books',
-        icon : <FontAwesomeIcon icon={faFileCircleCheck}/>
+        icon : <FontAwesomeIcon icon={faBook}/>
     },
     {
         path: '/manage/user',
