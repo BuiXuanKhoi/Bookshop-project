@@ -170,14 +170,19 @@ export default function Cart(){
     const [isLoading,setIsLoading] = useState(false);
     const [quantity,setQuatity] = useState(1);
     const [total,setTotal] = useState(0);
+    const [saveCartList, setSaveCartList] = useState([]);
+    const [cartList,setCartList] = useState([]);
+    const savingFlag = useRef(true);
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
-    const [cartList,setCartList] = useState([]);
+
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
+                console.log("Hello")
                 setCartList(res.data);
+                console.log(res.data)
             })
             .catch((error)=>{
                 console.log(error);
@@ -188,33 +193,41 @@ export default function Cart(){
         setTotal(listCost.reduce((a,b)=>a+b,0));
     }
     useEffect(()=> {
+
         getCartItem();
         calculateTotal();}
         ,[quantity])
-    return(
-        <>
-            <Row style={{paddingTop:"10%"}}>
-                <Col span={24}>
-                    <Row>
-                        <Col>
-                            <Row>
 
-                            </Row>
-                            <Row>
-                                <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}> </Col>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Row className={"customerReviewList"}>
-                            {bookTable({cartList,cartId,setCartId,config,quantity,setQuatity})}
+    useEffect(()=>{
+        // console.log("Hello")
+        // setSaveCartList(cartList);
+        // console.log(saveCartList);
+    },[cartList])
+
+    return(
+            <>
+                <Row style={{paddingTop:"10%"}}>
+                    <Col span={24}>
+                        <Row>
+                            <Col>
+                                <Row>
+
+                                </Row>
+                                <Row>
+                                    <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}> </Col>
+                                </Row>
+                            </Col>
                         </Row>
-                        <Row className={"customerReviewPost"}>
-                            {cartTotal({cartList,total})}
+                        <Row>
+                            <Row className={"customerReviewList"}>
+                                {bookTable({cartList,cartId,setCartId,config,quantity,setQuatity})}
+                            </Row>
+                            <Row className={"customerReviewPost"}>
+                                {cartTotal({cartList,total})}
+                            </Row>
                         </Row>
-                    </Row>
-                </Col>
-            </Row>
-        </>
+                    </Col>
+                </Row>
+            </>
     );
 }
