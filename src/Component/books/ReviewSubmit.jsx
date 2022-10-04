@@ -106,12 +106,17 @@ export default function ReviewSubmit ({bookID,config}) {
     const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
     const [form] = Form.useForm();
     const state = useRef(false);
-
     const [reviewSubmit, setReviewSubmitting] = useState({
         title: '',
         comment:'',
         ratingPoint: 0.0,
     })
+    useEffect(()=>{
+        if(state.current){
+            handleSendReview();
+        }
+        else { state.current=true;}
+    },[reviewSubmit])
 
     const handleSendReview = () => {
         axios.post("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks",reviewSubmit,config)

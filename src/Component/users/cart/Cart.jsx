@@ -8,16 +8,16 @@ import {getCookie} from "react-use-cookie";
 import {SecurityContext} from "../../../App";
 
 
-
-
 const bookTable = (props) => {
     const decreaseBookQuantity = (cartItemID,quantity) =>{
-        console.log(cartItemID)
         quantity -=1;
+        props.setQuatity(quantity);
         changeQuantity(cartItemID,quantity);
+
     }
     const increaseBookQuantity = (cartItemID,quantity) => {
         quantity +=1;
+        props.setQuatity(quantity);
         changeQuantity(cartItemID,quantity);
     }
     const changeQuantity = (cartItemID,quantity) =>{
@@ -26,11 +26,9 @@ const bookTable = (props) => {
                 console.log(res);
             })
             .catch((error) =>{
-                console.log("Error");
                 console.log(error);
             })
     }
-
     return (
         <Col span={24}>
             {/*---------------------------Header--------------------------------*/}
@@ -110,7 +108,7 @@ const bookTable = (props) => {
                                         </Col>
                                         {/*--------------------------------------------------------------------------------*/}
                                         <Col span={11} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                            <Button onClick={increaseBookQuantity(item.cartItemsID,item.quantity)} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
+                                            <Button onClick={()=>increaseBookQuantity(item.cartItemsID,item.quantity)} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -118,7 +116,7 @@ const bookTable = (props) => {
                             {/*---------------------------Header--------------------------------*/}
                             <Col span={4}>
                                 <p className={"positionForTitle2"}>
-                                    ${item.price*item.quantity}
+                                    ${Math.round(item.price*item.quantity*10)/10}
                                 </p>
                             </Col>
                         </Row>
@@ -130,7 +128,7 @@ const bookTable = (props) => {
     );
 }
 
-const cartTotal = () => {
+const cartTotal = (props) => {
     return (
         <>
             <Col span={24} style={{justifyContent:"center",textAlign:"center"}}>
@@ -149,7 +147,9 @@ const cartTotal = () => {
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{marginTop:"10%"}}>
                     <Col span={20} offset={2}>
-                        <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>$99.97</p>
+                        <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>
+                            ${props.total}
+                        </p>
                     </Col>
                 </Row>
 
@@ -166,10 +166,10 @@ const cartTotal = () => {
 export default function Cart(){
     const [cookies,setCookies,removeCookie] = useCookies(['book-token']);
     const [loginData,setLoginData] = useContext(SecurityContext);
-    const [quantity,setQuantity] = useState(1);
     const [cartId, setCartId] = useState(0);
-    const isLoading = useRef(false);
-
+    const [isLoading,setIsLoading] = useState(false);
+    const [quantity,setQuatity] = useState(1);
+    const [total,setTotal] = useState(0);
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
@@ -183,7 +183,14 @@ export default function Cart(){
                 console.log(error);
             })
     }
-    useEffect(()=>{getCartItem();},[])
+    const calculateTotal = () =>{
+        let listCost = cartList.map(item=>item.price*item.quantity);
+        setTotal(listCost.reduce((a,b)=>a+b,0));
+    }
+    useEffect(()=> {
+        getCartItem();
+        calculateTotal();}
+        ,[quantity])
     return(
         <>
             <Row style={{paddingTop:"10%"}}>
@@ -200,10 +207,10 @@ export default function Cart(){
                     </Row>
                     <Row>
                         <Row className={"customerReviewList"}>
-                            {bookTable({cartList,quantity,setQuantity,cartId,setCartId,config})}
+                            {bookTable({cartList,cartId,setCartId,config,quantity,setQuatity})}
                         </Row>
                         <Row className={"customerReviewPost"}>
-                            {cartTotal()}
+                            {cartTotal({cartList,total})}
                         </Row>
                     </Row>
                 </Col>

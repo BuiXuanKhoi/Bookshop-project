@@ -24,7 +24,7 @@ const customerReview = (props) =>{
             onClick={handleOnClickSort}
             items={[
                 {
-                    key: 'a',
+                    key: 'd',
                     label: (
                         <a target="_blank"  rel="noopener noreferrer" >
                             Sort by date: newest to oldest
@@ -32,7 +32,7 @@ const customerReview = (props) =>{
                     ),
                 },
                 {
-                    key: 'd',
+                    key: 'a',
                     label: (
                         <a target="_blank" rel="noopener noreferrer"    >
                             Sort by date: oldest to newest
