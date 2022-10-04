@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import './Cart.css'
 import {Button, Col, Row} from "antd";
 import {MinusOutlined, PlusOutlined} from "@ant-design/icons";
@@ -7,80 +7,28 @@ import {useCookies} from "react-cookie";
 import {getCookie} from "react-use-cookie";
 import {SecurityContext} from "../../../App";
 
-const cartItem = (url,bookTitle,bookPrice,bookQuantity,cartItemID) => {
-    const decreaseBookQuantity = (cartItemID) =>{
-        console.log(cartItemID);
-    }
-    const increaseBookQuantity = () => {
 
-    }
-    return (
-        <>
-        {/*---------------------------Line--------------------------------*/}
-            <Col span={24}>
-                <Row>
-                    <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}></Col>
-                </Row>
-                {/*---------------------------Cart item--------------------------------*/}
-                <Row style={{paddingBlock:"4%"}}>
-                    <Col span={10} offset={1}>
-                        <Row>
-                            {/*---------------------------Header--------------------------------*/}
-                            <Col span={12}>
-                                <div style={{padding: "1vw"}}>
-                                    <img src={url}/>
-                                </div>
-
-                            </Col>
-                            {/*---------------------------Header--------------------------------*/}
-                            <Col span={12}>
-                                <div>
-                                    <p className={"positionForTitle"}>
-                                        {bookTitle}
-                                    </p>
-                                    <p className={"positionForTitle"} style={{marginTop:"-20%",fontSize:"1vw",fontWeight:"normal"}}>
-                                        Hello no
-                                    </p>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Col>
-                    {/*---------------------------Price--------------------------------*/}
-                    <Col span={4} style={{justifyContent:"center"}}>
-                        <p className={"positionForTitle2"}>
-                            ${bookPrice}
-                        </p>
-                    </Col>
-                    {/*---------------------------Quantity--------------------------------*/}
-                    <Col span={4}>
-                        <Col span={19}>
-                            <Row style={{background:"#CFD2CF",marginTop:"87%"}}>
-                                <Col span={11} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
-                                    <Button onClick={()=>{decreaseBookQuantity(cartItemID)}}  style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
-                                </Col>
-                                {/*--------------------------------------------------------------------------------*/}
-                                <Col span={2} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",alignItems:"center",textAlign:"center"}}>
-                                    <p style={{marginTop:"5%",marginBottom:"5%",fontSize:"1.2vw"}}>{bookQuantity}</p>
-                                </Col>
-                                {/*--------------------------------------------------------------------------------*/}
-                                <Col span={11} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                    <Button onClick={increaseBookQuantity} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Col>
-                    {/*---------------------------Header--------------------------------*/}
-                    <Col span={4}>
-                        <p className={"positionForTitle2"}>
-                            ${bookPrice*bookQuantity}
-                        </p>
-                    </Col>
-                </Row>
-            </Col>
-        </>
-    );
-}
 const bookTable = (props) => {
+    const decreaseBookQuantity = (cartItemID,quantity) =>{
+        quantity -=1;
+        props.setQuatity(quantity);
+        changeQuantity(cartItemID,quantity);
+
+    }
+    const increaseBookQuantity = (cartItemID,quantity) => {
+        quantity +=1;
+        props.setQuatity(quantity);
+        changeQuantity(cartItemID,quantity);
+    }
+    const changeQuantity = (cartItemID,quantity) =>{
+        axios.put("https://ecommerce-web0903.herokuapp.com/api/carts/"+cartItemID+"/change?quantity="+quantity,null,props.config)
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+    }
     return (
         <Col span={24}>
             {/*---------------------------Header--------------------------------*/}
@@ -112,7 +60,67 @@ const bookTable = (props) => {
             {/*---------------------------CartItem--------------------------------*/}
             {props.cartList.map((item) =>
                 <Row key={item.cartItemsID}>
-                    {cartItem(item.imageLink,item.bookName,item.price,item.quantity,item.cartItemsID)}
+                    {/*---------------------------Line--------------------------------*/}
+                    <Col span={24}>
+                        <Row>
+                            <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}></Col>
+                        </Row>
+                        {/*---------------------------Cart item--------------------------------*/}
+                        <Row style={{paddingBlock:"4%"}}>
+                            <Col span={10} offset={1}>
+                                <Row>
+                                    {/*---------------------------Header--------------------------------*/}
+                                    <Col span={12}>
+                                        <div style={{padding: "1vw"}}>
+                                            <img src={item.imageLink}/>
+                                        </div>
+
+                                    </Col>
+                                    {/*---------------------------Header--------------------------------*/}
+                                    <Col span={12}>
+                                        <div>
+                                            <p className={"positionForTitle"}>
+                                                {item.bookName}
+                                            </p>
+                                            <p className={"positionForTitle"} style={{marginTop:"-20%",fontSize:"1vw",fontWeight:"normal"}}>
+
+                                            </p>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            {/*---------------------------Price--------------------------------*/}
+                            <Col span={4} style={{justifyContent:"center"}}>
+                                <p className={"positionForTitle2"}>
+                                    ${item.price}
+                                </p>
+                            </Col>
+                            {/*---------------------------Quantity--------------------------------*/}
+                            <Col span={4}>
+                                <Col span={19}>
+                                    <Row style={{background:"#CFD2CF",marginTop:"87%"}}>
+                                        <Col span={11} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
+                                            <Button onClick={()=>{decreaseBookQuantity(item.cartItemsID,item.quantity)}}  style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
+                                        </Col>
+                                        {/*--------------------------------------------------------------------------------*/}
+                                        <Col span={2} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",alignItems:"center",textAlign:"center"}}>
+                                            <p style={{marginTop:"5%",marginBottom:"5%",fontSize:"1.2vw"}}>{item.quantity}</p>
+                                        </Col>
+                                        {/*--------------------------------------------------------------------------------*/}
+                                        <Col span={11} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
+                                            <Button onClick={()=>increaseBookQuantity(item.cartItemsID,item.quantity)} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Col>
+                            {/*---------------------------Header--------------------------------*/}
+                            <Col span={4}>
+                                <p className={"positionForTitle2"}>
+                                    ${Math.round(item.price*item.quantity*10)/10}
+                                </p>
+                            </Col>
+                        </Row>
+                    </Col>
                 </Row>
             )}
 
@@ -120,7 +128,7 @@ const bookTable = (props) => {
     );
 }
 
-const cartTotal = () => {
+const cartTotal = (props) => {
     return (
         <>
             <Col span={24} style={{justifyContent:"center",textAlign:"center"}}>
@@ -139,7 +147,9 @@ const cartTotal = () => {
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{marginTop:"10%"}}>
                     <Col span={20} offset={2}>
-                        <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>$99.97</p>
+                        <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>
+                            ${props.total}
+                        </p>
                     </Col>
                 </Row>
 
@@ -156,7 +166,10 @@ const cartTotal = () => {
 export default function Cart(){
     const [cookies,setCookies,removeCookie] = useCookies(['book-token']);
     const [loginData,setLoginData] = useContext(SecurityContext);
-    const [quantity,setQuantity] = useState(1);
+    const [cartId, setCartId] = useState(0);
+    const [isLoading,setIsLoading] = useState(false);
+    const [quantity,setQuatity] = useState(1);
+    const [total,setTotal] = useState(0);
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
@@ -164,15 +177,20 @@ export default function Cart(){
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
-                console.log(res.data)
                 setCartList(res.data);
             })
             .catch((error)=>{
-                console.log("Error");
                 console.log(error);
             })
     }
-    useEffect(()=>{getCartItem();},[])
+    const calculateTotal = () =>{
+        let listCost = cartList.map(item=>item.price*item.quantity);
+        setTotal(listCost.reduce((a,b)=>a+b,0));
+    }
+    useEffect(()=> {
+        getCartItem();
+        calculateTotal();}
+        ,[quantity])
     return(
         <>
             <Row style={{paddingTop:"10%"}}>
@@ -189,10 +207,10 @@ export default function Cart(){
                     </Row>
                     <Row>
                         <Row className={"customerReviewList"}>
-                            {bookTable({cartList,quantity,setQuantity})}
+                            {bookTable({cartList,cartId,setCartId,config,quantity,setQuatity})}
                         </Row>
                         <Row className={"customerReviewPost"}>
-                            {cartTotal()}
+                            {cartTotal({cartList,total})}
                         </Row>
                     </Row>
                 </Col>

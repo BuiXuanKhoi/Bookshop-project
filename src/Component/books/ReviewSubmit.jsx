@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Row, Col, Menu, Dropdown, Button, Input, Select, Rate, Form,Modal} from "antd";
 import './FeedBackTable.css'
 import {CaretDownOutlined} from "@ant-design/icons";
@@ -104,16 +104,17 @@ export default function ReviewSubmit ({bookID,config}) {
     const [ratingPoint, setRatingPoint] = useState(3);
     const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
     const [form] = Form.useForm();
-
+    const state = useRef(false);
     const [reviewSubmit, setReviewSubmitting] = useState({
         title: "",
         comment:"",
         ratingPoint: "",
     })
     useEffect(()=>{
-        console.log("no")
-        console.log(reviewSubmit);
-        handleSendReview();
+        if(state.current){
+            handleSendReview();
+        }
+        else { state.current=true;}
     },[reviewSubmit])
 
     const handleSendReview = () => {
