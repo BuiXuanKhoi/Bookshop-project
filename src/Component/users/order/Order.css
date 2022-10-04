@@ -1,0 +1,26 @@
+.row{
+    display: flex;
+    padding-top: 10%;
+    border-style: ridge;
+    flex-direction: column;
+}
+
+.container{
+    height: 100%;
+    width: 100%;
+    margin-bottom: 20%;
+    justify-content: left;
+    text-align: center;
+}
+.imageBorder{
+    height: 40%;
+    border-block: 10%;
+    width: 15%;
+    margin-left: 5%;
+    border-style: ridge;
+    border-color: red;
+    display: flex;
+    position:relative;
+    justify-content: center;
+}
+

@@ -166,6 +166,7 @@ const customerReview = (props) =>{
 const reviewTitle = (ratingPoint, comment, title,userName, createdDay) => {
     return (
         <Col span={24}>
+
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{paddingBlock:"0.25em",marginLeft:"2%",display:"flex",justifyContent:"left",textAlign:"center",alignContent:"center"}}>
                 <div className={"container-for-title"}>
@@ -191,9 +192,8 @@ const reviewTitle = (ratingPoint, comment, title,userName, createdDay) => {
                 </div>
             </Row>
 
-            <Row>
+            <Row style={{marginTop:"0"}}>
                 <Col span={22}  style={{marginLeft:"2%",paddingBlock:"0.25em",borderBottomStyle:"ridge",borderColor:"gray"}}>
-
                 </Col>
             </Row>
         </Col>

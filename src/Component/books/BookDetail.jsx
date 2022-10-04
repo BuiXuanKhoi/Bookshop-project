@@ -205,11 +205,11 @@ export default function BookDetail(){
                                 <img src={bookDetail.imageLink}/>
                             </Row>
                             <Row >
-                                <Col span={17}>
-                                    <p className={"wordDesign"}> By (author)</p>
-                                </Col>
-                                <Col span={7}>
-                                    <p style={{fontWeight:"bolder",color:"#576F72"}}> {bookDetail.authorName} </p>
+                                <Col span={24}>
+                                    <div style={{display:"flex",justifyContent:"right"}}>
+                                        <p className={"wordDesign"}> By (author)</p>
+                                        <p style={{marginLeft:"2%",fontWeight:"bolder",color:"#576F72"}}> {bookDetail.authorName} </p>
+                                    </div>
                                 </Col>
                             </Row>
                         </Col>
@@ -220,8 +220,10 @@ export default function BookDetail(){
                             </Row>
                             {/*--------------------------------------------------------------------------------*/}
                             <Row>
-                                <p className={"description"}>Book description</p>
-                                <p className={"positionForChar"} style={{marginTop:"5%"}}>{bookDetail.description} </p>
+                                <div>
+                                    <p className={"description"}>Book description</p>
+                                    <p className={"positionForChar"} style={{marginTop:"5%"}}>{bookDetail.description} </p>
+                                </div>
                             </Row>
                         </Col>
                     </Row>
@@ -289,7 +291,7 @@ export default function BookDetail(){
                     <Col span={24}>
                         <Row style={{background:"#F6F6F6"}}>
                             <Col span={20} offset={2}>
-                                <p className="positionForChar" style={{fontSize:"2vw",fontWeight:"bolder"}}> $29.99</p>
+                                <p className="positionForChar" style={{fontSize:"2vw",fontWeight:"bolder"}}> ${bookDetail.bookPrice }</p>
                             </Col>
                         </Row>
                         {/*--------------------------------------------------------------------------------*/}

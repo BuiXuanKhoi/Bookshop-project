@@ -9,13 +9,11 @@ import axios from "axios";
 const customerReviewPost = (props) =>  {
 
     const setUpSubmit = (values) => {
-        console.log("Setup");
         props.setReviewSubmitting({
             title : values.title,
             comment : values.description,
             ratingPoint : props.ratingPoint,
         })
-        console.log(props.reviewSubmit)
     }
 
     return (
@@ -24,7 +22,7 @@ const customerReviewPost = (props) =>  {
                 <Form title={"feedback"}
                       form = {props.form}
                       onFinish={setUpSubmit}
-                    >
+                >
                     <Row >
                         <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>
                     </Row>
@@ -123,10 +121,9 @@ export default function ReviewSubmit ({bookID,config}) {
             .then((response)=>{
                 handleSuccess();
             }).catch((error)=>{
-                console.log(error)
-                if (error.response.data.statusCode === 400) {
-                    handleError();
-                }
+            if (error.response.data.statusCode === 400) {
+                handleError();
+            }
         })
     }
 
