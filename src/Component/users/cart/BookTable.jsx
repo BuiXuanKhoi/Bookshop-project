@@ -117,7 +117,7 @@ export default function BookTable({emptyList,cartList,cartId,setCartId,config,qu
                                 {/*---------------------------Quantity--------------------------------*/}
                                 <Col span={4}>
                                     <Col span={19}>
-                                        <CartButton setQuantity={setQuantity} quantity={item.quantity}
+                                        <CartButton emptyList={emptyList} setQuantity={setQuantity} quantity={item.quantity}
                                                     cartItemID={item.cartItemsID} config={config}/>
                                     </Col>
                                 </Col>

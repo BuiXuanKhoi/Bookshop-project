@@ -32,7 +32,7 @@ export default function CartTotal({emptyList,cartList,total,config}){
                     {/*--------------------------------------------------------------------------------*/}
                     <Row style={{marginTop:"10%",marginBottom:"10%"}}>
                         <Col span={20} offset={2}>
-                            <Button  style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%",fontSize:"1.5vw",fontWeight:"bolder"}}>Place order</Button>
+                            <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%",fontSize:"1.5vw",fontWeight:"bolder"}}>Place order</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -45,8 +45,11 @@ export default function CartTotal({emptyList,cartList,total,config}){
                 ,config)
                 .then((res)=>{
                     window.location.reload();
+                    handleAddSuccess();
                 })
                 .catch((error) =>{
+                    console.log("Hello")
+                    console.log(error)
                     window.location.reload();
                 })
         }

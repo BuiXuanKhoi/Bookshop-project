@@ -4,7 +4,7 @@ import {Button, Col, Row} from "antd";
 import {MinusOutlined, PlusOutlined} from "@ant-design/icons";
 import axios from "axios";
 
-export default function CartButton({cartItemID, quantity, config, setQuantity}){
+export default function CartButton({emptyList,cartItemID, quantity, config, setQuantity}){
     const [cartItemQuantity, setCartItemQuantity] = useState(quantity);
 
     const decreaseBookQuantity = () => {
@@ -26,10 +26,11 @@ export default function CartButton({cartItemID, quantity, config, setQuantity}){
                 console.log(res);
             })
             .catch((error) =>{
+                console.log(error)
             })
     }
 
-    if (typeof cartItemID !="undefined"){
+    if (emptyList != true){
         return(
             <Row style={{background:"#CFD2CF",marginTop:"87%"}}>
                 <Col span={11} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
