@@ -32,6 +32,7 @@ export default function Shop(){
                 setPageBooks(res.data.content)
                 setCurrentPage(res.data.number)
                 setTotalElements(res.data.totalElements)
+                console.log(res.data)
             })
             .catch((err) => setPageBooks([]))
     }

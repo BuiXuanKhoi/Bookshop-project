@@ -9,6 +9,8 @@ import Icon from "antd/es/icon";
 import {Link} from "react-router-dom";
 import axios from "axios";
 import {set} from "react-hook-form";
+import {useNavigate} from "react-router";
+import CartBook from "../CartBook";
 
 let number = 0;
 
@@ -17,14 +19,16 @@ export default function RecommendTable(){
     const [saveList, setSaveList] = useState([]);
     const [position,setPosition]=useState(0);
     const [isExistData, setIsExistData] = useState(false);
+
     useEffect(()=>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/onsale")
                 .then((res)=>{
-                    console.log("Sure");
                     localStorage.setItem("bookListOnSales",JSON.stringify(res.data))
                     setIsExistData(true);
-
                 })
+            .catch((error) =>{
+                console.log(error);
+            })
     },[]);
 
     useEffect(()=>{
@@ -32,13 +36,8 @@ export default function RecommendTable(){
         const initialValue = JSON.parse(saved);
         setBookListOnSales(initialValue.slice(0,4));
         setSaveList(initialValue)
-
     },[isExistData])
-    useEffect(()=>{
-        console.log("Yes")
-        console.log(position)
-        }
-    ,[position])
+
     const handleOnClickOfRightButton = () => {
         if(number<6){
             number+=1;
@@ -54,7 +53,6 @@ export default function RecommendTable(){
         setPosition(number)
         setBookListOnSales(saveList.slice(number,number+4))
     }
-
     return(
 
         <div className={"recommend-table"} >
@@ -79,38 +77,17 @@ export default function RecommendTable(){
 
                 {
                     bookListOnSales.map(item =>(
-                        <Col span={5} >
-                            <div className="container">
-                                <div className="card">
-                                    <div className="card__header">
-                                        <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                             className="card__image" style={{ width:"300"}}/>
-                                    </div>
-                                    <div className="card__body">
-                                        <h4>{item.bookName}</h4>
-                                        <p>{item.authorName}</p>
-                                    </div>
-                                    <div className="card footer" style={{background:"#D8D8D8"}}>
-                                        <div className="user">
-                                            <div className="user__info">
-                                                <h5>${item.bookPrice}</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <Col style={{marginTop:"3%"}} span={5} >
+                            <CartBook item={item}/>
                         </Col>
                     ))
                 }
 
                 <Col span={2} className={"displayItemInColumn"}>
                     <Button className={"buttonArrowDesign"} onClick={handleOnClickOfRightButton} icon={<CaretRightOutlined className={"arrowPointerInList"}/>}>
-                    {/*<CaretRightOutlined  className={"arrowPointerInList"}/>*/}
                     </Button>
                 </Col>
-
             </Row>
-
         </div>
 
     );

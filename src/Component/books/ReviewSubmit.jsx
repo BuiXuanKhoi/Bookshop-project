@@ -6,22 +6,77 @@ import {Option} from "antd/es/mentions";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
 
-const customerReviewPost = (props) =>  {
+export default function ReviewSubmit ({bookID,config}) {
 
-    const setUpSubmit = (values) => {
-        props.setReviewSubmitting({
-            title : values.title,
-            comment : values.description,
-            ratingPoint : props.ratingPoint,
+    const [ratingPoint, setRatingPoint] = useState(3);
+    const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+    const [form] = Form.useForm();
+    const state = useRef(false);
+    const [reviewSubmit, setReviewSubmitting] = useState({
+        title: '',
+        comment:'',
+        ratingPoint: 0.0,
+    })
+
+
+    const handleSendReview = () => {
+        axios.post("https://ecommerce-web0903.herokuapp.com/api/books/" + bookID + "/feedbacks", reviewSubmit, config)
+            .then((response) => {
+                handleSuccess();
+            }).catch((error) => {
+            if (error.response.data.statusCode === 400) {
+                handleError();
+            }
+            if (error.response.data.statusCode === 404){
+                handleAuthenticationError();
+            }
         })
     }
 
+    const handleSubmitReview = (values) => {
+
+        setReviewSubmitting({
+            title : values.title,
+            comment : values.description,
+            ratingPoint : ratingPoint,
+        })
+    }
+    const handleAuthenticationError = () =>{
+        Modal.error({
+            title:"Error",
+            content: " You must login first before submitting the feedback"
+        })
+
+    }
+    useEffect(()=>{
+        if(state.current){
+            handleSendReview();
+        }else{
+            state.current = true;
+        }
+    },[reviewSubmit])
+
+    const handleSuccess = () =>{
+        Modal.success({
+            content: 'Succeeded in submitting your review',
+        });
+
+        window.location.reload();
+    }
+    const handleError = () => {
+        Modal.error({
+            title: 'Error',
+            content: 'Can not submit two feedbacks for one book',
+        });
+    };
     return (
         <Row className={"customerReviewPost"}>
             <Col span={24}>
                 <Form title={"feedback"}
-                      form = {props.form}
-                      onFinish={setUpSubmit}
+                      form = {form}
+                      onFinish={
+                          handleSubmitReview
+                      }
                 >
                     <Row >
                         <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>
@@ -56,7 +111,7 @@ const customerReviewPost = (props) =>  {
                     <Form.Item name="description">
                         <Row style={{paddingBlock:"0.25em"}}>
                             <Col offset={1} span={22}>
-                                <TextArea  style={{height:"7vw"}}></TextArea>
+                                <TextArea style={{height:"7vw"}}></TextArea>
                             </Col>
                         </Row>
                     </Form.Item>
@@ -68,15 +123,14 @@ const customerReviewPost = (props) =>  {
                     </Row>
                     {/*--------------------------------------------------------------------------------*/}
 
-                    <Row style={{paddingBlock:"0.25em"}}>
-                        <Col span={24}>
-                            <span style={{marginLeft:"5%"}}>
-                                <Rate tooltips={props.desc} onChange={props.setRatingPoint} value={props.ratingPoint}/>
-                                {props.ratingPoint ? <span className="ant-rate-text">{props.desc[props.ratingPoint - 1]}</span>  : ''}
-                            </span>
-                        </Col>
-                    </Row>
-
+                        <Row style={{paddingBlock:"0.25em"}}>
+                            <Col span={24}>
+                                <span style={{marginLeft:"5%"}}>
+                                    <Rate tooltips={desc} onChange={setRatingPoint} value={ratingPoint}/>
+                                    {ratingPoint ? <span className="ant-rate-text">{desc[ratingPoint - 1]}</span>  : ''}
+                                </span>
+                            </Col>
+                        </Row>
                     {/*--------------------------------------------------------------------------------*/}
                     <Row>
                         <Col span={24} style={{borderStyle:"ridge",marginTop:"5%",marginBottom:"2%",borderColor:"#F6F6F6"}}>
@@ -97,60 +151,5 @@ const customerReviewPost = (props) =>  {
                 </Form>
             </Col>
         </Row>
-    );
-}
-export default function ReviewSubmit ({bookID,config}) {
-    const [ratingPoint, setRatingPoint] = useState(3);
-    const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
-    const [form] = Form.useForm();
-    const state = useRef(false);
-    const [reviewSubmit, setReviewSubmitting] = useState({
-        title: '',
-        comment:'',
-        ratingPoint: 0.0,
-    })
-    useEffect(()=>{
-        if(state.current){
-            handleSendReview();
-        }
-        else { state.current=true;}
-    },[reviewSubmit])
-
-    const handleSendReview = () => {
-        axios.post("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks",reviewSubmit,config)
-            .then((response)=>{
-                handleSuccess();
-            }).catch((error)=>{
-            if (error.response.data.statusCode === 400) {
-                handleError();
-            }
-        })
-    }
-
-    useEffect(()=>{
-        if(state.current){
-            handleSendReview();
-        }else{
-            state.current = true;
-        }
-    },[reviewSubmit])
-
-    const handleSuccess = () =>{
-        Modal.success({
-            content: 'Succeeded in submitting your review',
-        });
-
-        window.location.reload();
-    }
-    const handleError = () => {
-        Modal.error({
-            title: 'Error',
-            content: 'Can not submit two feedbacks for one book',
-        });
-    };
-    return (
-        <>
-            {customerReviewPost({ratingPoint,setRatingPoint,desc,reviewSubmit,setReviewSubmitting,handleSendReview,form})}
-        </>
     );
 }

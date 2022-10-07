@@ -49,14 +49,14 @@
     justify-content: center;
     max-width: 1000px;
     margin-block: 2rem;
-
+    overflow: hidden;
 }
 
 
 img {
     max-width: 100%;
     display: block;
-    object-fit: cover;
+    margin-right: 40%;
 }
 
 .card {
@@ -75,10 +75,12 @@ img {
     display: flex;
     flex-direction: column;
     text-align: left;
+    overflow: hidden;
+    height: 7rem;
 }
 
 .card__body h4 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     text-transform: capitalize;
 }
 .card__body p{
@@ -99,6 +101,9 @@ img {
 
 .user__image {
     border-radius: 50%;
+    position: relative;
+    height: 50%;
+    width:50%;
 }
 .user__info h5 {
     margin-left: 1em;
@@ -112,4 +117,10 @@ img {
 Button.active{
     color: white;
     background: gray;
+}
+.card__header{
+    height: 20em;
+    width: 20em;
+    display: flex;
+    justify-content: center;
 }

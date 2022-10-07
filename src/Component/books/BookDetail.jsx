@@ -36,7 +36,6 @@ export default function BookDetail(){
         headers: {Authorization: `Bearer ` + loginData.token}
     };
 
-
     const bookId = useParams();
     const [quantity,setQuantity] = useState(0);
     const [bookFeedback, setBookFeedback] = useState([{
