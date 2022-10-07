@@ -7,6 +7,9 @@ import './Home.css'
 import {CaretLeftOutlined, SearchOutlined} from "@ant-design/icons"
 import axios from "axios";
 import {useEffect} from "react";
+import MyCard from "../general/MyCard";
+import '../general/MyCart.css'
+import CartBook from "./CartBook";
 export default function Home(){
 
     const [changeStateButton, setChangeStateButton] = useState(false);
@@ -47,7 +50,6 @@ export default function Home(){
     return(
 
         <div >
-
             <RecommendTable/>
             <div className={"recommend-table"}>
                 <Row className={"feature"}>
@@ -74,32 +76,18 @@ export default function Home(){
                 </Row>
 
                 <Row className={"onSaleCardList"} style={{height:"65rem"}}>
+                        <Col span={24} offset={2}>
+                            <Row>
+                            {
+                                bookList.map(item => (
+                                    <Col span={5} style={{marginTop:"5%"}}>
+                                        <CartBook item={item}/>
 
-                        {
-                            bookList.map(item => (
-                                <Col span={6} >
-                                    <div className="container">
-                                        <div className="card">
-                                            <div className="card__header">
-                                                <img src="https://th.bing.com/th/id/R.f17b9a7342277b1f5fb7986e114d89dc?rik=Glb%2bxt2j4opMtg&pid=ImgRaw&r=0" alt="card__image"
-                                                     className="card__image" style={{ width:"300"}}/>
-                                            </div>
-                                            <div className="card__body">
-                                                <h4>{item.bookName}</h4>
-                                                <p>{item.authorName}</p>
-                                            </div>
-                                            <div className="card footer" style={{background:"#D8D8D8"}}>
-                                                <div className="user">
-                                                    <div className="user__info">
-                                                        <h5>${item.bookPrice}</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                            ))
-                        }
+                                    </Col>
+                                ))
+                            }
+                            </Row>
+                        </Col>
 
                 </Row>
             </div>

@@ -11,6 +11,7 @@
 .card-image{
     position: relative;
     height: 200px;
+    margin-left: 40%;
 }
 
 .card-image-container{
@@ -36,7 +37,6 @@
     margin-block-end: 1em;
     font-family: Helvetica, serif;
     font-weight: bold;
-
 }
 
 

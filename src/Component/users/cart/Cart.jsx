@@ -18,14 +18,18 @@ export default function Cart(){
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
+    const [emptyList,setEmptyList] = useState(false);
     const [cartList,setCartList] = useState([{}]);
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
                 setCartList(res.data);
+                setEmptyList(false);
             })
             .catch((error)=>{
-                console.log(error);
+                if(error.response.data.message=="List is Empty !!!"){
+                    setEmptyList(true);
+                }
             })
     }
     const calculateTotal = () =>{
@@ -34,7 +38,7 @@ export default function Cart(){
     }
     useEffect(()=> {
         getCartItem();
-        },[])
+    },[])
 
     useEffect(()=> {
         getCartItem();
@@ -59,10 +63,10 @@ export default function Cart(){
                     </Row>
                     <Row>
                         <Row className={"customerReviewList"}>
-                            <BookTable cartList={cartList} cartId={cartId} setCartId={setCartId} config={config} quantity={quantity} setQuantity={setQuantity} />
+                            <BookTable  emptyList={emptyList} cartList={cartList} cartId={cartId} setCartId={setCartId} config={config} quantity={quantity} setQuantity={setQuantity} />
                         </Row>
                         <Row className={"customerReviewPost"}>
-                            <CartTotal cartList={cartList} total={total} />
+                            <CartTotal emptyList={emptyList} cartList={cartList} total={total} config={config}/>
                         </Row>
                     </Row>
                 </Col>
