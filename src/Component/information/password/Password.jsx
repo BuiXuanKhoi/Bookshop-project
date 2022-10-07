@@ -1,6 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {Button, Form, Input, Modal} from "antd";
 import axios from "axios";
+import {SecurityContext} from "../../../App";
 
 export default function Password({isOpen, closeChangePasswordModal, config}){
 

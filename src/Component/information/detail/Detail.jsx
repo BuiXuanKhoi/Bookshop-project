@@ -30,6 +30,15 @@ export default function Detail({config}){
         updateDate : ''
     })
 
+    const [modifyRequest, setModifyRequest] = useState({
+        firstName : '',
+        lastName : '',
+        dateOfBirth : '',
+        address : '',
+        phoneNumber : '',
+        email : ''
+    })
+
     const closeSession = () => {
         removeCookies('book-token');
         navigate('/login');
@@ -38,6 +47,15 @@ export default function Detail({config}){
 
     const handleSubmitForm = (values) => {
         console.log(values);
+        console.log(values.dateOfBirth.format('dd/mm/yyyy'));
+        // setModifyRequest({
+        //     firstName: values.firstName,
+        //     lastName: values.lastName,
+        //     email: values.email,
+        //     dateOfBirth: values.dateOfBirth.format('dd/mm/yyyy'),
+        //     address: values.address,
+        //     phoneNumber: values.phoneNumber
+        // })
     }
 
     const getInformationDetail = () => {

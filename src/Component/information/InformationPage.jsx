@@ -15,7 +15,7 @@ export default function InformationPage(){
     const[isOpenChangePassword, setIsOpenChangePassword] = useState(false);
     const [loginData, setLoginData] = useContext(SecurityContext);
     const config = {
-        headers: {Authorization: 'Bearer ' + JSON.parse(getCookie('book-token')).token}
+        headers: {Authorization: 'Bearer ' + loginData.token}
     }
 
 

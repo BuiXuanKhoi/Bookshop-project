@@ -3,7 +3,6 @@ import './UserTable.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBan, faPenToSquare, faSort, faTrash, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import {CreateToken} from "../../../../general/ManageCookies";
 import {getCookie} from "react-use-cookie";
 import {Button, Drawer, Form, Pagination} from "antd";
 import Input from "antd/lib/input/Input";
@@ -60,6 +59,12 @@ export default function UserTable({config, token}){
             .catch((err) => console.log(err))
     }
 
+    const blockUser = (userId) => {
+        axios.put('https://ecommerce-web0903.herokuapp.com/api/users/' + userId, null, config)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
+    }
+
     const openDetailModal = () => {
         setIsOpenDetail(true);
     }
@@ -90,7 +95,8 @@ export default function UserTable({config, token}){
     }
 
     const handleBlock = (id) => {
-        console.log(id)
+        blockUser(id);
+        window.location.reload();
     }
 
     const handleUnlock = (id) => {
@@ -147,12 +153,7 @@ export default function UserTable({config, token}){
                             <td onClick={() => handleFind(user)}>{user.createDate}</td>
                             <td>
                                 <Button className="btn-style">
-                                    <FontAwesomeIcon icon={faPenToSquare} onClick={() =>handleEdit(user.userId)}/>
-                                </Button>
-                            </td>
-                            <td>
-                                <Button className="btn-style">
-                                    <FontAwesomeIcon icon={faTrash} onClick={() => handleDelete(user.userId)}/>
+                                    <FontAwesomeIcon icon={faPenToSquare} />
                                 </Button>
                             </td>
                             <td>

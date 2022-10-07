@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./NavigateBar.css"
 import {BookFilled} from "@ant-design/icons";
 import {Button, Divider, Dropdown, Menu} from "antd";
@@ -10,9 +10,14 @@ import {useNavigate} from "react-router";
 import '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBroom, faReply, faRightFromBracket, faUser, faUserCheck, faUserGear} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import {getCookie} from "react-use-cookie";
+import {SecurityContext} from "../../../App";
 const NavMenu = (nav) => {
 
     const navigate = useNavigate();
+
+    const [security, setSecurity] = useContext(SecurityContext);
 
     const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
 
@@ -24,9 +29,16 @@ const NavMenu = (nav) => {
         }
     }
 
+    const config = {
+        headers: {Authorization: 'Bearer ' + security.token}
+    }
+
 
 
     const logout = () => {
+        axios.delete('https://ecommerce-web0903.herokuapp.com/api/auth/logout', config)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
         removeCookies('book-token');
         window.location.reload();
     }

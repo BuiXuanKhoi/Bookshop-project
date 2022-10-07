@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Col, Menu, Row, Table} from "antd";
 import './ManageCustomer.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -7,6 +7,7 @@ import UserTable from "./table/UserTable";
 import {getCookie} from "react-use-cookie";
 import {useCookies} from "react-cookie";
 import CreateUser from "./create/CreateUser";
+import {SecurityContext} from "../../../../App";
 
 
 const column = [
@@ -50,25 +51,13 @@ export default function ManageCustomer(){
         setIsOpen(false);
     }
 
-
-
-
-
+    const [security, setSecurity] = useContext(SecurityContext);
     const [sort, setSort] = useState('ea');
 
-    const [cookies, setCookies, removeCookies] = useCookies(['book-token']);
     const [token, setToken] = useState('');
     const config = {
-        headers: {Authorization: 'Bearer ' + token}
+        headers: {Authorization: 'Bearer ' + security.token}
     };
-
-    useEffect(() => {
-        if(getCookie('book-token') !== ''){
-            setToken(JSON.parse(getCookie('book-token')).token);
-        }else{
-            setToken('no-token');
-        }
-    })
 
 
     const onChange = (sorter) => {

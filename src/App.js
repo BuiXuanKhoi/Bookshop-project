@@ -27,13 +27,22 @@ function App()  {
         role : '',
         userName: '',
         token : 'dggdgdf',
-        tokenType: 'Bearer'
+        tokenType: 'Bearer',
+        refreshToken : ''
     });
 
 
     useEffect(() =>{
         if(getCookie('book-token') !== ''){
             setLoginData(JSON.parse(getCookie('book-token')))
+        }else{
+            setLoginData({
+                role : '',
+                userName: '',
+                token : 'dggdgdf',
+                tokenType: 'Bearer',
+                refreshToken : ''
+            });
         }
     },[loginData.token])
 

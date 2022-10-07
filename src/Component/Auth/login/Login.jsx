@@ -7,7 +7,6 @@ import axios from "axios";
 import "./Login.css"
 import {useForm} from "react-hook-form";
 import {getCookie} from 'react-use-cookie';
-import {Link, Redirect} from "react-router-dom";
 import {useCookies} from "react-cookie";
 import {useNavigate} from "react-router";
 import {SecurityContext} from "../../../App";
@@ -45,13 +44,12 @@ export default function Login(){
             content: mess
         })
 
-        window.location.reload();
+        // window.location.reload();
     }
 
 
 
     const successPopup = (mes) => {
-        console.log(JSON.parse(getCookie('book-token')))
         Modal.success({
             title: "Login Success",
             content: mes
@@ -64,17 +62,19 @@ export default function Login(){
 
 
     const login = () =>{
-        axios.post('https://ecommerce-web0903.herokuapp.com/api/auth/login',loginData)
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/auth/login',loginData,null)
             .then((res) =>{
+                console.log(res)
                 setCookies('book-token',{
                     userName : res.data.userName,
                     role : res.data.role,
                     token : res.data.token,
-                    type : res.data.tokenType
+                    tokenType : res.data.tokenType,
+                    refreshToken : res.data.refreshToken
                 });
-                setSecurity(res.data);
                 successPopup("You can access shopping page now !!!");
             }).catch((err) => {
+                console.log(err)
                 errorPopup(err.response.status, err.response.data.message);
         })
     }
