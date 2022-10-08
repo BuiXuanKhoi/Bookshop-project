@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import './Cart.css';
+
 import {Button, Col, Modal, Row} from "antd";
 import axios from "axios";
 import './Cart.css';
@@ -48,7 +49,6 @@ export default function CartTotal({emptyList,cartList,total,config}){
                     handleAddSuccess();
                 })
                 .catch((error) =>{
-                    console.log("Hello")
                     console.log(error)
                     window.location.reload();
                 })

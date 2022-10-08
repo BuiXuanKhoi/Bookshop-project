@@ -50,6 +50,7 @@
     max-width: 1000px;
     margin-block: 2rem;
     overflow: hidden;
+    cursor: pointer;
 }
 
 

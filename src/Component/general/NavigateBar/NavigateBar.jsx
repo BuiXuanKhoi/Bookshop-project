@@ -47,7 +47,6 @@ const NavMenu = (nav) => {
             {(nav).map((item) =>
                     <Menu.Item icon={item.icon}  key={item.path}>{item.title}</Menu.Item>
             )}
-
             <Divider/>
             <Menu.Item icon={<FontAwesomeIcon icon={faRightFromBracket}/>} style={{color:'red'}} key={'logout'} >Log out</Menu.Item>
         </Menu>
