@@ -249,7 +249,7 @@ export default function FeedbackTable ({bookID,config}) {
                         {/*--------------------------------------------------------------------------------*/}
                         <Row>
                             <Col span={24} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-                                <Pagination onChange={handleOnChange} defaultCurrent={currentPage} pageSize={defaultPageSize}  total={totalElements}/>
+                                <Pagination onChange={handleOnChange} defaultCurrent={currentPage} pageSize={defaultPageSize} style={{marginTop:"5%"}} total={totalElements}/>
                             </Col>
                         </Row>
                     </Col>

@@ -4,7 +4,7 @@ import {Button, Col, Row} from "antd";
 import {MinusOutlined, PlusOutlined} from "@ant-design/icons";
 import axios from "axios";
 
-export default function CartButton({emptyList,cartItemID, quantity, config, setQuantity}){
+export default function CartButton({emptyList,cartItemID, quantity, config, setQuantity,setQuantityFlag}){
     const [cartItemQuantity, setCartItemQuantity] = useState(quantity);
 
     const decreaseBookQuantity = () => {
@@ -18,6 +18,7 @@ export default function CartButton({emptyList,cartItemID, quantity, config, setQ
     useEffect(() => {
         setQuantity(cartItemQuantity)
         changeQuantity();
+        setQuantityFlag(cartItemQuantity)
     },[cartItemQuantity])
 
     const changeQuantity = () =>{

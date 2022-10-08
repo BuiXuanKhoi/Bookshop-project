@@ -76,7 +76,7 @@ export default function CartTotal({emptyList,cartList,total,config}){
                     <Row style={{marginTop:"10%"}}>
                         <Col span={20} offset={2}>
                             <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>
-                                ${total}
+                                ${Math.round(total*100)/100}
                             </p>
                         </Col>
                     </Row>

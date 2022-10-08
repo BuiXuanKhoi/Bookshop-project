@@ -19,22 +19,22 @@ export default function OrderHistory ({element}) {
 
     const setState = (state) =>{
         if(state=="PREPARED"){
-            setStateOfOrder(["finish","process","wait","wait","wait"]);
-            setIcon([<UserOutlined/>,<LoadingOutlined/>,<ShoppingCartOutlined/>,<SmileOutlined/>,<CheckOutlined/>]);
+            setStateOfOrder(["process","wait","wait","wait","wait"]);
+            setIcon([<LoadingOutlined/>,<FolderOutlined/>,<ShoppingCartOutlined/>,<SmileOutlined/>,<CheckOutlined/>]);
         }
         else if(state=="PACKAGED"){
-            setStateOfOrder(["finish","finish","process","wait","wait"]);
-            setIcon([<UserOutlined/>,<FolderOutlined/>,<LoadingOutlined/>,<SmileOutlined/>,<CheckOutlined/>])
+            setStateOfOrder(["finish","process","wait","wait","wait"]);
+            setIcon([<UserOutlined/>,<LoadingOutlined/>,<ShoppingCartOutlined/>,<SmileOutlined/>,<CheckOutlined/>])
         }
         else if(state=="DELIVERED"){
+            setStateOfOrder(["finish","finish","process","wait","wait"])
+            setIcon([<UserOutlined/>,<FolderOutlined/>,<LoadingOutlined/>,<SmileOutlined/>,<CheckOutlined/>])
+        }
+        else if(state=="RECEIVED"){
             setStateOfOrder(["finish","finish","finish","process","wait"])
             setIcon([<UserOutlined/>,<FolderOutlined/>,<ShoppingCartOutlined/>,<LoadingOutlined/>,<CheckOutlined/>])
         }
-        else if(state=="RECEIVED"){
-            setStateOfOrder(["finish","finish","finish","finish","process"])
-            setIcon([<UserOutlined/>,<FolderOutlined/>,<ShoppingCartOutlined/>,<SmileOutlined/>,<LoadingOutlined/>])
-        }
-        else{
+        else if(state=="COMPLETED"){
             setStateOfOrder(["finish","finish","finish","finish","finish"])
             setIcon([<UserOutlined/>,<FolderOutlined/>,<ShoppingCartOutlined/>,<SmileOutlined/>,<CheckOutlined/>])
         }
@@ -83,7 +83,7 @@ export default function OrderHistory ({element}) {
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{justifyContent: "right",marginBottom: "5%"}}>
                     <div style={{display: "flex",textAlign:"left"}}>
-                        <p style={{padding: "1px",fontSize:"2rem",fontWeight:"bolder"}}>Total cost: ${totalCost}</p>
+                        <p style={{padding: "1px",fontSize:"2rem",fontWeight:"bolder"}}>Total cost: ${Math.round(totalCost*100)/100}</p>
                     </div>
                 </Row>
             </Col>

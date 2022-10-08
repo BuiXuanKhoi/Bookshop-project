@@ -4,7 +4,7 @@ export default function OrderItem ({bookName,imageLink,price,quantity}) {
     const [sum,setSum] = useState(0);
     let save = 0
     const calculateCost = (quantity,price)=>{
-         save = Math.round(quantity*price*10)/10;
+         save = Math.round(quantity*price*100)/100;
          setSum(save);
     }
     useEffect(()=>{

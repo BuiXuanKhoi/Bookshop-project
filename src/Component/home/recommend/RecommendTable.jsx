@@ -58,12 +58,12 @@ export default function RecommendTable(){
         <div className={"recommend-table"} >
 
             <Row>
-                <Col span={19} push={2} style={{fontSize:"20px"}}>
-                    On Sale
+                <Col span={19} push={2} style={{fontSize:"20px",fontWeight:"bolder",fontFamily:"Palatino Linotype"}}>
+                    Top cheapest book
                 </Col>
                 <Col span={5} pull={1}>
 
-                    <Button className={"viewAllButton"}><a href={"/shop"}>View all <CaretRightOutlined /></a>
+                    <Button className={"viewAllButton"}><a href={"/shop"}>Go to shop <CaretRightOutlined /></a>
                     </Button>
 
                 </Col>

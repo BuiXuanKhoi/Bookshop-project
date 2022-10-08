@@ -13,19 +13,28 @@ import CartTotal from "./CartTotal";
 export default function Cart(){
     const [loginData,setLoginData] = useContext(SecurityContext);
     const [cartId, setCartId] = useState(0);
-    const [quantity,setQuantity] = useState(1);
     const [total,setTotal] = useState(0);
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
+
+    const [quantityFlag, setQuantityFlag] = useState(0);
+    // const copyCartList = useRef([]);
     const [emptyList,setEmptyList] = useState(false);
     const [cartList,setCartList] = useState([{}]);
+    // const [cartListUse,setCartListUse] = useState()
+    const flagForRegister = useRef(true);
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
                 setCartList(res.data);
                 setEmptyList(false);
-            })
+                // if(flagForRegister.current){
+                //     copyCartList.current = res.data;
+                //     flagForRegister.current= false;
+                //     }
+                }
+            )
             .catch((error)=>{
                 if(error.response.data.message=="List is Empty !!!"){
                     setEmptyList(true);
@@ -42,7 +51,7 @@ export default function Cart(){
 
     useEffect(()=> {
         getCartItem();
-    },[quantity])
+    },[quantityFlag])
 
     useEffect(() => {
         calculateTotal();
@@ -63,7 +72,7 @@ export default function Cart(){
                     </Row>
                     <Row>
                         <Row className={"customerReviewList"}>
-                            <BookTable  emptyList={emptyList} cartList={cartList} cartId={cartId} setCartId={setCartId} config={config} quantity={quantity} setQuantity={setQuantity} />
+                            <BookTable  emptyList={emptyList} cartList={cartList} config={config} setQuantityFlag={setQuantityFlag}/>
                         </Row>
                         <Row className={"customerReviewPost"}>
                             <CartTotal emptyList={emptyList} cartList={cartList} total={total} config={config}/>
