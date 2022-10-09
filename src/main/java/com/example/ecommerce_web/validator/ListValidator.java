@@ -20,14 +20,10 @@ public class ListValidator<T>{
 
     public List<T> ifNotEmpty() {
 
-        if (this.value instanceof List)
-        {
             if (!this.value.isEmpty())
             {
                 return this.value;
             }
             throw new ResourceNotFoundException("List is Empty !!!");
-        }
-        throw new ConstraintViolateException("Only List Accepted !!!");
     }
 }

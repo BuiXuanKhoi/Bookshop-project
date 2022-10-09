@@ -16,12 +16,11 @@ public class UserDetail implements UserDetails {
 
 
 
-    private int userId;
-    private String userName;
-    private String userPassword;
-    private Collection<? extends GrantedAuthority> authorities;
-    private UserState userState;
-    private  Date lockTime;
+    private final int userId;
+    private final String userName;
+    private final String userPassword;
+    private final Collection<? extends GrantedAuthority> authorities;
+    private final UserState userState;
 
     public UserDetail(int userId, String userName,
                       String userPassword, Collection<? extends GrantedAuthority> authorities, UserState userState) {
@@ -38,7 +37,6 @@ public class UserDetail implements UserDetails {
         String role = userRole.name();
 
         authorities.add(new SimpleGrantedAuthority(role));
-        users.getUserState();
 
         return new UserDetail(
                 users.getUserId(),
@@ -59,9 +57,6 @@ public class UserDetail implements UserDetails {
         return userPassword;
     }
 
-    public void setLockTime(Date lockTime) {
-        this.lockTime = lockTime;
-    }
 
     @Override
     public String getUsername() {

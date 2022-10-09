@@ -1,18 +1,18 @@
 package com.example.ecommerce_web.controller;
 
 
-import com.example.ecommerce_web.mapper.BookMapper;
-import com.example.ecommerce_web.mapper.BookMapperImpl;
-import com.example.ecommerce_web.mapper.CartItemMapper;
-import com.example.ecommerce_web.mapper.FeedbackMapper;
+import com.example.ecommerce_web.mapper.*;
 import com.example.ecommerce_web.model.dto.request.*;
 import com.example.ecommerce_web.model.dto.respond.*;
+import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.CartItem;
 import com.example.ecommerce_web.model.entities.Feedback;
+import com.example.ecommerce_web.service.AuthorService;
 import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.CategoryService;
 import com.example.ecommerce_web.service.FeedbackService;
+import com.example.ecommerce_web.validator.ListValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -34,16 +34,21 @@ public class BookController {
     BookMapper bookMapper;
     FeedbackMapper feedbackMapper;
     CartItemMapper cartItemMapper;
+    AuthorService authorService;
+    AuthorMapper authorMapper;
 
     @Autowired
     public BookController(BookService bookService, FeedbackService feedbackService
-            , CategoryService categoryService, BookMapper bookMapper, FeedbackMapper feedbackMapper, CartItemMapper cartItemMapper) {
+            , CategoryService categoryService, BookMapper bookMapper, FeedbackMapper feedbackMapper,
+                          CartItemMapper cartItemMapper, AuthorService authorService, AuthorMapper authorMapper) {
         this.bookService = bookService;
         this.feedbackService = feedbackService;
         this.categoryService = categoryService;
         this.bookMapper = bookMapper;
         this.feedbackMapper = feedbackMapper;
         this.cartItemMapper = cartItemMapper;
+        this.authorService = authorService;
+        this.authorMapper = authorMapper;
     }
 
     @PostMapping
@@ -110,6 +115,11 @@ public class BookController {
         return feedbackMapper.toDTO(savedFeedback);
     }
 
+    @GetMapping("/{id}/feedbacks/rate")
+    public RateCountingRespondDTO getRateCounter(@PathVariable Integer id){
+        return this.feedbackService.countRatingPoint(id);
+    }
+
     @GetMapping("/{id}/feedbacks")
     public Page<FeedbackRespondDTO> getPageFeedback(
             @PathVariable int id,
@@ -132,5 +142,15 @@ public class BookController {
     public CartItemRespondDTO getCartItemExistByBook(@PathVariable int id){
         CartItem cartItem = this.bookService.getCartItemByBook(id);
         return cartItemMapper.toDTO(cartItem);
+    }
+
+    @GetMapping("/authors")
+    public List<AuthorRespondDTO> getPageAuthor(@RequestParam (name = "page", defaultValue = "0", required = false) int page){
+        List<Author> listAuthor = authorService.getPage(page).getContent();
+
+        return ListValidator.ofList(listAuthor).ifNotEmpty()
+                                               .stream()
+                                               .map(authorMapper::toDTO)
+                                               .collect(Collectors.toList());
     }
 }

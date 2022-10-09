@@ -5,6 +5,7 @@ import com.example.ecommerce_web.model.dto.respond.AuthorRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.service.AuthorService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

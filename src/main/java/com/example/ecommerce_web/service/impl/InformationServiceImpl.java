@@ -1,44 +1,33 @@
 package com.example.ecommerce_web.service.impl;
 
-import com.example.ecommerce_web.constant.Location;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.InformationMapper;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
-import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.Information;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.InformationRepository;
-import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.InformationService;
 import com.example.ecommerce_web.service.UserService;
-import com.example.ecommerce_web.utils.MyDateUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 
 @Service
 public class InformationServiceImpl implements InformationService {
 
-    InformationRepository informationRepository;
-    MyDateUtil myDateUtil;
-    UserLocal userLocal;
-    InformationMapper informationMapper;
-    UserService userService;
+    private final InformationRepository informationRepository;
+    private final UserLocal userLocal;
+    private final InformationMapper informationMapper;
+    private final UserService userService;
 
     @Autowired
-    public InformationServiceImpl(InformationRepository informationRepository,
-                                  MyDateUtil myDateUtil, UserLocal userLocal, InformationMapper informationMapper,
+    public InformationServiceImpl(InformationRepository informationRepository
+                                    , UserLocal userLocal, InformationMapper informationMapper,
                                   UserService userService) {
         this.informationRepository = informationRepository;
         this.userService = userService;
-        this.myDateUtil = myDateUtil;
         this.userLocal = userLocal;
         this.informationMapper = informationMapper;
     }

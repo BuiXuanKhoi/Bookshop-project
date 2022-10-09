@@ -16,7 +16,7 @@ public interface RefreshTokenService {
 
     RefreshTokenResponse createToken( RefreshTokenRequest request);
 
-    boolean verify(RefreshToken refreshToken);
+    boolean isNotExpired(RefreshToken refreshToken);
 
     void deleteByLocalUsers();
 

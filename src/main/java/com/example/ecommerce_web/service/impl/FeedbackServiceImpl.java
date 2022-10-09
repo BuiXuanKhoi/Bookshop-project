@@ -5,6 +5,7 @@ import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.FeedbackMapper;
 import com.example.ecommerce_web.model.dto.request.FeedbackRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.FeedbackRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.RateCountingRespondDTO;
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.Feedback;
 import com.example.ecommerce_web.model.entities.Users;
@@ -26,11 +27,11 @@ import java.util.List;
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
-    FeedbackRepository feedbackRepository;
-    UserLocal userLocal;
-    FeedbackMapper feedbackMapper;
-    BookService bookService;
-    UserService userService;
+    private final FeedbackRepository feedbackRepository;
+    private final UserLocal userLocal;
+    private final FeedbackMapper feedbackMapper;
+    private final BookService bookService;
+    private final UserService userService;
 
     @Autowired
     public FeedbackServiceImpl(FeedbackRepository feedbackRepository, UserLocal userLocal
@@ -56,14 +57,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
         Books books = bookService.getById(bookId);
-        Feedback feedback = feedbackMapper.fromDTO(feedbackRequestDTO);
 
-        List<Feedback> listFeedbackUser = users.getFeedbacks();
+        if(feedbackRepository.existsByUsersAndBooks(users, books)){
+            throw new ConstraintViolateException("User cannot rating an book two times !!!");
+        }
+
+        Feedback feedback = feedbackMapper.fromDTO(feedbackRequestDTO);
         feedback.setBooks(books);
         feedback.setUsers(users);
-
-        ifNotExistThenContinue(listFeedbackUser, books);
-
         return this.feedbackRepository.save(feedback);
     }
 
@@ -78,10 +79,31 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public Page<FeedbackRespondDTO> getPageByBook(int page, int size, char mode, float filter, int bookId) {
         Pageable pageable = createPage(page, size, mode);
-        Page<FeedbackRespondDTO> pageFeedback = this.feedbackRepository.getPageFeedback(pageable, filter, bookId);
+        float max = (filter == 0) ? 6 : filter + 1;
+
+        Page<FeedbackRespondDTO> pageFeedback = this.feedbackRepository.getPageFeedback(pageable, filter, max, bookId);
 
         if(!pageFeedback.hasContent())  throw new ResourceNotFoundException("Page is Empty");
         return pageFeedback;
+    }
+
+    @Override
+    public RateCountingRespondDTO countRatingPoint(int bookId) {
+        Books books = bookService.getById(bookId);
+        int counterTerribleRate = feedbackRepository.countByRatingPointIsBetweenAndBooks(0,2, books);
+        int counterBadRate = feedbackRepository.countByRatingPointIsBetweenAndBooks(2,3, books);
+        int counterNormalRate = feedbackRepository.countByRatingPointIsBetweenAndBooks(3,4,books);
+        int counterGoodRate = feedbackRepository.countByRatingPointIsBetweenAndBooks(4, 5, books);
+        int counterWonderfulRate = feedbackRepository.countByRatingPointIsBetweenAndBooks(5, 6, books);
+
+        return RateCountingRespondDTO.builder()
+                                     .terrible(counterTerribleRate)
+                                     .bad(counterBadRate)
+                                     .normal(counterNormalRate)
+                                     .good(counterGoodRate)
+                                     .wonderful(counterWonderfulRate)
+                                     .build();
+
     }
 
     private Pageable createPage(int page, int size, char mode){
@@ -92,15 +114,5 @@ public class FeedbackServiceImpl implements FeedbackService {
             default -> throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
         };
         return PageRequest.of(page, size, sort);
-    }
-
-    private void ifNotExistThenContinue(List<Feedback> listFeedbackUser, Books books){
-        listFeedbackUser.stream()
-                .filter(feedback1 -> feedback1.getBooks().equals(books))
-                .findAny()
-                .ifPresent(s ->
-                {
-                    throw new ConstraintViolateException("User cannot rating an book two times !!!");
-                });
     }
 }

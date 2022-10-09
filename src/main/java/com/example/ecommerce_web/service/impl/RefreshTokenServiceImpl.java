@@ -8,7 +8,6 @@ import com.example.ecommerce_web.model.entities.RefreshToken;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.RefreshTokenRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
-import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.RefreshTokenService;
 import com.example.ecommerce_web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Ref;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,18 +23,16 @@ import java.util.UUID;
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
 
-    RefreshTokenRepository refreshTokenRepository;
-    UserService userService;
-    UserLocal userLocal;
-    JwtUtils jwtUtils;
-    long refreshExpiration;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
+    private final long refreshExpiration;
 
     @Autowired
-    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, UserService userService,
-                                   UserLocal userLocal, @Value("${ecommerce.app.jwtRefreshExpirationMs}") long refreshExpiration, JwtUtils jwtUtils) {
+    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository, UserService userService
+                                    , @Value("${ecommerce.app.jwtRefreshExpirationMs}") long refreshExpiration, JwtUtils jwtUtils) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userService = userService;
-        this.userLocal = userLocal;
         this.refreshExpiration = refreshExpiration;
         this.jwtUtils = jwtUtils;
     }
@@ -52,14 +48,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken createByUserName(String userName) {
-        System.out.println("Hi");
-
         Date now = new Date();
         Users users = userService.findByUserName(userName);
         Date expiresDuration = new Date(now.getTime() + refreshExpiration);
         String token = UUID.randomUUID().toString();
-
-        System.out.println("Hello");
 
         RefreshToken refreshToken = RefreshToken.builder()
                                                 .expired(expiresDuration)
@@ -78,7 +70,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         String userName = refreshToken.getUsers().getUserName();
 
         String jwtToken = Optional.of(refreshToken)
-                                  .filter(this::verify)
+                                  .filter(this::isNotExpired)
                                   .map(RefreshToken::getUsers)
                                   .map(Users::getUserName)
                                   .map(jwtUtils::generateTokenByUserName)
@@ -95,7 +87,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public boolean verify(RefreshToken refreshToken) {
+    public boolean isNotExpired(RefreshToken refreshToken) {
         Date now = new Date();
         return refreshToken.getExpired().after(now);
     }

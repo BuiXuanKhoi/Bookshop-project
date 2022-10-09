@@ -2,12 +2,14 @@ package com.example.ecommerce_web.controller;
 
 import com.example.ecommerce_web.mapper.OrderMapper;
 import com.example.ecommerce_web.model.dto.respond.OrderRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.PageManageOrder;
 import com.example.ecommerce_web.model.entities.Orders;
 import com.example.ecommerce_web.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,7 @@ public class OrderController {
     public List<OrderRespondDTO> getListOrder(){
         return this.ordersService.findAllByLocalUser()
                                  .stream()
+                                 .sorted(Comparator.comparing(Orders::getOrderId))
                                  .map(orderMapper::toDTO)
                                  .collect(Collectors.toList());
     }
@@ -43,5 +46,13 @@ public class OrderController {
     public OrderRespondDTO updateOrderState(@PathVariable int id){
         Orders orders =  this.ordersService.updateState(id);
         return orderMapper.toDTO(orders);
+    }
+
+    @GetMapping("/manage")
+    public PageManageOrder getPageManageOrder(
+            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "search", defaultValue = "%", required = false) String search
+    ){
+        return this.ordersService.getPageForManage(page, search);
     }
 }

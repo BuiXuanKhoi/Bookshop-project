@@ -1,10 +1,8 @@
 package com.example.ecommerce_web.service.impl;
 
 
-import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.request.UserRequestDTO;
-import com.example.ecommerce_web.model.dto.request.EmailDetail;
 import com.example.ecommerce_web.model.dto.request.LoginRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.LoginRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.MessageRespond;
@@ -15,10 +13,7 @@ import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserDetail;
 import com.example.ecommerce_web.service.*;
-import com.example.ecommerce_web.utils.MyDateUtil;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +24,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,32 +31,28 @@ import java.util.stream.Collectors;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    UserRepository userRepository;
-    InformationRepository informationRepository;
-    MyDateUtil myDateUtil;
-    ModelMapper modelMapper;
-    AuthenticationManager authenticationManager;
-    PasswordEncoder encoder;
-    JwtUtils jwtUtils;
-    UserService userService;
-    InformationService informationService;
-    RefreshTokenService refreshTokenService;
+    private final UserRepository userRepository;
+    private final InformationRepository informationRepository;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder encoder;
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
+    private final InformationService informationService;
+    private final RefreshTokenService refreshTokenService;
     private final int EXPIRATION;
 
 
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository,
-                           InformationRepository informationRepository, MyDateUtil myDateUtil,
-                           ModelMapper modelMapper, JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
+                           InformationRepository informationRepository,
+                           JwtUtils jwtUtils, PasswordEncoder passwordEncoder,
                            AuthenticationManager authenticationManager,
                            UserService userService, InformationService informationService, RefreshTokenService refreshTokenService,
                            @Value("${ecommerce.app.jwtExpirationMs}") final int EXPIRATION
                            ) {
         this.userRepository = userRepository;
         this.informationRepository = informationRepository;
-        this.myDateUtil = myDateUtil;
-        this.modelMapper = modelMapper;
         this.jwtUtils = jwtUtils;
         this.encoder = passwordEncoder;
         this.authenticationManager = authenticationManager;

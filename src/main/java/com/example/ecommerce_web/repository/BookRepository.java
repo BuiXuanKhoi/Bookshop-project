@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Repository
-public interface BookRepository extends BasicRepository<Books> {
+public interface BookRepository extends JpaRepository<Books, Integer> {
 
 
     @Query(value = "select distinct NEW com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO(" +

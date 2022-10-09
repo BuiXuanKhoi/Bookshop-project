@@ -14,14 +14,12 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private final String SECRET_KEY;
+    private  final String SECRET_KEY;
+    private final long EXPIRATION;
 
-    private final int EXPIRATION;
-
-    private static Logger logger =  LoggerFactory.getLogger(JwtUtils.class);
 
     public JwtUtils( @Value("${ecommerce.app.jwtSecret}") final String SECRET_KEY,
-                     @Value("${ecommerce.app.jwtExpirationMs}") final int EXPIRATION) {
+                     @Value("${ecommerce.app.jwtExpirationMs}") final long EXPIRATION) {
         this.SECRET_KEY = SECRET_KEY;
         this.EXPIRATION = EXPIRATION;
     }

@@ -1,6 +1,8 @@
 package com.example.ecommerce_web.repository;
 
+import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.CartItem;
+import com.example.ecommerce_web.model.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,13 +15,14 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface CartItemRepository extends BasicRepository<CartItem> {
+public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 
-    @Query(value = "select * from cart_items where user_id = :userId and book_id = :bookId", nativeQuery = true)
-    Optional<CartItem> getCartItemByBooksAndUsers(int userId, int bookId);
+    Optional<CartItem> getCartItemByBooksAndUsers(Users users, Books books);
 
 
     @Modifying
     @Query(value = "delete from cart_items where cart_item_id = :cartId", nativeQuery = true)
     void deleteByCartId(int cartId);
+
+    boolean existsByBooks(Books books);
 }

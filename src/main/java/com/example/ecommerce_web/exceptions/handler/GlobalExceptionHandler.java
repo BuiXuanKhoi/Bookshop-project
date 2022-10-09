@@ -2,7 +2,6 @@ package com.example.ecommerce_web.exceptions.handler;
 
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
-import com.example.ecommerce_web.exceptions.MethodNotImplementedException;
 import com.example.ecommerce_web.exceptions.RefreshTokenExpiredException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.respond.ErrorRespond;
@@ -71,7 +70,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected  ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex){
 
         ErrorRespond errorRespond = ErrorRespond.builder()
-                                                .message("You don't have enough permission to access this api")
+                                                .message("You don't have enough permission to access this resource")
                                                 .statusCode(HttpStatus.METHOD_NOT_ALLOWED.value())
                                                 .build();
         return new ResponseEntity<>(errorRespond, HttpStatus.FORBIDDEN);
@@ -89,16 +88,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorRespond, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler({MethodNotImplementedException.class})
-    protected ResponseEntity<?> handleMethodNotImplementedException(MethodNotImplementedException ex){
-
-        ErrorRespond errorRespond = ErrorRespond.builder()
-                                                .message(ex.getMessage())
-                                                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                                                .build();
-
-        return new ResponseEntity<>(errorRespond, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     protected ResponseEntity<?> handleMethodTypeMisMatchException(MethodArgumentTypeMismatchException ex){

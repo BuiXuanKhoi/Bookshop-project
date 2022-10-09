@@ -15,8 +15,8 @@ import java.util.List;
 
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
-    OrderItemsRepository orderItemsRepository;
-    ModelMapper modelMapper;
+    private final OrderItemsRepository orderItemsRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public OrderItemServiceImpl(OrderItemsRepository orderItemsRepository, ModelMapper modelMapper){
@@ -42,7 +42,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public void saveOrderItemWith(Orders orders, List<OrderItems> orderItemsList) {
-        orderItemsList.stream().forEach(orderItems -> {
+        orderItemsList.forEach(orderItems -> {
             orderItems.setOrders(orders);
             this.orderItemsRepository.save(orderItems);
         });

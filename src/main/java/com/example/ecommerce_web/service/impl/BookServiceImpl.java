@@ -3,12 +3,9 @@ package com.example.ecommerce_web.service.impl;
 import com.example.ecommerce_web.constant.BookState;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.BookMapper;
-import com.example.ecommerce_web.mapper.BookMapperImpl;
 import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyBookRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.entities.*;
 import com.example.ecommerce_web.repository.*;
 import com.example.ecommerce_web.security.service.UserLocal;
@@ -17,54 +14,43 @@ import com.example.ecommerce_web.service.BookService;
 import com.example.ecommerce_web.service.ClassifyService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.validator.ListValidator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
-import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import java.util.Collections;
+
 
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
 
-    BookRepository bookRepository;
-    AuthorService authorService;
-    ClassifyRepository classifyRepository;
-    AuthorRepository authorRepository;
-    UserRepository userRepository;
-    UserLocal userLocal;
-    CategoryRepository categoryRepository;
-    FeedbackRepository feedbackRepository;
-    ClassifyService classifyService;
-    BookMapper bookMapper;
-    UserService userService;
+    private final BookRepository bookRepository;
+    private final AuthorService authorService;
+    private final AuthorRepository authorRepository;
+    private final UserLocal userLocal;
+    private final CategoryRepository categoryRepository;
+    private final ClassifyService classifyService;
+    private final BookMapper bookMapper;
+    private final UserService userService;
 
 
     @Autowired
     public BookServiceImpl(BookRepository bookRepository
-            , AuthorService authorService, ClassifyRepository classifyRepository
-            , AuthorRepository authorRepository, UserRepository userRepository, UserLocal userLocal,
-                           CategoryRepository categoryRepository, FeedbackRepository feedbackRepository,
+            , AuthorService authorService
+            , AuthorRepository authorRepository, UserLocal userLocal,
+                           CategoryRepository categoryRepository,
                            ClassifyService classifyService, BookMapper bookMapper, UserService userService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
-        this.classifyRepository = classifyRepository;
         this.authorRepository = authorRepository;
-        this.userRepository = userRepository;
         this.userLocal = userLocal;
         this.categoryRepository = categoryRepository;
-        this.feedbackRepository = feedbackRepository;
         this.classifyService = classifyService;
         this.bookMapper = bookMapper;
         this.userService = userService;
@@ -73,8 +59,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Books getById(int id) {
         return this.bookRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Book Not Found With ID: " + id)
-        );
+                () -> new ResourceNotFoundException("Book Not Found With ID: " + id));
     }
 
     @Override
@@ -111,7 +96,7 @@ public class BookServiceImpl implements BookService {
 
         List<Classify> classifyList = Arrays.stream(listCategoryId)
                                             .boxed()
-                                            .map(id -> classifyService.createClassify(id))
+                                            .map(classifyService::createClassify)
                                             .collect(Collectors.toList());
 
         Books books = bookMapper.fromDTO(bookRequestDTO);

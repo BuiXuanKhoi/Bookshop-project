@@ -10,21 +10,15 @@ import com.example.ecommerce_web.model.dto.respond.MessageRespond;
 import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
 import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.UserRepository;
-import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.security.service.UserLocal;
-import com.example.ecommerce_web.service.EmailService;
 import com.example.ecommerce_web.service.UserService;
 import com.example.ecommerce_web.utils.MyDateUtil;
-import org.apache.catalina.User;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,21 +28,18 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    UserRepository userRepository;
-    MyDateUtil myDateUtil;
-    AuthenticationManager authenticationManager;
-    PasswordEncoder encoder;
-    JwtUtils jwtUtils;
-    UserLocal userLocal;
+    private final UserRepository userRepository;
+    private final MyDateUtil myDateUtil;
+    private final PasswordEncoder encoder;
+    private final UserLocal userLocal;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MyDateUtil myDateUtil,
-                           AuthenticationManager authenticationManager, PasswordEncoder encoder, JwtUtils jwtUtils,
+                           PasswordEncoder encoder,
                            UserLocal userLocal
                            ) {
         this.userRepository = userRepository;
         this.myDateUtil = myDateUtil;
-        this.authenticationManager = authenticationManager;
         this.encoder = encoder;
         this.userLocal = userLocal;
     }
@@ -134,7 +125,6 @@ public class UserServiceImpl implements UserService {
     public Page<UserRespondDTO> getPage(int page){
 
         Pageable pageable = PageRequest.of(page,10);
-
         Page<UserRespondDTO> userList = this.userRepository.getPage(pageable);
 
         if(userList.hasContent()){
