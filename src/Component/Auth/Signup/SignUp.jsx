@@ -191,8 +191,7 @@ const SignUp = () =>{
                                rules = {[
                                    {max:128, message: "Your last name must be less than 128 characters",},
                                    {
-                                       // pattern: new RegExp("^[a-zA-Z]+( [a-zA-Z]+)+$"),
-                                       pattern: new RegExp("^[A-Z]([a-z])+"),
+                                       pattern: new RegExp("^[a-zA-Z'.]+$"),
                                        message: "Your last name cannot contain the number or special characters",
                                    },
                                    () =>({
@@ -212,7 +211,7 @@ const SignUp = () =>{
                                rules={[
                                    {max: 128, message: "Your first name must be less than 128 character",},
                                    {
-                                       pattern: new RegExp("^[a-zA-Z'.]+$"),
+                                       pattern: new RegExp("^[A-Z]([a-z])+"),
                                        message: "Your first name cannot contain the number or special characters"
                                    },
                                    () =>({

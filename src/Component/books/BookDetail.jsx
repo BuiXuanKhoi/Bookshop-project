@@ -319,7 +319,7 @@ export default function BookDetail(){
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={10} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                        <Button  style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}></Button>
+                                        <Button style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}></Button>
                                     </Col>
                                 </Row>
 

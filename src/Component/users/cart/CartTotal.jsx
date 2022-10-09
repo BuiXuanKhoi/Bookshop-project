@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import './Cart.css';
+
 import {Button, Col, Modal, Row} from "antd";
 import axios from "axios";
 import './Cart.css';
@@ -48,7 +49,6 @@ export default function CartTotal({emptyList,cartList,total,config}){
                     handleAddSuccess();
                 })
                 .catch((error) =>{
-                    console.log("Hello")
                     console.log(error)
                     window.location.reload();
                 })
@@ -76,7 +76,7 @@ export default function CartTotal({emptyList,cartList,total,config}){
                     <Row style={{marginTop:"10%"}}>
                         <Col span={20} offset={2}>
                             <p style={{fontSize:"2.5vw",fontWeight:"bolder"}}>
-                                ${total}
+                                ${Math.round(total*100)/100}
                             </p>
                         </Col>
                     </Row>
