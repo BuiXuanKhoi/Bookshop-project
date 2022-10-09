@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookRespondDTO {
-
+    private int bookId;
     private String bookName;
     private String description;
     private float bookPrice;
