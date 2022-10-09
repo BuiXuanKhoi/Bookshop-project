@@ -9,6 +9,12 @@
     left: 70px;
 }
 
+.user-detail-block{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
 
 
 .user-table-column-container{

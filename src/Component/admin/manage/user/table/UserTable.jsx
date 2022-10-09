@@ -19,6 +19,9 @@ export default function UserTable({config, token}){
 
     const [totalElements, setTotalElements] = useState(0);
     const [isOpenDetail, setIsOpenDetail] = useState(false);
+    const [isOpenBlock, setIsOpenBlock] = useState(false);
+    const [isOpenUnlock, setIsUnLock] = useState(false);
+    const [id, setId] = useState(0);
 
     const [users, setUsers] = useState([{
         userId: 0,
@@ -59,9 +62,15 @@ export default function UserTable({config, token}){
             .catch((err) => console.log(err))
     }
 
-    const blockUser = (userId) => {
-        axios.put('https://ecommerce-web0903.herokuapp.com/api/users/' + userId, null, config)
-            .then((res) => console.log(res))
+    const blockUser = () => {
+        axios.put('https://ecommerce-web0903.herokuapp.com/api/users/' + id, null, config)
+            .then((res) => window.location.reload())
+            .catch((err) => console.log(err))
+    }
+
+    const unblockUser = () => {
+        axios.put('https://ecommerce-web0903.herokuapp.com/api/users/' + id + '/state', null, config)
+            .then((res) => window.location.reload())
             .catch((err) => console.log(err))
     }
 
@@ -71,6 +80,22 @@ export default function UserTable({config, token}){
 
     const closeDetailModal = () => {
         setIsOpenDetail(false);
+    }
+
+    const openBlockModal = () => {
+        setIsOpenBlock(true);
+    }
+
+    const closeBlockModal = () => {
+        setIsOpenBlock(false);
+    }
+
+    const openUnblockModal = () => {
+        setIsUnLock(true);
+    }
+
+    const closeUnblockModal = () => {
+        setIsUnLock(false);
     }
 
     const changePage = (number) => {
@@ -94,15 +119,6 @@ export default function UserTable({config, token}){
         console.log(id)
     }
 
-    const handleBlock = (id) => {
-        blockUser(id);
-        window.location.reload();
-    }
-
-    const handleUnlock = (id) => {
-        console.log(id);
-    }
-
     const handleFind = (user) => {
         setDetail(user);
         openDetailModal();
@@ -120,19 +136,35 @@ export default function UserTable({config, token}){
                 footer={null}
                 onCancel={closeDetailModal}
             >
-                <div>{detail.userName}</div>
-                <div>{detail.firstName}  {detail.lastName}</div>
-                <div>{detail.userId}</div>
-                <div>{detail.userState}</div>
-                <div>{detail.createDate}</div>
-                <div>{detail.email}</div>
-                <div>{detail.role}</div>
+                <div className="user-detail-block">
+                    <h2 style={{textAlign:"center"}}>{detail.userName}'s Information</h2>
+                    <div>Username:  {detail.userName}</div>
+                    <div>Full Name:  {detail.firstName}  {detail.lastName}</div>
+                    <div>User id:  {detail.userId}</div>
+                    <div>State:  {detail.userState}</div>
+                    <div>Create Date:  {detail.createDate}</div>
+                    <div>E-mail:  {detail.email}</div>
+                    <div>Role:  {detail.role}</div>
+
+                </div>
+
 
             </Modal>
             <Modal
                 title="Are you sure ?"
+                open={isOpenBlock}
+                onOk={blockUser}
+                onCancel={closeBlockModal}
             >
-                <span>Are you sure to delete this user ?</span>
+                <span>Are you sure to block this user ?</span>
+            </Modal>
+            <Modal
+                title="Are you sure ?"
+                open={isOpenUnlock}
+                onOk={unblockUser}
+                onCancel={closeUnblockModal}
+            >
+                <span>Are you sure to unlock this user ?</span>
             </Modal>
             <table className="user-table-container">
                 <thead className="user-table-column">
@@ -145,7 +177,7 @@ export default function UserTable({config, token}){
                 <tbody>
                 {
                     users.map((user) => (
-                        <tr className="user-table-row-container"  >
+                        <tr className="user-table-row-container"  key={user.userId}>
                             <td onClick={() => handleFind(user)}>{user.userName}</td>
                             <td onClick={() => handleFind(user)}>{user.firstName}</td>
                             <td onClick={() => handleFind(user)}>{user.lastName}</td>
@@ -160,10 +192,15 @@ export default function UserTable({config, token}){
                                 <Button className="btn-style">
                                     {
                                         user.userState === 'UNBLOCK' ? (
-                                            <FontAwesomeIcon icon={faBan} onClick={() => handleBlock(user.userId)}/>
-                                        ) :
-                                            (
-                                                <FontAwesomeIcon icon={faUnlock} onClick={() => handleUnlock(user.userId)}/>
+                                            <FontAwesomeIcon icon={faBan} onClick={() => {
+                                                    setId(user.userId);
+                                                    openBlockModal();
+                                            }}/>
+                                        ) : (
+                                                <FontAwesomeIcon icon={faUnlock} onClick={() => {
+                                                    setId(user.userId);
+                                                    openUnblockModal();
+                                                }}/>
                                             )
                                     }
                                 </Button>

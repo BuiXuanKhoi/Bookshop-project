@@ -31,5 +31,6 @@ export const AdminRoute = [
         component: <InformationPage/>,
         title: 'Information',
         icon: <FontAwesomeIcon icon={faUser}/>
-    }
+    },
+
 ]
