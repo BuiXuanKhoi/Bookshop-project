@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+ import React, {useEffect, useState} from "react";
 import './ManageBookTable.css'
 import Modal from "antd/es/modal/Modal";
 import {Button, Pagination} from "antd";
@@ -107,7 +107,7 @@ export default function ManageBookTable(){
                             </td>
                             <td>
                                 <Button className="btn-style" onClick={() => handleDelete(book.bookId)}>
-                                        <FontAwesomeIcon icon={faTrash}/>
+                                    <FontAwesomeIcon icon={faTrash}/>
                                 </Button>
                             </td>
                         </tr>

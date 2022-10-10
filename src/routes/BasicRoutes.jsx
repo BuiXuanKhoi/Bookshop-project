@@ -8,6 +8,7 @@ export const BasicRoutes = (routes) =>  [
     routes[0],
     routes[1],
     routes[2],
+    routes[3],
     {
         path: '/',
         component: <Home/>,

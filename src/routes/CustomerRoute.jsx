@@ -8,7 +8,8 @@ import InformationPage from "../Component/information/InformationPage";
 import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBagShopping, faCartShopping, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBagShopping, faCartShopping, faStop, faUser} from "@fortawesome/free-solid-svg-icons";
+import No from "../Component/admin/manage/book/table/No";
 
 
 export const CustomerRoute = [
@@ -32,5 +33,11 @@ export const CustomerRoute = [
         component: <Order/>,
         title: 'Order',
         icon: <FontAwesomeIcon icon={faBagShopping}/>
+    },
+    {
+        path:'/no',
+        component: <No/>,
+        title: 'No',
+        icon: <FontAwesomeIcon icon={faStop}/>,
     }
 ]

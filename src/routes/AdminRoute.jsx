@@ -6,13 +6,13 @@ import Login from "../Component/Auth/login/Login";
 import SignUp from "../Component/Auth/Signup/SignUp";
 import BookDetail from "../Component/books/BookDetail";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBook, faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
+import {faBook, faCartShopping, faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
 import ManageBook from "../Component/admin/manage/book/ManageBook";
 import ManageCustomer from "../Component/admin/manage/user/ManageCustomer";
+import ManageOrder from "../Component/admin/manage/book/table/ManageOrder";
 
 
 export const AdminRoute = [
-
     {
         path: '/manage/book',
         component: <ManageBook/>,
@@ -31,5 +31,11 @@ export const AdminRoute = [
         component: <InformationPage/>,
         title: 'Information',
         icon: <FontAwesomeIcon icon={faUser}/>
-    }
+    },
+    {
+        path: '/manage/orders',
+        component: <ManageOrder/>,
+        title: ' Manage Orders',
+        icon: <FontAwesomeIcon icon={faCartShopping}/>
+    },
 ]

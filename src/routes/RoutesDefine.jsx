@@ -4,7 +4,6 @@ import BlankPage from "../Component/BlankPage";
 import {Space} from "antd";
 
 export default function RoutesDefine({routes}){
-
     console.log(routes);
 
     return(
