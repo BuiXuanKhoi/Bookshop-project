@@ -10,19 +10,22 @@ import java.util.Map;
 
 @Configuration
 public class CloudinaryConfig {
-
-    @Bean
-    public Cloudinary cloudinaryConfig(){
-        final String API_KEY = "225229435733562";
-        final String API_SECRET_KEY = "mSGGj_5hEZhdaZcywQBg3DVTD94";
-        final String CLOUD_NAME = "university-of-sciene";
-
-        return new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", CLOUD_NAME,
-                "api_key", API_KEY,
-                "api_secret", API_SECRET_KEY
-        ));
-
-    }
+//
+//    @Bean
+//    public Cloudinary cloudinaryConfig(){
+//        Cloudinary cloudinary ;
+//        final String API_KEY = "225229435733562";
+//        final String API_SECRET_KEY = "mSGGj_5hEZhdaZcywQBg3DVTD94";
+//        final String CLOUD_NAME = "university-of-sciene";
+//
+//        cloudinary = new  Cloudinary(ObjectUtils.asMap(
+//                "cloud_name", CLOUD_NAME,
+//                "api_key", API_KEY,
+//                "api_secret", API_SECRET_KEY
+//        ));
+//
+//        return cloudinary;
+//
+//    }
 
 }
