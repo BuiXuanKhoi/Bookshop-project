@@ -37,12 +37,9 @@ public class BookServiceTest {
     BookRepository bookRepository;
     ModelMapper modelMapper;
     AuthorService authorService;
-    ClassifyRepository classifyRepository;
     AuthorRepository authorRepository;
-    UserRepository userRepository;
     UserLocal userLocal;
     CategoryRepository categoryRepository;
-    FeedbackRepository feedbackRepository;
     BookServiceImpl bookService;
     ClassifyService classifyService;
     BookMapper bookMapper;

@@ -82,7 +82,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public PageManageOrder getPageForManage(int page, String search) {
 
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(page, 10);
         Page<ManageOrderRespondDTO> manageOrderPage = ordersRepository.getPageManageOrders(pageable);
         List<ManageOrderRespondDTO> listManageOrder = manageOrderPage.getContent();
 
