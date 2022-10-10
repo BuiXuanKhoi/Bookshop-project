@@ -18,8 +18,9 @@ export default function ManageBookTable(){
     const [page, setPage] = useState(0);
     const [mode, setMode] = useState('na');
     const [totalElements, setTotalElements] = useState(0);
+    const [isOpenDetail, setIsOpenDetail] = useState(false);
 
-    const [bookDetail, setBookDetail] = useState([{
+    const [books, setBooks] = useState([{
         bookId : 0,
         bookName: '',
         bookPrice : 0.0,
@@ -28,12 +29,21 @@ export default function ManageBookTable(){
         authorName : ''
     }])
 
+    const [bookDetail, setBookDetail] = useState({
+        bookId : 0,
+        bookName: '',
+        bookPrice : 0.0,
+        ratingPoint : 0.0,
+        imageLink : '',
+        authorName : ''
+    })
+
     const getBookPage = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&search=' + search + '&mode=' + mode, authorize)
             .then((res) => {
                 console.log(res);
                 setTotalElements(res.data.totalElements);
-                setBookDetail(res.data.content);
+                setBooks(res.data.content);
             })
             .catch((err) => console.log(err))
     }
@@ -47,7 +57,8 @@ export default function ManageBookTable(){
     },[page])
 
     const handleFind = (book) => {
-        console.log(book);
+        setBookDetail(book);
+        openBookDetailModal();
     }
 
     const handleEdit = (bookId) => {
@@ -62,24 +73,30 @@ export default function ManageBookTable(){
         setPage(number - 1);
     }
 
+    const openBookDetailModal = () => {
+        setIsOpenDetail(true);
+    }
+
+    const closeBookDetailModal = () => {
+        setIsOpenDetail(false);
+    }
+
+
     return(
         <div>
-            {/*<Modal*/}
-            {/*    title="Book Information"*/}
-            {/*    open={isOpenDetail}*/}
-            {/*    closable={true}*/}
-            {/*    footer={null}*/}
-            {/*    onCancel={closeDetailModal}*/}
-            {/*>*/}
-            {/*    <div>{bookDetail.bo}</div>*/}
-            {/*    <div>{detail.firstName}  {detail.lastName}</div>*/}
-            {/*    <div>{detail.userId}</div>*/}
-            {/*    <div>{detail.userState}</div>*/}
-            {/*    <div>{detail.createDate}</div>*/}
-            {/*    <div>{detail.email}</div>*/}
-            {/*    <div>{detail.role}</div>*/}
-
-            {/*</Modal>*/}
+            <Modal
+                title="Book Information"
+                open={isOpenDetail}
+                closable={true}
+                footer={null}
+                onCancel={closeBookDetailModal}
+            >
+                <div>{bookDetail.bookName}</div>
+                <div>{bookDetail.bookId}</div>
+                <div>{bookDetail.bookPrice}</div>
+                <div>{bookDetail.authorName}</div>
+                <div>{bookDetail.ratingPoint}</div>
+            </Modal>
             <Modal
                 title="Are you sure ?"
             >
@@ -94,7 +111,7 @@ export default function ManageBookTable(){
                 </thead>
                 <tbody>
                 {
-                    bookDetail.map((book) => (
+                    books.map((book) => (
                         <tr className="book-table-row-container"  >
                             <td onClick={() => handleFind(book)}>{book.bookName}</td>
                             <td onClick={() => handleFind(book)}>{book.bookPrice}</td>

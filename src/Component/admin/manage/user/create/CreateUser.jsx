@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, DatePicker, Drawer, Form, Select, Space} from "antd";
 import Input from "antd/lib/input/Input";
 import {Option} from "antd/es/mentions";
@@ -8,15 +8,49 @@ import axios from "axios";
 export default function ({isOpen, close}){
 
     const [form] = Form.useForm();
+    const state = useRef(false);
+
+    const [userDetail, setUserDetail] = useState({
+        userName : '',
+        phoneNumber : '',
+        address : '',
+        dateOfBirth: '',
+        firstName : '',
+        lastName: '',
+        email : '',
+        role : 'ADMIN'
+    })
 
 
     const handleFinish = (values) => {
-        console.log(values);
+        setUserDetail({
+            userName: values.userName,
+            phoneNumber: values.phoneNumber,
+            address: values.location,
+            dateOfBirth: values.dateOfBirth.format('DD/MM/YYYY'),
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            role: 'ADMIN'
+        })
     }
 
+
+
     const createUser = () => {
-        axios.post()
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/auth/signup', userDetail)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
     }
+
+    useEffect(() => {
+        if(state.current){
+            createUser();
+        }else{
+            state.current = true;
+        }
+    },[userDetail])
+
 
     const formItemLayout = {
         labelCol: {
@@ -55,7 +89,7 @@ export default function ({isOpen, close}){
 
     return(
         <Drawer
-            title="Create new account"
+            title="Create new admin account"
             width={700}
             open={isOpen}
             onClose={close}
@@ -65,6 +99,7 @@ export default function ({isOpen, close}){
                     <Button onClick={form.submit} type="primary">Submit</Button>
                 </Space>
             }
+            bodyStyle={{ justifyContent:"center", display: "flex", marginTop: "30px"}}
         >
             <Form
                 {...formItemLayout}
@@ -72,7 +107,7 @@ export default function ({isOpen, close}){
                 name="register"
                 onFinish={handleFinish}
                 scrollToFirstError
-                className="create-user-container"
+
             >
                 <Form.Item
                     name="userName"

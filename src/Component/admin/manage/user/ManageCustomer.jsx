@@ -10,35 +10,6 @@ import CreateUser from "./create/CreateUser";
 import {SecurityContext} from "../../../../App";
 
 
-const column = [
-    {
-        title: 'User name',
-        dataIndex: 'userName',
-        sorter : true
-    },
-    {
-        title : 'First Name',
-        dataIndex: 'firstName',
-        sorter: true
-    },
-    {
-        title: 'Last Name',
-        dataIndex: 'lastName',
-        sorter : true
-    },
-    {
-        title: 'E-mail',
-        dataIndex: 'email',
-        sorter : true
-    },
-    {
-        title: 'Date Of Birth',
-        dataIndex: 'dateOfBirth',
-        sorter : true
-    }
-]
-
-
 export default function ManageCustomer(){
 
     const [isOpen, setIsOpen] = useState(false);
@@ -52,13 +23,11 @@ export default function ManageCustomer(){
     }
 
     const [security, setSecurity] = useContext(SecurityContext);
-    const [sort, setSort] = useState('ea');
 
     const [token, setToken] = useState('');
     const config = {
         headers: {Authorization: 'Bearer ' + security.token}
     };
-
 
     const onChange = (sorter) => {
         console.log(sorter);
