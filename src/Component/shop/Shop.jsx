@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Avatar, Button, Card, Col, Dropdown, Menu, Pagination, Row, Space} from "antd";
 import FilterColumn from "./setting/FilterColumn";
-import DisplayBooks from "./display/DisplayBooks";
 import axios from "axios";
 import './Shop.css'
 import ButtonArrow from "./ButtonArrow";
@@ -27,7 +26,7 @@ export default function Shop(){
     const[isLoading, setIsLoading] = useState(false);
 
     const displayBooks = () => {
-        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&mode=' + mode + '&searchCode=' + search + '&filter=' + categories)
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&mode=' + mode + '&searchCode=' + search + '&filter=' + categories + '&author=' + authors)
             .then((res) => {
                 setPageBooks(res.data.content)
                 setCurrentPage(res.data.number)
@@ -47,6 +46,7 @@ export default function Shop(){
         {
             authors.splice(authors.indexOf(e.target.value), 1);
         }
+        displayBooks();
     }
 
     const updateCategories = (e) => {
@@ -63,7 +63,7 @@ export default function Shop(){
     useEffect(() => {
         displayBooks();
         console.log(page)
-    },[mode, page])
+    },[mode, page, categories, authors])
 
     useEffect(() =>{
         displayBooks();

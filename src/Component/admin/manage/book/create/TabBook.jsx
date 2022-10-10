@@ -2,6 +2,7 @@ import React, {useRef, useState} from "react";
 import {Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {Option} from "antd/es/mentions";
+import axios from "axios";
 
 export default function TabBook({formItemLayout, form, config}){
 
@@ -21,6 +22,12 @@ export default function TabBook({formItemLayout, form, config}){
 
     const handleCreateBook = (values) => {
         console.log(values);
+    }
+
+    const createBook = () => {
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/books', null, config)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err))
     }
 
     return(

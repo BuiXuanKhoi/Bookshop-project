@@ -106,10 +106,11 @@ export default function Password({isOpen, closeChangePasswordModal, config}){
     return(
         <>
             <Modal
+                title="Error"
                 closable={true}
                 centered
                 open={isFail}
-                onOk={closeFailModal}
+                footer={null}
                 onCancel={closeFailModal}
             >
                 <span>{errorMessage}</span>
