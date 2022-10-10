@@ -19,20 +19,20 @@ export default function Cart(){
     }
 
     const [quantityFlag, setQuantityFlag] = useState(0);
-    // const copyCartList = useRef([]);
+    const copyCartList = useRef([]);
     const [emptyList,setEmptyList] = useState(false);
     const [cartList,setCartList] = useState([{}]);
-    // const [cartListUse,setCartListUse] = useState()
+    const [cartListUse,setCartListUse] = useState()
     const flagForRegister = useRef(true);
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
                 setCartList(res.data);
                 setEmptyList(false);
-                // if(flagForRegister.current){
-                //     copyCartList.current = res.data;
-                //     flagForRegister.current= false;
-                //     }
+                if(flagForRegister.current){
+                    copyCartList.current = res.data;
+                    flagForRegister.current= false;
+                    }
                 }
             )
             .catch((error)=>{
@@ -56,7 +56,8 @@ export default function Cart(){
     useEffect(() => {
         calculateTotal();
     },[cartList])
-    return(
+
+    return (
         <>
             <Row style={{paddingTop:"10%"}}>
                 <Col span={24}>
@@ -74,7 +75,7 @@ export default function Cart(){
                         <Row className={"customerReviewList"}>
                             <BookTable  emptyList={emptyList} cartList={cartList} config={config} setQuantityFlag={setQuantityFlag}/>
                         </Row>
-                        <Row className={"customerReviewPost"}>
+                        <Row className={"customerReviewPost"} >
                             <CartTotal emptyList={emptyList} cartList={cartList} total={total} config={config}/>
                         </Row>
                     </Row>

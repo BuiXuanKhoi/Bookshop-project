@@ -215,14 +215,13 @@ export default function FeedbackTable ({bookID,config}) {
 
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks?page="+page+"&size="+size+"&mode="+mode+"&filter="+filter)
             .then((response)=>{
+                console.log(response.data)
                 setPageBook(response.data.content);
                 setCurrentPage(response.data.number);
                 setTotalElements(response.data.totalElements);
                 setDefaultPageSize(response.data.pageable.pageSize)
-                console.log(response)
             })
             .catch((error) =>{
-                console.log("Error");
                 console.log(error);
             })
     }
