@@ -15,6 +15,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer>{
             "select new com.example.ecommerce_web.model.alter.ManageOrderRespondDTO(" +
             "ord.orderId, usr.userName, 0.0f, ord.createDate, ord.updateDate, usr.userName, ord.orderState) " +
             "from Orders ord " +
-            "join ord.users usr")
-    Page<ManageOrderRespondDTO> getPageManageOrders(Pageable pageable);
+            "join ord.users usr " +
+            "where lower(usr.userName) like %:search%")
+    Page<ManageOrderRespondDTO> getPageManageOrders(Pageable pageable, String search);
 }

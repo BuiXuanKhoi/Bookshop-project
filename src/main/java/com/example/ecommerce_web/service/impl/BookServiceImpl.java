@@ -76,6 +76,7 @@ public class BookServiceImpl implements BookService {
         int[] listFilter = getCategoriesFilter(filter);
         int[] listAuthors = getAuthorsFilter(authors);
         Pageable pageable = createPage(page, mode);
+        searchCode = searchCode.toLowerCase();
         Page<BookFeatureRespondDTO> listBookFeature = bookRepository.getPageBook(pageable, searchCode, listFilter, listAuthors);
 
         if (!listBookFeature.hasContent()) throw new ResourceNotFoundException("This Page Is Empty !!!");
@@ -168,6 +169,7 @@ public class BookServiceImpl implements BookService {
     private Pageable createPage(int page, String sortBy){
         char field = sortBy.charAt(0);
         char mode = sortBy.charAt(1);
+        final int PAGE_SIZE = 20;
 
         String fieldSort = switch (field) {
             case 'p' -> "bookPrice";
@@ -183,7 +185,7 @@ public class BookServiceImpl implements BookService {
             default -> throw new ResourceNotFoundException("NOT FOUND MODE SORT !!!");
         };
 
-        return PageRequest.of(page, 20, sort);
+        return PageRequest.of(page, PAGE_SIZE, sort);
     }
 
     private int[] getAuthorsFilter(String authors){

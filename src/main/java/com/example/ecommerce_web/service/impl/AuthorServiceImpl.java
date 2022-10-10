@@ -37,13 +37,14 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findAll() {
         List<Author> listAuthor = this.authorRepository.findAll();
         return ListValidator.ofList(listAuthor).ifNotEmpty();
-
     }
 
     @Override
-    public Page<Author> getPage(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return this.authorRepository.findAll(pageable);
+    public Page<AuthorRespondDTO> getPage(int page, String search) {
+        final int PAGE_SIZE = 10;
+        search = search.toLowerCase();
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        return this.authorRepository.getPageAuthor(pageable, search);
     }
 
 

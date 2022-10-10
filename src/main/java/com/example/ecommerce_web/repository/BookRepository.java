@@ -23,7 +23,7 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "join bkk.classifies cls " +
             "join bkk.authors au " +
             "where " +
-            "bkk.bookName like %:searchCode% " +
+            "lower(bkk.bookName) like %:searchCode% " +
             "and " +
             "bkk.bookState = 'AVAILABLE' " +
             "and " +

@@ -147,12 +147,17 @@ public class BookController {
     }
 
     @GetMapping("/authors")
-    public List<AuthorRespondDTO> getPageAuthor(@RequestParam (name = "page", defaultValue = "0", required = false) int page){
-        List<Author> listAuthor = authorService.getPage(page).getContent();
+    public Page<AuthorRespondDTO> getPageAuthor(
+            @RequestParam (name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "search", defaultValue = "%", required = false) String search){
+        return this.authorService.getPage(page, search);
+    }
 
-        return ListValidator.ofList(listAuthor).ifNotEmpty()
-                                               .stream()
-                                               .map(authorMapper::toDTO)
-                                               .collect(Collectors.toList());
+    @GetMapping("/categories")
+    public Page<CategoryRespondDTO> getPageCategory(
+            @RequestParam (name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "search", defaultValue = "%", required = false) String search
+    ){
+        return this.categoryService.getPage(page, search);
     }
 }

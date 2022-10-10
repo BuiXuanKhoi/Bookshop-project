@@ -12,5 +12,5 @@ public interface AuthorService {
     Author add(Author author);
     Author getById(int id);
     List<Author> findAll();
-    Page<Author> getPage(int page);
+    Page<AuthorRespondDTO> getPage(int page, String search);
 }

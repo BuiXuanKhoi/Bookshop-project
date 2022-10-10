@@ -83,8 +83,10 @@ public class OrdersServiceImpl implements OrdersService {
     public PageManageOrder getPageForManage(int page, String search) {
 
         Pageable pageable = PageRequest.of(page, 10);
-        Page<ManageOrderRespondDTO> manageOrderPage = ordersRepository.getPageManageOrders(pageable);
+        search = search.toLowerCase();
+        Page<ManageOrderRespondDTO> manageOrderPage = ordersRepository.getPageManageOrders(pageable, search);
         List<ManageOrderRespondDTO> listManageOrder = manageOrderPage.getContent();
+
 
         return PageManageOrder.builder()
                               .listManageOrder(
