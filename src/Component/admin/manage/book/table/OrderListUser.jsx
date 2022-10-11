@@ -45,11 +45,11 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
     }
     return (
         <>
-            <tr className="book-table-row-container"  >
-                <td>{item.orderId}</td>
-                <td>{item.userName}</td>
-                <td>$ {item.totalPrice}</td>
-                <td>
+            <tr className="book-table-row-container" style={{border: "1px solid black"}} >
+                <td style={{border: "1px solid black"}}>{item.orderId}</td>
+                <td style={{border: "1px solid black"}}>{item.userName}</td>
+                <td style={{border: "1px solid black"}}>$ {item.totalPrice}</td>
+                <td style={{border: "1px solid black"}}>
                     <Col span={24}>
                         {item.orderItems.map((element)=>
                             <Row className={"row-container"}>
@@ -62,10 +62,10 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
                         )}
                     </Col>
                 </td>
-                <td>{item.updateDate}</td>
-                <td>{item.updateBy}</td>
-                <td>{changeOrderState}</td>
-                <td>
+                <td style={{border: "1px solid black"}}>{item.updateDate}</td>
+                <td style={{border: "1px solid black"}}>{item.updateBy}</td>
+                <td style={{border: "1px solid black"}}>{changeOrderState}</td>
+                <td style={{border: "1px solid black"}}>
                     <Button  onClick={handleChangeOrderState} className="btn-style" size={"large"} icon={<ArrowRightOutlined className={"button"}/>}>
                     </Button>
                 </td>

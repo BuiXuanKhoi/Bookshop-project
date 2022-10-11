@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import 'antd/dist/antd.min.css';
-import {Tree} from 'antd';
+import {Menu, Tree} from 'antd';
 import './SettingColumn.css';
 import axios from "axios";
 import Checkbox from "antd/es/checkbox/Checkbox";
@@ -17,26 +17,24 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
         authorID: 0
     }]);
 
-    const updateListAuthor = () => {
+    const getListAuthor = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/authors')
             .then((res) =>{
                 setAuthor(res.data)
             }).catch((err) => console.log(err))
     }
 
-    const updateListCategory = () => {
+    const getListCategory = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/categories')
             .then((res) => {
                 setCategory(res.data)
             }).catch((err) => console.log(err))
     }
-    const update = () =>{
-            updateListAuthor();
-            updateListCategory();
-    }
+
 
     useEffect(() =>{
-            update();
+            getListCategory();
+            getListAuthor();
     },[])
 
 
