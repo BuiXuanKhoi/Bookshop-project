@@ -19,13 +19,11 @@ import java.io.IOException;
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
-    private static Logger logger = LoggerFactory.getLogger(JwtAuthEntryPoint.class);
 
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        logger.error(authException.getMessage());
         ObjectMapper mapper = new ObjectMapper();
         String message;
         String detail;
@@ -58,7 +56,7 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
         else
         {
             message = "Cannot determine error";
-            detail = null;
+            detail = String.valueOf(request.getAttribute("undified"));
         }
 
 

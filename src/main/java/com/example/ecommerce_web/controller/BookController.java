@@ -77,11 +77,10 @@ public class BookController {
     public Page<BookFeatureRespondDTO> getPageBook(
             @RequestParam(name = "filter", required = false, defaultValue = "0") String filter,
             @RequestParam(name = "searchCode", required = false, defaultValue = "") String searchCode,
-            @RequestParam(name = "page", required = false, defaultValue = "0") String page,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             @RequestParam(name = "mode", required = false, defaultValue = "na") String mode,
             @RequestParam(name = "author", required = false, defaultValue = "0") String author){
-        int pageConverted = Integer.parseInt(page);
-        return this.bookService.getPage(searchCode,filter,mode,pageConverted, author);
+        return this.bookService.getPage(searchCode,filter,mode,page, author);
     }
 
     @GetMapping("/recommend")
