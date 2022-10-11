@@ -8,9 +8,14 @@ import axios from "axios";
 
 import ReviewSubmit from "./ReviewSubmit";
 
-
-
 const customerReview = (props) =>{
+    const fiveStar = props.feedbackRatingList.wonderful;
+    const fourStar = props.feedbackRatingList.good;
+    const threeStar = props.feedbackRatingList.normal;
+    const twoStar =  props.feedbackRatingList.bad;
+    const oneStar = props.feedbackRatingList.terrible;
+    const totalFeedback = oneStar+twoStar+threeStar+fourStar+fiveStar;
+    let a = document.getElementsByTagName("a");
     const handleOnClickSort = (values) =>{
         props.setMode(values.key)
     }
@@ -18,6 +23,9 @@ const customerReview = (props) =>{
         props.setSize(values.key);
         props.setDefaultPageSize(values.key);
         props.setShowNumber(values.key);
+    }
+    const displayOnClick = (values) =>{
+        console.log(values.target)
     }
     const menu = (
         <Menu
@@ -91,7 +99,7 @@ const customerReview = (props) =>{
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{fontSize:"3vw",fontWeight:"bolder"}}>
                     <Col span={3}>
-                        <p className={"positionForChar"} style ={{marginLeft:"18%"}}>4.6</p>
+                        <p className={"positionForChar"} style ={{marginLeft:"18%"}}>{Math.round(((fiveStar*5+fourStar*4+threeStar*3+twoStar*2+oneStar)/totalFeedback)*10)/10}</p>
                     </Col>
                     <Col span={21}>
                         <p className={"positionForChar"}>Star</p>
@@ -99,47 +107,41 @@ const customerReview = (props) =>{
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{fontSize:"1vw"}}>
-                    <Col span={3} >
-                        <p className={"positionForChar"} style={{marginLeft:"20%",fontWeight:"bolder",textDecoration:"underline"}}>
-                            number
-                        </p>
-                    </Col>
+                    <Col span={24}>
+                        <div style={{display:"flex"}}>
+                            <p className={"positionForChar"} style={{marginLeft:"2.5%",fontWeight:"bolder",textDecoration:"underline"}}>
+                                ({totalFeedback})
+                            </p>
+                            <div style={{display:"inline-block" ,marginLeft:"2%"}}>
 
-                    <Col span={2.5} >
-                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
-                            5 star (200) |
-                        </a>
-                    </Col>
+                                <a onClick={displayOnClick} value={"5"}  className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                    5 star ({fiveStar}) |
+                                </a>
 
-                    <Col span={2.5} >
-                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
-                            4 star (100) |
-                        </a>
-                    </Col>
+                                <a onClick={displayOnClick} value={"4"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                    4 star ({fourStar})|
+                                </a>
 
-                    <Col span={2.5} >
-                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
-                            3 star (20) |
-                        </a>
-                    </Col>
+                                <a onClick={displayOnClick} value={"3"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                    3 star ({threeStar}) |
+                                </a>
 
-                    <Col span={2.5} >
-                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
-                            2 star (10) |
-                        </a>
-                    </Col>
+                                <a onClick={displayOnClick} value={"2"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                    2 star ({twoStar}) |
+                                </a>
 
-                    <Col span={11}>
-                        <a className={"positionForChar"} style={{textDecoration:"underline"}}>
-                            1 star (10) |
-                        </a>
+                                <a onClick={displayOnClick} value={"1"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                    1 star ({oneStar}) |
+                                </a>
+                            </div>
+                        </div>
                     </Col>
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{marginTop:"2%"}}>
                     <Col span={12} style={{display:"flex",alignItems:"center",justifyContent:"left"}}>
                         <p className={"positionForChar"} style={{fontSize:"1.2vw",marginLeft:"5%"}}>
-                            Showing 1-12 of number reviews
+                            Showing 1-{props.size} of number reviews
                         </p>
                     </Col>
 
@@ -185,8 +187,8 @@ const reviewTitle = (ratingPoint, comment, title,userName, createdDay) => {
             </Row>
             {/*--------------------------------------------------------------------------------*/}
             <Row style={{padding:"0.1em"}}>
-                <div className={"container"}>
-                    <p className={"positionForCharComment"}>{userName}</p>
+                <div className={"container"} >
+                    <p className={"positionForCharComment"} >{userName}</p>
                     <p className={"positionForCharComment"}> - </p>
                     <p className={"positionForCharComment"}> {createdDay} </p>
                 </div>
@@ -211,6 +213,7 @@ export default function FeedbackTable ({bookID,config}) {
     const [totalElements, setTotalElements] = useState(0);
     const [defaultPageSize,setDefaultPageSize] = useState(10);
     const [showNumber, setShowNumber] = useState(10);
+    const [feedbackRatingList, setFeedbackRatingList] = useState([])
     const initReviewFeedback = () => {
 
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks?page="+page+"&size="+size+"&mode="+mode+"&filter="+filter)
@@ -229,7 +232,24 @@ export default function FeedbackTable ({bookID,config}) {
     const handleOnChange = (m) =>{
         setPage(m-1);
     }
-    useEffect( ()=>{initReviewFeedback()},[page,mode,size]);
+    const getFeebackQuantityList = () => {
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks/rate")
+            .then((res) =>{
+                setFeedbackRatingList(res.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    useEffect( ()=>{
+        initReviewFeedback()
+    },[page,mode,size]);
+
+    useEffect(()=>{
+        getFeebackQuantityList();
+
+    },[])
 
     return (
             <>
@@ -237,7 +257,7 @@ export default function FeedbackTable ({bookID,config}) {
                     <Col span={24}>
                         {/*--------------------------------------------------------------------------------*/}
                         <Row style={{paddingTop:"5%"}}>
-                            {customerReview({setMode,mode,size,setSize,defaultPageSize,setDefaultPageSize,setShowNumber,showNumber})}
+                            {customerReview({setMode,mode,size,setSize,defaultPageSize,setDefaultPageSize,setShowNumber,showNumber,feedbackRatingList,setFilter})}
                         </Row>
                         {/*--------------------------------------------------------------------------------*/}
                         { pageBook.map((feedback) =>
