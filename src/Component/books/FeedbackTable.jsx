@@ -15,7 +15,7 @@ const customerReview = (props) =>{
     const twoStar =  props.feedbackRatingList.bad;
     const oneStar = props.feedbackRatingList.terrible;
     const totalFeedback = oneStar+twoStar+threeStar+fourStar+fiveStar;
-    let a = document.getElementsByTagName("a");
+
     const handleOnClickSort = (values) =>{
         props.setMode(values.key)
     }
@@ -24,8 +24,20 @@ const customerReview = (props) =>{
         props.setDefaultPageSize(values.key);
         props.setShowNumber(values.key);
     }
-    const displayOnClick = (values) =>{
-        console.log(values.target)
+    const handleOnClickSearch5 = () =>{
+        props.setFilter(5);
+    }
+    const handleOnClickSearch4 = () => {
+        props.setFilter(4);
+    }
+    const handleOnClickSearch3 = () => {
+        props.setFilter(3);
+    }
+    const handleOnClickSearch2 = () => {
+        props.setFilter(2);
+    }
+    const handleOnClickSearch1 = () => {
+        props.setFilter(1);
     }
     const menu = (
         <Menu
@@ -114,23 +126,23 @@ const customerReview = (props) =>{
                             </p>
                             <div style={{display:"inline-block" ,marginLeft:"2%"}}>
 
-                                <a onClick={displayOnClick} value={"5"}  className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch5} value={"5"}  className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     5 star ({fiveStar}) |
                                 </a>
 
-                                <a onClick={displayOnClick} value={"4"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch4} value={"4"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     4 star ({fourStar})|
                                 </a>
 
-                                <a onClick={displayOnClick} value={"3"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch3} value={"3"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     3 star ({threeStar}) |
                                 </a>
 
-                                <a onClick={displayOnClick} value={"2"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch2} value={"2"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     2 star ({twoStar}) |
                                 </a>
 
-                                <a onClick={displayOnClick} value={"1"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch1} value={"1"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     1 star ({oneStar}) |
                                 </a>
                             </div>
@@ -229,9 +241,10 @@ export default function FeedbackTable ({bookID,config}) {
             })
     }
 
-    const handleOnChange = (m) =>{
-        setPage(m-1);
+    const handleOnChange = (m) => {
+        setPage(m - 1);
     }
+
     const getFeebackQuantityList = () => {
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks/rate")
             .then((res) =>{
@@ -244,11 +257,10 @@ export default function FeedbackTable ({bookID,config}) {
 
     useEffect( ()=>{
         initReviewFeedback()
-    },[page,mode,size]);
+    },[page,mode,size,filter]);
 
     useEffect(()=>{
         getFeebackQuantityList();
-
     },[])
 
     return (
