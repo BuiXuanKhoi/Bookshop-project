@@ -96,8 +96,7 @@ export default function ReviewSubmit ({bookID,config}) {
                     <Form.Item name= "title">
                         <Row style={{paddingBlock:"0.25em"}}>
                             <Col offset={1} span={22}>
-
-                                <Input  style={{height:"3vw"}}></Input>
+                                <Input style={{height:"3vw"}}></Input>
                             </Col>
                         </Row>
                     </Form.Item>

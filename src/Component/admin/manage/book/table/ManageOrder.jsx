@@ -14,6 +14,7 @@ export default function ManageOrder () {
     const config = {
         headers: {Authorization: 'Bearer ' + JSON.parse(getCookie('book-token')).token}
     }
+    const [form]  = Form.useForm();
 
     const listOfOrderState = [
         "PREPARED","PACKAGED","DELIVERED","RECEIVED","COMPLETED"
@@ -43,27 +44,61 @@ export default function ManageOrder () {
     const handleOnChange = (res) =>{
         setCurrentPage(res-1)
     }
+
+    const handleSubmitSearch = (values) =>{
+        requestListUserName(values.userName)
+    }
+
+    const requestListUserName = (userName) => {
+        console.log(userName)
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage"+"?page="+currentPage+"&search="+userName,config)
+            .then((res)=>{
+                setOrderList(res.data.listManageOrder);
+                setPageSize(res.data.pageSize);
+                setCurrentPage(res.data.currentPage);
+                setTotalElements(res.data.totalElements);
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+    }
+
     return (
         <div style={{paddingTop:"10%"}}>
             <Row>
                 <Col span={23} offset={1}>
+                    {/*--------------------------------------------------------------------------------*/}
                     <Row style={{fontStyle:"Palatino Linotype",fontSize:"2rem",fontWeight:"bolder"}}>
                         <p> Orders</p>
                     </Row>
-                    <Row style={{justifyContent:"right"}}>
-                        <Col span={7}>
-                            <Form>
-                                <Form.Item >
-                                    <Input placeholder="Input username"/>
-                                </Form.Item>
+                    {/*--------------------------------------------------------------------------------*/}
+                    <Row >
+                        <Col span={24}>
+                            <Form
+                                title={"Search"}
+                                onFinish={handleSubmitSearch}
+                                form={form}
+                            >
+                                <Row style={{justifyContent:"right"}}>
+                                    <Col span={7}>
+                                        <Form.Item name={"userName"}>
+                                            <Input placeholder="Input username"/>
+                                        </Form.Item>
+                                    </Col>
+
+                                    <Col style={{marginLeft:"1%",marginRight:"2%"}} span={2}>
+                                        <Form.Item>
+                                            <Button htmlType={"submit"} style={{background:"#D8D8D8"}}>
+                                                    Search Orders
+                                            </Button>
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+
                             </Form>
                         </Col>
-                        <Col style={{marginLeft:"1%",marginRight:"2%"}} span={2}>
-                            <Button style={{background:"#D8D8D8"}}>
-                                Search Orders
-                            </Button>
-                        </Col>
                     </Row>
+                    {/*--------------------------------------------------------------------------------*/}
                     <Row>
                         <Col span={24} >
                             <div >

@@ -7,7 +7,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
 
     const [changeOrderState,setChangeOrderState] = useState(item.orderState);
     const flagChange = useRef(false);
-    const flagDisable = useRef(true)
+    const [disableButton, setDisableButton] = useState(false);
 
     const handleChangeOrderState = () =>{
         for (const element of listOfOrderState ){
@@ -24,28 +24,30 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
         }
         else{
             flagChange.current= true;
+            if(changeOrderState == listOfOrderState[listOfOrderState.length-1]){
+                setDisableButton(true)
+            }
         }
     },[changeOrderState])
 
     const sendAPI = () =>{
         axios.put("https://ecommerce-web0903.herokuapp.com/api/orders/"+item.orderId,null,config)
             .then(()=>{
-
+                if(changeOrderState == listOfOrderState[listOfOrderState.length-1]){
+                    setDisableButton(true)
+                }
+                else{
+                    setDisableButton(false)
+                }
             })
             .catch((error) =>{
                 console.log(error);
-                handleFailUpdated(error);
             })
     }
-    const handleFailUpdated = (error) => {
-        Modal.error({
-            title:"Error",
-            content:error.response.data.message,
-        })
-    }
+
     return (
         <>
-            <tr className="book-table-row-container"  >
+            <tr className="book-table-row-container" style={{borderTopStyle:"ridge"}}>
                 <td>{item.orderId}</td>
                 <td>{item.userName}</td>
                 <td>$ {item.totalPrice}</td>
@@ -66,7 +68,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
                 <td>{item.updateBy}</td>
                 <td>{changeOrderState}</td>
                 <td>
-                    <Button  onClick={handleChangeOrderState} className="btn-style" size={"large"} icon={<ArrowRightOutlined className={"button"}/>}>
+                    <Button  disabled={disableButton} onClick={handleChangeOrderState} className="btn-style" size={"large"} icon={<ArrowRightOutlined className={"button"}/>}>
                     </Button>
                 </td>
             </tr>
