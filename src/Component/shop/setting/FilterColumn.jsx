@@ -5,6 +5,9 @@ import './SettingColumn.css';
 import axios from "axios";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import '../Shop.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronDown, faTrash} from "@fortawesome/free-solid-svg-icons";
+
 
 export default function FilterColumn({changeAuthorFilter, changeCategoryFilter}){
 
@@ -43,14 +46,23 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
             <ul>
                 <li className={'select-box'}>Category
                     <ul>
-                        {category.map((item) =>
-                            <li  key={item.categoryId} className="paddingcheck">
-                                <Checkbox value={item.categoryId} onChange={changeCategoryFilter}>
-                                    {item.name}
-                                </Checkbox>
-
-                            </li>
-                        )}
+                        <div className="dropdown-category-toggle">
+                            <div>
+                                <span>Select Categories</span>
+                                <FontAwesomeIcon style={{marginLeft:"30px"}} icon={faChevronDown}/>
+                            </div>
+                            <div className="dropdown-category-container">
+                                <ul>
+                                    {category.map((item) =>
+                                        <li  key={item.categoryId} className="paddingcheck">
+                                            <Checkbox value={item.categoryId} onChange={changeCategoryFilter}>
+                                                {item.name}
+                                            </Checkbox>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
                     </ul>
                 </li>
                 <li className={'paddingItem'}  >Author
@@ -65,7 +77,6 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
             </ul>
         </div>
     )
-
 }
 
 // <input value={item.authorID} type="checkbox" onChange={updateAuthor}/>
