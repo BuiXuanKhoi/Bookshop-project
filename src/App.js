@@ -19,7 +19,7 @@ import RoutesDefine from "./routes/RoutesDefine";
 import {BasicRoutes} from "./routes/BasicRoutes";
 import {UserRoute} from "./routes/UserRoute";
 import {Routes} from "react-router";
-import ManageOrder from "./Component/admin/manage/book/table/ManageOrder";
+import ManageOrder from "./Component/admin/manage/order/ManageOrder";
 
 export const SecurityContext = createContext();
 

@@ -61,8 +61,6 @@ export default function BookDetail(){
     })
 
 
-
-
     const closeSucessModal = () => {
         setQuantity(0);
         setIsOpenSuccess(false);
@@ -170,16 +168,15 @@ export default function BookDetail(){
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id + '/feedbacks')
             .then((res) => {
                 setBookFeedback(res.data)
-                console.log(bookFeedback);
+
             }).catch((err) => console.log(err))
     }
 
     const getBookDetail = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id)
             .then((res) => {
+                console.log(res.data)
                 setBookDetail(res.data);
-                console.log(res.data);
-                console.log(bookDetail);
             }).catch((err) => setIsFeedback(false))
     }
 
@@ -187,14 +184,39 @@ export default function BookDetail(){
         removeCookies('book-token');
         navigate('/login');
     }
-
+    const displayButton = (state) =>{
+        if(state ==="UNAVAILABLE"){
+            return(
+                <>
+                </>
+            );
+        }
+        else if(state==="OUT_OF_STOCK"){
+            return(
+                <Button disabled={true} style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
+                    <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
+                        Stock out
+                    </p>
+                </Button>
+            );
+        }
+        else{
+            return(
+                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
+                    <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
+                        Add to Cart
+                    </p>
+                </Button>
+            );
+        }
+    }
 
     useEffect(() => {
         getBookDetail();
         getFeedback();
     },[])
 
-    const bookDescription = () =>{
+    const bookDescription = () => {
         return(
             <Row className={"customerReviewList"} >
                 <Col span={24}>
@@ -328,11 +350,7 @@ export default function BookDetail(){
                         {/*--------------------------------------------------------------------------------*/}
                         <Row style={{marginTop:"10%",marginBottom:"15%"}}>
                             <Col span={20} offset={2}>
-                                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
-                                    <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
-                                        Add to cart
-                                    </p>
-                                </Button>
+                                {displayButton(bookDetail.bookState)}
                             </Col>
                         </Row>
                     </Col>

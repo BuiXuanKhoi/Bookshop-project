@@ -9,7 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBook, faCartShopping, faFileCircleCheck, faUser, faUserCheck} from "@fortawesome/free-solid-svg-icons";
 import ManageBook from "../Component/admin/manage/book/ManageBook";
 import ManageCustomer from "../Component/admin/manage/user/ManageCustomer";
-import ManageOrder from "../Component/admin/manage/book/table/ManageOrder";
+import ManageOrder from "../Component/admin/manage/order/ManageOrder";
 
 
 export const AdminRoute = [
