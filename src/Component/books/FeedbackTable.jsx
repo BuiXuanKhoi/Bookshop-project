@@ -95,7 +95,19 @@ const customerReview = (props) =>{
             ]}
         />
     );
-
+    const handleCalculateTotal = () =>{
+        let number=0;
+        console.log(totalFeedback)
+        if (totalFeedback != 0){
+            number =Math.round(((fiveStar*5+fourStar*4+threeStar*3+twoStar*2+oneStar)/totalFeedback)*10)/10;
+            return(number);
+        }
+        else{
+            return(
+                number
+            );
+        }
+    }
     return (
             <Col span={24} >
                 {/*--------------------------------------------------------------------------------*/}
@@ -110,12 +122,10 @@ const customerReview = (props) =>{
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{fontSize:"3vw",fontWeight:"bolder"}}>
-                    <Col span={3}>
-                        <p className={"positionForChar"} style ={{marginLeft:"18%"}}>{Math.round(((fiveStar*5+fourStar*4+threeStar*3+twoStar*2+oneStar)/totalFeedback)*10)/10}</p>
-                    </Col>
-                    <Col span={21}>
-                        <p className={"positionForChar"}>Star</p>
-                    </Col>
+                    <div style={{display:"flex"}}>
+                        <p className={"positionForChar"} style ={{marginLeft:"13%"}}>{handleCalculateTotal()}</p>
+                        <p className={"positionForChar"} style={{marginLeft:"10%"}}>Star</p>
+                    </div>
                 </Row>
                 {/*--------------------------------------------------------------------------------*/}
                 <Row style={{fontSize:"1vw"}}>

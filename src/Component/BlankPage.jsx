@@ -1,7 +1,7 @@
 import React from "react";
 import {Button, Result} from "antd";
 import './shop/Shop.css'
-import ManageOrder from "./admin/manage/book/table/ManageOrder";
+import ManageOrder from "./admin/manage/order/ManageOrder";
 
 export default function BlankPage(){
 
