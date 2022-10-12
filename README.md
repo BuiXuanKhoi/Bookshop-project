@@ -30,6 +30,7 @@ User cannot access the route of other roles. If they try, it will lead to the Pa
 - View Shop Page (User can view shop page with pagination and user can filter by category and authors. User can also sort by some conditions and search for book name).
 - View Book Detail (User can view specific book detail including book name, description, price, author, quantity, image and feedbacks of this book
 . The book detail page also has add to cart table and submit review table but only available for user who signed).
+- User who signed can view their information detail and edit the information. Besides, the menu also has an option for users to change their password if they don't want to use the present password.
 
 ## Specific in Admin Side
 
