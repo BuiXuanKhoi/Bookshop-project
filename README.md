@@ -19,7 +19,7 @@
 
 # Feature
 - Almost the data has been pagination to make optimize APIs.
-- There are specific routes for each role beside basic routes. There are 3 routes for 3 different roles : User not signed, Admin, User signed.
+- There are specific routes for each role beside basic routes. There is one general route and  2 routes for 3 different roles : User not signed, Admin, User signed.
 User cannot access the route of other roles. If they try, it will lead to the Page Not Found page.
 - In Security, we use Spring Security with JWT for authentication and authorize. 
 ## Basic :
