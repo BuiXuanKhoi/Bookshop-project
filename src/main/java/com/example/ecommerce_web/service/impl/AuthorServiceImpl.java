@@ -44,7 +44,7 @@ public class AuthorServiceImpl implements AuthorService {
         final int PAGE_SIZE = 10;
         search = search.toLowerCase();
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        return this.authorRepository.getPageAuthor(pageable, search);
+        return this.authorRepository.getPageAuthorNotBooks(pageable, search);
     }
 
 
