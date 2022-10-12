@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.repository;
 
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
+import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.Classify;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
 
 
     @Query(value = "select distinct NEW com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO(" +
-            "bkk.bookId, bkk.bookName, bkk.bookPrice, bkk.ratingPoint, bkk.imageLink, au.authorName) " +
+            "bkk.bookId, bkk.bookName, bkk.bookPrice, bkk.ratingPoint, bkk.imageLink, au.authorName, bkk.bookState) " +
             "from Books bkk " +
             "join bkk.classifies cls " +
             "join bkk.authors au " +
@@ -31,6 +32,15 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "and " +
             "au.authorID in :author")
     Page<BookFeatureRespondDTO> getPageBook(Pageable pageable, String searchCode, int[] filter, int[] author);
+
+
+    @Query(value = "" +
+            "select distinct new com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO(" +
+            "bkk.bookId, bkk.bookName, bkk.bookPrice, bkk.ratingPoint, bkk.imageLink, aut.authorName, bkk.bookState) " +
+            "from Books bkk " +
+            "join bkk.authors aut " +
+            "where bkk.bookName like %:search%")
+    Page<BookFeatureRespondDTO> getPageManageBook(Pageable pageable, String search);
 }
 
 

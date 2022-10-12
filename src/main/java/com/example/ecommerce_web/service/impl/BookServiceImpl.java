@@ -86,6 +86,15 @@ public class BookServiceImpl implements BookService {
         return listBookFeature;
     }
 
+    @Override
+    public Page<BookFeatureRespondDTO> getPageManageBook(String searchCode, int page) {
+        final int PAGE_SIZE = 20;
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<BookFeatureRespondDTO> pageManageBook = bookRepository.getPageManageBook(pageable, searchCode);
+        if (!pageManageBook.hasContent()) throw new ResourceNotFoundException("This Page Is Empty !!!");
+        return pageManageBook;
+    }
+
 
     @Override
     public Books add(BookRequestDTO bookRequestDTO) {

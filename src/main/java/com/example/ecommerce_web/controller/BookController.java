@@ -83,6 +83,14 @@ public class BookController {
         return this.bookService.getPage(searchCode,filter,mode,page, author);
     }
 
+    @GetMapping("/manage")
+    public Page<BookFeatureRespondDTO> getPageManageBook(
+            @RequestParam(name = "search", required = false, defaultValue = "%") String search,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page
+    ){
+        return this.bookService.getPageManageBook(search, page);
+    }
+
     @GetMapping("/recommend")
     public List<BookRespondDTO> getListRecommend(){
         return this.bookService.findTopRecommend()
