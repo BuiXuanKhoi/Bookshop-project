@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.constant.BookState;
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.BookMapper;
 import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
@@ -132,6 +133,22 @@ public class BookServiceImpl implements BookService {
                     .findAny()
                     .orElseThrow(
                         () -> new ResourceNotFoundException("Don't have cart item exist with this book !"));
+    }
+
+    @Override
+    public Books checkout(int bookId, int minusQuantity) {
+        Books books = getById(bookId);
+        int oldQuantity = books.getQuantity();
+
+        if(oldQuantity == minusQuantity){
+            books.setBookState(BookState.OUT_OF_STOCK);
+        }
+        else if (oldQuantity < minusQuantity){
+            throw new ConstraintViolateException("Cannot add to order due to out of stock books !!!");
+        }
+
+        books.setQuantity(oldQuantity - minusQuantity);
+        return this.bookRepository.save(books);
     }
 
     @Override

@@ -24,5 +24,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     @Query(value = "delete from cart_items where cart_item_id = :cartId", nativeQuery = true)
     void deleteByCartId(int cartId);
 
-    boolean existsByBooks(Books books);
+    boolean existsByBooksAndUsers(Books books, Users users);
 }

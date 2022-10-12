@@ -22,4 +22,5 @@ public interface BookService {
     List<Books> findTopOnSale();
     void delete(int bookId);
     CartItem getCartItemByBook(int bookId);
+    Books checkout(int bookId, int minusQuantity);
 }
