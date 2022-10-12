@@ -34,6 +34,7 @@ public class CartItemMapperImpl implements CartItemMapper{
                                  .cartItemsID(entity.getCartItemsID())
                                  .bookName(book.getBookName())
                                  .imageLink(book.getImageLink())
+                                 .bookQuantity(book.getQuantity())
                                  .price(book.getBookPrice())
                                  .build();
     }
