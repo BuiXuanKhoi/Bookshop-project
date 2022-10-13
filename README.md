@@ -1,3 +1,5 @@
+### The BE code place in the master branch and the FE code place in the Ecommerce-book-frontend branch
+
 # Technologies in use:
 
 
