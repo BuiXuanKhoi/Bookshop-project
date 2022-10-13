@@ -37,7 +37,7 @@ export default function ManageBook(){
                 </Col>
                 <Col span={19}>
                     <ManageBookTable/>
-                    <CreateBook isOpen={isOpen} closeCreateBookForm={closeCreateBookModal}/>
+                    <CreateBook setIsOpen={setIsOpen} isOpen={isOpen} closeCreateBookForm={closeCreateBookModal}/>
                 </Col>
             </Row>
         </div>

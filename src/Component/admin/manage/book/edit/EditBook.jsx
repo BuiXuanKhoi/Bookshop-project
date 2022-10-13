@@ -5,7 +5,7 @@ import {SecurityContext} from "../../../../../App";
 import {Option} from "antd/es/mentions";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
-export default function EditBook ({open,closeEdit,bookId}) {
+export default function EditBook ({setOpenEditBook,open,closeEdit,bookId}) {
     const [form] = Form.useForm();
     const [security, setSecurity] = useContext(SecurityContext);
     const [bookDetail,setBookDetail] = useState({});
@@ -69,21 +69,15 @@ export default function EditBook ({open,closeEdit,bookId}) {
         axios.put("https://ecommerce-web0903.herokuapp.com/api/books/"+bookId,bookUpdate,config)
             .then((res)=>{
                 handleSuccessUpdate();
+                setOpenEditBook(true);
             })
             .catch((error) =>{
                 console.log(error)
-                handleFailUpdate(error)
             })
     }
     const handleSuccessUpdate = () =>{
         Modal.success({
             content: " Updated Book information successfully !!!"
-        })
-    }
-    const handleFailUpdate = (error) => {
-        Modal.error({
-            title:"Error",
-            content: error.response.data.message
         })
     }
     return (

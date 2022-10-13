@@ -11,11 +11,9 @@ import {SecurityContext} from "../../../../../App";
 
 const menuAuthor = (listAuthor) => {
 
-
 }
 
-
-export default function CreateBook({isOpen,closeCreateBookForm}){
+export default function CreateBook({setIsOpen,isOpen,closeCreateBookForm}){
 
 
     const [formBook] = Form.useForm();
@@ -81,7 +79,7 @@ export default function CreateBook({isOpen,closeCreateBookForm}){
         >
             <Tabs defaultActiveKey="1" onTabClick={handleSwitchTab}>
                 <Tabs.TabPane tab="Book" key="1" >
-                    <TabBook formItemLayout={formItemLayout} form={formBook} config={config}/>
+                    <TabBook formItemLayout={formItemLayout} form={formBook} config={config} isOpen={isOpen} setIsOpen={setIsOpen}/>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="Category" key="2">
                     <TabCategory formItemLayout={formItemLayout} form={formCategory} config={config}/>

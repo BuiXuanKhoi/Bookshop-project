@@ -44,7 +44,6 @@ export default function Login(){
             content: mess
         })
 
-        // window.location.reload();
     }
 
 
@@ -54,7 +53,6 @@ export default function Login(){
             title: "Login Success",
             content: mes
         })
-
         navigate('/');
     }
 

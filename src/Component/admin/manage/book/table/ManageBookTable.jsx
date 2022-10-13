@@ -159,7 +159,7 @@ export default function ManageBookTable(){
                         </tr>
                     ))
                 }
-                    <EditBook open={openEditBook} closeEdit = {closeEdit} bookId={bookID}/>
+                    <EditBook setOpenEditBook={setOpenEditBook} open={openEditBook} closeEdit = {closeEdit} bookId={bookID}/>
                 </tbody>
             </table>
 

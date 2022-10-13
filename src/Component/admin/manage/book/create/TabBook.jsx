@@ -1,33 +1,86 @@
-import React, {useRef, useState} from "react";
-import {Form, Input, Select} from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Col, Form, Input, Modal, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {Option} from "antd/es/mentions";
 import axios from "axios";
-
-export default function TabBook({formItemLayout, form, config}){
+import './DropDownCustom.css'
+import { default as ReactSelect } from "react-select";
+import { components } from "react-select";
+export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen}){
 
     const state = useRef(false);
 
-
-    const [bookRegister, setBookRegister] = useState({
-        bookName : '',
-        bookPrice : 0.0,
-        description : '',
-        quantity : 0,
-        authorId : 0,
-        state : '',
-        imageLink : '',
-        listCategory : []
-    })
-
+    const [bookRegister, setBookRegister] = useState({});
+    const [listCategory, setListCategory] = useState([]);
+    let optionList = [];
+    let categoryChosenList=[]
     const handleCreateBook = (values) => {
-        console.log(values);
+        setBookRegister({
+            bookName: values.bookName,
+            bookPrice: values.bookPrice,
+            description: values.description,
+            quantity: values.quantity,
+            state: values.bookState,
+            listCategory: categoryChosenList,
+            imageLink: values.imageLink,
+            authorId: 2,
+        })
     }
 
+    const sendRequestCategoryList = () =>{
+        console.log("No")
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/categories")
+            .then((res) =>{
+                setListCategory(res.data)
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+    }
+    const handleCreateNewCategoryList = () => {
+        listCategory.map((item) =>{
+            let value = {value:"",label:""};
+            value.value = item.categoryId;
+            value.label = item.name;
+            optionList.push(value)
+        })
+    }
+
+    useEffect(()=>{
+        sendRequestCategoryList();
+    },[isOpen])
+
+    useEffect(()=>{
+        handleCreateNewCategoryList();
+    },[listCategory]);
+
+    useEffect(()=>{
+        createBook()
+    },[bookRegister])
+
     const createBook = () => {
-        axios.post('https://ecommerce-web0903.herokuapp.com/api/books', null, config)
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/books', bookRegister, config)
+            .then((res) => {
+                handleSuccessAdd();
+                setIsOpen(false);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    const handleSuccessAdd = () => {
+        Modal.success({
+            content:"Book has been added to shop !!!"
+        })
+    }
+
+    const handleChange = (values) =>{
+        categoryChosenList=[]
+        values.map((item)=>{
+            let number = 0;
+            number = item.value;
+            categoryChosenList.push(number)
+        })
     }
 
     return(
@@ -48,7 +101,7 @@ export default function TabBook({formItemLayout, form, config}){
                     }
                 ]}
             >
-                <Input placeholder="Input Book Name"/>
+                <Input defaultValue={""} placeholder="Input Book Name"/>
             </Form.Item>
             <Form.Item
                 name="bookPrice"
@@ -64,13 +117,19 @@ export default function TabBook({formItemLayout, form, config}){
                     }
                 ]}
             >
-                <Input placeholder="Input Book Priace"/>
+                <Input defaultValue={""} placeholder="Input Book Price"/>
             </Form.Item>
             <Form.Item
                 name="description"
                 label="Book Description"
             >
-                <TextArea rows={5} cols={10} placeholder="Write the book's description"/>
+                <TextArea defaultValue={""} rows={5} cols={10} placeholder="Write the book's description"/>
+            </Form.Item>
+            <Form.Item
+                name="imageLink"
+                label="Book Images"
+            >
+                <TextArea defaultValue={""} rows={1} cols={10} placeholder="Insert book images"/>
             </Form.Item>
             <Form.Item
                 name="quantity"
@@ -86,7 +145,7 @@ export default function TabBook({formItemLayout, form, config}){
                     }
                 ]}
             >
-                <Input placeholder="Input your quantity"/>
+                <Input defaultValue={""} placeholder="Input your quantity"/>
             </Form.Item>
             <Form.Item
                 name='bookState'
@@ -98,12 +157,33 @@ export default function TabBook({formItemLayout, form, config}){
                     }
                 ]}
             >
-                <Select placeholder='select book state'>
+                <Select defaultValue={""} placeholder='select book state'>
                     <Option value='AVAILABLE'>AVAILABLE</Option>
                     <Option value='UNAVAILABLE'>UNAVAILABLE</Option>
                     <Option value='OUT_OF_STOCK'>OUT OF STOCK</Option>
                     <Option value='EXPIRED'>EXPIRED</Option>
                 </Select>
+            </Form.Item>
+
+            <Form.Item
+                name = 'bookCategory'
+                label={"Category:"}
+                >
+                <div className={"borderBox"} value={"Hello world"}>
+                        <ReactSelect
+                            options={optionList}
+                            isMulti
+                            closeMenuOnSelect={false}
+                            hideSelectedOptions={false}
+                            allowSelectAll={false}
+                            onChange={handleChange}
+
+                        />
+                </div>
+
+            </Form.Item>
+            <Form.Item>
+                <Button htmlType={"submit"}> Push</Button>
             </Form.Item>
         </Form>
     )
