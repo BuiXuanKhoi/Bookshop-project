@@ -43,38 +43,60 @@ export default function FilterColumn({changeAuthorFilter, changeCategoryFilter})
 
     return(
         <div className={'display'}>
-            <ul>
-                <li className={'select-box'}>Category
-                    <ul>
-                        <div className="dropdown-category-toggle">
-                            <div>
-                                <span>Select Categories</span>
-                                <FontAwesomeIcon style={{marginLeft:"30px"}} icon={faChevronDown}/>
-                            </div>
-                            <div className="dropdown-category-container">
-                                <ul>
-                                    {category.map((item) =>
-                                        <li  key={item.categoryId} className="paddingcheck">
-                                            <Checkbox value={item.categoryId} onChange={changeCategoryFilter}>
-                                                {item.name}
-                                            </Checkbox>
-                                        </li>
-                                    )}
-                                </ul>
-                            </div>
+            {/*<ul>*/}
+            {/*    <li className={'select-box'}>Category*/}
+            {/*        <ul>*/}
+            {/*            <div className="dropdown-category-toggle">*/}
+            {/*                <div>*/}
+            {/*                    <span>Select Categories</span>*/}
+            {/*                    <FontAwesomeIcon style={{marginLeft:"30px"}} icon={faChevronDown}/>*/}
+            {/*                </div>*/}
+            {/*                <div className="dropdown-category-container">*/}
+            {/*                    <ul>*/}
+            {/*                        {category.map((item) =>*/}
+            {/*                            <li  key={item.categoryId} className="paddingcheck">*/}
+            {/*                                <Checkbox value={item.categoryId} onChange={changeCategoryFilter}>*/}
+            {/*                                    {item.name}*/}
+            {/*                                </Checkbox>*/}
+            {/*                            </li>*/}
+            {/*                        )}*/}
+            {/*                    </ul>*/}
+            {/*                </div>*/}
+            {/*            </div>*/}
+            {/*        </ul>*/}
+            {/*    </li>*/}
+            {/*    <li className={'paddingItem'}  >Author*/}
+            {/*        <ul>*/}
+            {/*            {author.map((item) =>*/}
+            {/*                <li  key={item.authorID} className="paddingcheck">*/}
+            {/*                    <Checkbox value={item.authorID} onChange={changeAuthorFilter}>{item.authorName}</Checkbox>*/}
+            {/*                </li>*/}
+            {/*            )}*/}
+            {/*        </ul>*/}
+            {/*    </li>*/}
+            {/*</ul>*/}
+
+            <div className="category-container">
+                <div className="category-title">Category</div>
+                    <div className="dropdown-category-toggle">
+                        <div className="dropdown-category-header">
+                            <span className="dropdown-category-title">Select Categories</span>
+                            <FontAwesomeIcon className="dropdown-category-icon" icon={faChevronDown}/>
                         </div>
-                    </ul>
-                </li>
-                <li className={'paddingItem'}  >Author
-                    <ul>
-                        {author.map((item) =>
-                            <li  key={item.authorID} className="paddingcheck">
-                                <Checkbox value={item.authorID} onChange={changeAuthorFilter}>{item.authorName}</Checkbox>
-                            </li>
-                        )}
-                    </ul>
-                </li>
-            </ul>
+                        <div className="dropdown-category-container">
+                            <ul >
+                                {category.map((item) =>
+                                    <li key={item.categoryId} >
+                                        <Checkbox value={item.categoryId} onChange={changeCategoryFilter}>{item.name}</Checkbox>
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+
+
+
         </div>
     )
 }

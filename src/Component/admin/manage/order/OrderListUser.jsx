@@ -25,7 +25,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
         }
         else{
             flagChange.current= true;
-            if(changeOrderState == listOfOrderState[listOfOrderState.length-1]){
+            if(changeOrderState === listOfOrderState[listOfOrderState.length-1]){
                 setDisableButton(true)
             }
         }
@@ -34,7 +34,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
     const sendAPI = () =>{
         axios.put("https://ecommerce-web0903.herokuapp.com/api/orders/"+item.orderId,null,config)
             .then(()=>{
-                if(changeOrderState == listOfOrderState[listOfOrderState.length-1]){
+                if(changeOrderState === listOfOrderState[listOfOrderState.length-1]){
                     setDisableButton(true)
                 }
                 else{

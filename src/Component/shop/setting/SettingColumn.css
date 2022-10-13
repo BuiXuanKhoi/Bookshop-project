@@ -47,44 +47,13 @@ li{
     font-size: 20px;
 }
 
-.dropdown-category-toggle:hover .dropdown-category-container{
-    display: block;
-    width: 107%;
-    height: 100%;
-    border: none;
-    background-color: white;
-    position: relative;
-    top: 3px;
-    z-index: 10 ;
-}
 
-.dropdown-category-container{
-    text-align: left ;
-    display: none;
-    border: 0.75px solid white;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    opacity: 1;
-}
-
-.dropdown-category-toggle{
-    display: flex;
-    background-color: white;
-    width: 75%;
-    top: 3px;
-    border: 0.5px solid black;
-    border-radius: 0.5em;
-    font-size: 0.75em;
-    padding: 0.5em;
-    flex-direction: column;
-    align-items: center;
-}
 
 .dropdown-author-toggle{
     display: flex;
     background-color: white;
     width: 75%;
-    top: 3px;
+    top: 23px;
     border: 0.5px solid black;
     border-radius: 0.5em;
     font-size: 0.75em;
@@ -94,13 +63,14 @@ li{
 }
 
 .dropdown-author-container{
-    text-align: left ;
     display: none;
     border: 0.75px solid white;
     border-bottom-left-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     opacity: 1;
 }
+
+
 
 .dropdown-author-toggle:hover .dropdown-author-container{
     display: block;
@@ -111,5 +81,74 @@ li{
     position: relative;
     top: 3px;
     z-index: 100;
+}
+
+.category-title{
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+    font-family: Helvetica, Serif;
+    top: 10px;
+    left: 10px;
+}
+
+.category-container{
+    border: 1px solid black;
+    border-radius: 6px;
+    width: 300px;
+    height: 120px;
+    display: flex;
+    margin-left: 25px;
+}
+
+.dropdown-category-toggle{
+    display: flex;
+    width: 13em;
+    height: 35px;
+    margin-top: 45px;
+    border: 0.5px solid black;
+    border-radius: 0.5em;
+    font-size: 1em;
+    flex-direction: column;
+    position: relative;
+    right: 35px;
+    top: 15px;
+}
+
+.dropdown-category-header{
+    display: flex;
+    width: 13em;
+    flex-direction: row;
+    height: inherit;
+    margin-left: 0.5em;
+    margin-top : 0.5em;
+}
+
+.dropdown-category-title{
+    font-family: Arial, serif;
+}
+
+.dropdown-category-icon{
+    margin-left: 30px;
+    padding-right: 10px;
+}
+
+.dropdown-category-toggle:hover .dropdown-category-container{
+    display: block;
+    width: 100%;
+    height: 300px;
+    background-color: white;
+    position: relative;
+    top: -8px;
+    border: 1px solid black;
+}
+
+.dropdown-category-container{
+    height: 100%;
+    text-align: left ;
+    display: none;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    opacity: 1;
 }
 
