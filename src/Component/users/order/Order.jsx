@@ -20,7 +20,7 @@ export default function Order() {
     const [element,setElement] = useState([]);
 
     const getOrderList = () => {
-        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders", config)
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage", config)
             .then((res) => {
                 setOrderList(res.data);
                 console.log(res.data)

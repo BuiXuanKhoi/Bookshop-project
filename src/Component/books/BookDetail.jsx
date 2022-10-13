@@ -359,8 +359,6 @@ export default function BookDetail(){
             </Row>
 
 
-
-
             <Row style={{marginTop:"3%"}}>
                 <FeedbackTable bookID={bookId.id} config={config}/>
                 <ReviewSubmit bookID={bookId.id} config={config}/>

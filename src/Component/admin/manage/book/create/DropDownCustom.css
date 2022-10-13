@@ -1,0 +1,47 @@
+.borderBox {
+    max-width: 100%;
+}
+.multiselect{
+    width: 100%;
+}
+.selectBox{
+    position: relative;
+}
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.selectBox select{
+    width: 100%;
+    border-color: #d9d9d9;
+    padding: 4px;
+    border-style: ridge;
+    font-size: 14px;
+    cursor: pointer;
+    overflow-y: scroll;
+}
+
+#mySelectOptions {
+    display: none;
+    border: 0.5px #7c7c7c solid;
+    background-color: #ffffff;
+    max-height: 150px;
+    overflow-y: scroll;
+}
+
+#mySelectOptions label {
+    display: block;
+    font-weight: normal;
+    white-space: nowrap;
+    min-height: 1.2em;
+    background-color: #ffffff00;
+    padding: 0 2.25rem 0 .75rem;
+}
+
+#mySelectOptions label:hover {
+    background-color: #1e90ff;
+}
