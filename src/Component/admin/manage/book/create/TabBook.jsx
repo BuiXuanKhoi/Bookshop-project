@@ -6,14 +6,19 @@ import axios from "axios";
 import './DropDownCustom.css'
 import { default as ReactSelect } from "react-select";
 import { components } from "react-select";
+
+
+
 export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen}){
 
     const state = useRef(false);
-
     const [bookRegister, setBookRegister] = useState({});
     const [listCategory, setListCategory] = useState([]);
     let optionList = [];
     let categoryChosenList=[]
+    const { Option } = Select;
+    let authorChosenList = []
+    const [authorList,setAuthorList] = useState([]);
     const handleCreateBook = (values) => {
         setBookRegister({
             bookName: values.bookName,
@@ -23,18 +28,26 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             state: values.bookState,
             listCategory: categoryChosenList,
             imageLink: values.imageLink,
-            authorId: 2,
+            authorId: values.authorName,
         })
     }
 
     const sendRequestCategoryList = () =>{
-        console.log("No")
         axios.get("https://ecommerce-web0903.herokuapp.com/api/categories")
             .then((res) =>{
                 setListCategory(res.data)
             })
             .catch((error) =>{
                 console.log(error);
+            })
+    }
+    const sendRequestAuthorList = () => {
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/authors")
+            .then((res) =>{
+                setAuthorList(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
             })
     }
     const handleCreateNewCategoryList = () => {
@@ -48,6 +61,7 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
 
     useEffect(()=>{
         sendRequestCategoryList();
+        sendRequestAuthorList();
     },[isOpen])
 
     useEffect(()=>{
@@ -56,7 +70,7 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
 
     useEffect(()=>{
         createBook()
-    },[bookRegister])
+    },[bookRegister]);
 
     const createBook = () => {
         axios.post('https://ecommerce-web0903.herokuapp.com/api/books', bookRegister, config)
@@ -103,6 +117,7 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             >
                 <Input defaultValue={""} placeholder="Input Book Name"/>
             </Form.Item>
+
             <Form.Item
                 name="bookPrice"
                 label="Price"
@@ -119,18 +134,21 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             >
                 <Input defaultValue={""} placeholder="Input Book Price"/>
             </Form.Item>
+
             <Form.Item
                 name="description"
                 label="Book Description"
             >
                 <TextArea defaultValue={""} rows={5} cols={10} placeholder="Write the book's description"/>
             </Form.Item>
+
             <Form.Item
                 name="imageLink"
                 label="Book Images"
             >
                 <TextArea defaultValue={""} rows={1} cols={10} placeholder="Insert book images"/>
             </Form.Item>
+
             <Form.Item
                 name="quantity"
                 label="Book Quantity"
@@ -147,6 +165,7 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             >
                 <Input defaultValue={""} placeholder="Input your quantity"/>
             </Form.Item>
+
             <Form.Item
                 name='bookState'
                 label='State'
@@ -161,7 +180,6 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
                     <Option value='AVAILABLE'>AVAILABLE</Option>
                     <Option value='UNAVAILABLE'>UNAVAILABLE</Option>
                     <Option value='OUT_OF_STOCK'>OUT OF STOCK</Option>
-                    <Option value='EXPIRED'>EXPIRED</Option>
                 </Select>
             </Form.Item>
 
@@ -169,7 +187,7 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
                 name = 'bookCategory'
                 label={"Category:"}
                 >
-                <div className={"borderBox"} value={"Hello world"}>
+                <div className={"borderBox"}>
                         <ReactSelect
                             options={optionList}
                             isMulti
@@ -177,13 +195,21 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
                             hideSelectedOptions={false}
                             allowSelectAll={false}
                             onChange={handleChange}
-
                         />
                 </div>
 
             </Form.Item>
-            <Form.Item>
-                <Button htmlType={"submit"}> Push</Button>
+
+            <Form.Item
+                name = "authorName"
+                label={"Author Name:"}
+            >
+                <Select
+                >
+                    {authorList.map((item)=>
+                        <Option value={item.authorID}>{item.authorName}</Option>
+                    )}
+                </Select>
             </Form.Item>
         </Form>
     )

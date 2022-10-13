@@ -1,6 +1,6 @@
  import React, {useEffect, useState} from "react";
 import './ManageBookTable.css'
-import {Button, Drawer, Pagination,Modal} from "antd";
+import {Button, Drawer, Pagination, Modal, Row, Col, Input, Form} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faBan, faPenToSquare, faTrash, faUnlock} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -14,7 +14,7 @@ export default function ManageBookTable(){
     const authorize = {
         headers: {Authorization: 'Bearer ' + JSON.parse(getCookie('book-token')).token}
     }
-
+    const [form] = Form.useForm();
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(0);
     const [mode, setMode] = useState('na');
@@ -39,14 +39,15 @@ export default function ManageBookTable(){
         authorName : ''
     })
     const getBookPage = () => {
-        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&search=' + search + '&mode=' + mode, authorize)
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&searchCode=' + search  + '&mode=' + mode, authorize)
             .then((res) => {
                 console.log(res);
                 setTotalElements(res.data.totalElements);
                 setBooks(res.data.content);
-
             })
-            .catch((err) => console.log(err))
+            .catch((err) => {
+                console.log("Error")
+                console.log(err)})
     }
 
     useEffect(() => {
@@ -55,7 +56,7 @@ export default function ManageBookTable(){
 
     useEffect(() => {
         getBookPage();
-    },[page])
+    },[page,search])
 
     const handleFind = (book) => {
         setBookDetail(book);
@@ -107,6 +108,9 @@ export default function ManageBookTable(){
             },
         });
     };
+    const handleSearchingEvent = (values) => {
+        setSearch(values.bookName);
+    }
     return(
         <div>
             <Modal
@@ -127,6 +131,29 @@ export default function ManageBookTable(){
             >
                 <span>Are you sure to delete this user ?</span>
             </Modal>
+            <Row style={{marginTop:"70px",marginBottom:"0"}}>
+                <Col span={24}>
+                    <Form
+                        name={"Search"}
+                        onFinish={handleSearchingEvent}
+                        form={form}
+                    >
+                        <Row>
+                            <Col offset={11} span={10} >
+                                <Form.Item
+                                    name={"bookName"}>
+                                        <Input/>
+                                </Form.Item>
+                            </Col>
+                            <Col span={2} style={{marginLeft:"1%"}}>
+                                <Form.Item>
+                                    <Button htmlType={"submit"}> Search</Button>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Col>
+            </Row>
             <table className="book-table-container">
                 <thead className="book-table-column">
                 <th className="book-table-column-container">Book Name</th>
