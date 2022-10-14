@@ -160,21 +160,21 @@ public class BookServiceTest {
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class)
+                mock(Books.class)
         );
 
         Stream<Books> booksStream = Stream.of(
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class)
+                mock(Books.class)
         );
 
         Stream<Books> sortedBooks = Stream.of(
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
                 mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class)
+                mock(Books.class)
         );
 
         List<Books> topPopularBooks = List.of(

@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> block(int userId) {
-        long THREE_MINUTES = 180000;
+        long THREE_MINUTES = 180_000;
         // Because of fast testing, You just have to waiting for 3 minutes and log in again, the account will be available again.
 
         Users users = findById(userId);
