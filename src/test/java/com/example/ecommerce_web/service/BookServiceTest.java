@@ -1,8 +1,10 @@
 package com.example.ecommerce_web.service;
 
 import com.example.ecommerce_web.constant.BookState;
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.BookMapper;
+import com.example.ecommerce_web.model.dto.request.ModifyBookRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
 import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.model.entities.Books;
@@ -25,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 import java.awt.print.Book;
+import java.lang.invoke.CallSite;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,6 +47,7 @@ public class BookServiceTest {
     ClassifyService classifyService;
     BookMapper bookMapper;
     UserService userService;
+    CloudinaryService cloudinaryService;
 
 
 
@@ -58,10 +62,11 @@ public class BookServiceTest {
         bookMapper = mock(BookMapper.class);
         userService = mock(UserService.class);
         classifyService = mock(ClassifyService.class);
+        cloudinaryService = mock(CloudinaryService.class);
 
         bookService = new BookServiceImpl(bookRepository, authorService,
                 authorRepository,
-                userLocal, categoryRepository, classifyService, bookMapper, userService);
+                userLocal, categoryRepository, classifyService, bookMapper, userService, cloudinaryService);
 
     }
 
@@ -148,16 +153,102 @@ public class BookServiceTest {
         verify(bookRepository, times(1)).delete(books);
     }
 
-    void whenFindTopPopular_thenReturnTopPopular(){
 
+    @Test
+    void whenFindTopPopular_thenReturnTopPopular(){
+        List<Books> books = List.of(
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class)
+        );
+
+        Stream<Books> booksStream = Stream.of(
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class)
+        );
+
+        Stream<Books> sortedBooks = Stream.of(
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class)
+        );
+
+        List<Books> topPopularBooks = List.of(
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class)
+        );
+
+        Stream<Books> streamTopPopularBooks = Stream.of(
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class), mock(Books.class),
+                mock(Books.class),mock(Books.class)
+        );
+
+        when(bookRepository.findAll()).thenReturn(books);
+        when(books.stream()).thenReturn(booksStream);
+        when(booksStream.sorted(Comparator.comparing(Books::getQuantity))).thenReturn(sortedBooks);
+        when(sortedBooks.limit(8)).thenReturn(streamTopPopularBooks);
+        when(streamTopPopularBooks.collect(Collectors.toList())).thenReturn(topPopularBooks);
+
+        assertThat(bookService.findTopPopular(),is(topPopularBooks));
     }
 
+    @Test
+    void whenCheckout_thenThrowConstrainViolateException_ifMinusQuantityGreaterThanBaseQuantity(){
+        Books books = mock(Books.class);
+        int bookId = 1;
+        int quantity = 10;
+        int minusQuantity = 11;
 
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(books));
+        when(books.getQuantity()).thenReturn(quantity);
 
+        ConstraintViolateException exception = Assertions.assertThrows(ConstraintViolateException.class,
+                () -> bookService.checkout(bookId, minusQuantity));
 
+        assertThat(exception.getMessage(), is("Cannot add to order due to out of stock books !!!"));
+    }
 
+    @Test
+    void whenCheckout_thenChangeBookStateToOutOfStock_ifMinusQuantityEqualToBaseQuantity(){
+        Books books = mock(Books.class);
+        int bookId = 1;
+        int quantity = 10;
+        int minusQuantity = 10;
+        Books savedBooks = mock(Books.class);
 
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(books));
+        when(books.getQuantity()).thenReturn(quantity);
 
+        books.setBookState(BookState.OUT_OF_STOCK);
+        books.setQuantity(0);
 
+        verify(books).setBookState(BookState.OUT_OF_STOCK);
+        verify(books).setQuantity(0);
 
+        when(bookRepository.save(books)).thenReturn(savedBooks);
+
+        assertThat(bookService.checkout(bookId, minusQuantity), is(savedBooks));
+        assertThat(bookService.checkout(bookId, minusQuantity).getQuantity(), is(0));
+    }
+
+    @Test
+    void whenUpdateBook_thenReturnBookAfterUpdate(){
+        Books books = mock(Books.class);
+        Books mappedBooks = mock(Books.class);
+        Books savedBooks = mock(Books.class);
+        int bookId = 1;
+        ModifyBookRequestDTO modifyBookRequestDTO = mock(ModifyBookRequestDTO.class);
+
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(books));
+        when(bookMapper.toExistedBooks(modifyBookRequestDTO, books)).thenReturn(mappedBooks);
+        when(this.bookRepository.save(mappedBooks)).thenReturn(savedBooks);
+
+        assertThat(bookService.update(bookId, modifyBookRequestDTO), is(savedBooks));
+    }
 }

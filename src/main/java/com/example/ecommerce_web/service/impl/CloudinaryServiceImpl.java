@@ -3,6 +3,7 @@ package com.example.ecommerce_web.service.impl;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.ecommerce_web.config.CloudinaryConfig;
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +27,18 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-    public String uploadImage(MultipartFile bookImage) throws IOException {
-        File uploadedFile = convertToFile(bookImage);
-        Map uploadedResult = cloudinary.uploader().upload(uploadedFile, ObjectUtils.emptyMap());
-        boolean isDeleted = uploadedFile.delete();
+    @Override
+    public String uploadImage(MultipartFile bookImage) {
+        try {
+            File uploadedFile = convertToFile(bookImage);
+            Map uploadedResult = cloudinary.uploader().upload(uploadedFile, ObjectUtils.emptyMap());
+            boolean isDeleted = uploadedFile.delete();
 
-        return uploadedResult.get("url").toString();
+            return uploadedResult.get("url").toString();
+        } catch (IOException exception){
+            System.out.println("Break");
+            throw new ConstraintViolateException("Something wrong");
+        }
     }
 
 

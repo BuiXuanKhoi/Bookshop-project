@@ -190,6 +190,12 @@ public class OrderServiceTest {
         Orders orders = mock(Orders.class);
         Orders savedOrders = mock(Orders.class);
 
+        orders.setUsers(users);
+        orders.setOrderItems(orderItemsList);
+        orders.setOrderState(OrderState.PREPARED);
+        orderItemService.saveOrderItemWith(savedOrders, orderItemsList);
+        cartItemList.forEach(cartItem -> cartItemRepository.deleteByCartId(cartItem.getCartItemsID()));
+
         verify(orders).setUsers(users);
         verify(orders).setOrderItems(orderItemsList);
         verify(orders).setOrderState(OrderState.PREPARED);

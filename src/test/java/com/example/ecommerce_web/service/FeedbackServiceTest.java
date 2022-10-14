@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.CoreMatchers.is;
-
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -175,6 +173,11 @@ public class FeedbackServiceTest {
                                                                               .normal(normal)
                                                                               .good(good)
                                                                               .wonderful(wonderful).build();
-        assertThat(feedbackService.countRatingPoint(bookId), is(rateCountingRespondDTO));
+
+        assertThat(feedbackService.countRatingPoint(bookId).getTerrible(), is(rateCountingRespondDTO.getTerrible()));
+        assertThat(feedbackService.countRatingPoint(bookId).getBad(), is(rateCountingRespondDTO.getBad()));
+        assertThat(feedbackService.countRatingPoint(bookId).getNormal(), is(rateCountingRespondDTO.getNormal()));
+        assertThat(feedbackService.countRatingPoint(bookId).getGood(), is(rateCountingRespondDTO.getGood()));
+        assertThat(feedbackService.countRatingPoint(bookId).getWonderful(), is(rateCountingRespondDTO.getWonderful()));
     }
 }
