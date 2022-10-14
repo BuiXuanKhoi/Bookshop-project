@@ -91,7 +91,7 @@ public class AuthorServiceTest {
         String search = "khoi";
         int page = 0;
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<AuthorRespondDTO> pageAuthorRespond = Page.empty();
+        Page<AuthorRespondDTO> pageAuthorRespond = Page.empty(pageable);
         when(authorRepository.getPageAuthorNotBooks(pageable, search)).thenReturn(pageAuthorRespond);
         ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
                 () -> authorService.getPage(page, search));

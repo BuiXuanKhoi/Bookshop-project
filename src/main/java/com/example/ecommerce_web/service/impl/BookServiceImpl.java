@@ -10,10 +10,7 @@ import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.entities.*;
 import com.example.ecommerce_web.repository.*;
 import com.example.ecommerce_web.security.service.UserLocal;
-import com.example.ecommerce_web.service.AuthorService;
-import com.example.ecommerce_web.service.BookService;
-import com.example.ecommerce_web.service.ClassifyService;
-import com.example.ecommerce_web.service.UserService;
+import com.example.ecommerce_web.service.*;
 import com.example.ecommerce_web.validator.ListValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,6 +40,7 @@ public class BookServiceImpl implements BookService {
     private final ClassifyService classifyService;
     private final BookMapper bookMapper;
     private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
 
     @Autowired
@@ -47,7 +48,7 @@ public class BookServiceImpl implements BookService {
             , AuthorService authorService
             , AuthorRepository authorRepository, UserLocal userLocal,
                            CategoryRepository categoryRepository,
-                           ClassifyService classifyService, BookMapper bookMapper, UserService userService) {
+                           ClassifyService classifyService, BookMapper bookMapper, UserService userService, CloudinaryService cloudinaryService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.authorRepository = authorRepository;
@@ -56,6 +57,7 @@ public class BookServiceImpl implements BookService {
         this.classifyService = classifyService;
         this.bookMapper = bookMapper;
         this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -97,7 +99,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Books add(BookRequestDTO bookRequestDTO) {
+    public Books add(BookRequestDTO bookRequestDTO, MultipartFile bookImage){
 
         int[] listCategoryId = bookRequestDTO.getListCategory();
         int authorId = bookRequestDTO.getAuthorId();
@@ -111,12 +113,15 @@ public class BookServiceImpl implements BookService {
                                             .map(classifyService::createClassify)
                                             .collect(Collectors.toList());
 
+        String imageLink = cloudinaryService.uploadImage(bookImage);
+
         Books books = bookMapper.fromDTO(bookRequestDTO);
 
         books.setClassifies(classifyList);
         books.setAuthors(author);
         books.setUsers(users);
         books.setBookState(BookState.AVAILABLE);
+        books.setImageLink(imageLink);
         Books savedBook = this.bookRepository.save(books);
         classifyList.forEach(classify -> classifyService.updateClassifyWithBook(classify, savedBook));
 

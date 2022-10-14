@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public class BookRequestDTO {
 
@@ -19,11 +19,6 @@ public class BookRequestDTO {
     @NotNull(message = "book price must not be null")
     @Min(value = 1, message = "Book Price must have at least 1.")
     private float bookPrice;
-
-
-    @NotEmpty(message = "image link is required")
-    @NotNull(message = "image link must not be null")
-    private String imageLink;
 
     @NotEmpty(message = "description is required")
     @NotNull(message = "description must not be null")

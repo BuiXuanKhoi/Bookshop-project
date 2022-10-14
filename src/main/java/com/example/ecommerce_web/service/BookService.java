@@ -8,14 +8,16 @@ import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.CartItem;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BookService {
     Page<BookFeatureRespondDTO> getPage(String searchCode, String filter, String mode, int page, String authors);
     Page<BookFeatureRespondDTO> getPageManageBook(String searchCode, int page);
     Books getById(int bookId);
-    Books add(BookRequestDTO bookRequestDTO);
+    Books add(BookRequestDTO bookRequestDTO, MultipartFile multipartFile);
     Books update(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
     List<Books> findAll();
     List<Books> findTopPopular();
