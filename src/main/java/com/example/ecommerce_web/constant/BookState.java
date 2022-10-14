@@ -7,8 +7,7 @@ import java.util.Arrays;
 public enum BookState {
        AVAILABLE("AVAILABLE"),
        UNAVAILABLE("UNAVAILABLE"),
-       OUT_OF_STOCK("OUT_OF_STOCK"),
-       EXPIRED("EXPIRED");
+       OUT_OF_STOCK("OUT_OF_STOCK");
 
        private final String state;
 

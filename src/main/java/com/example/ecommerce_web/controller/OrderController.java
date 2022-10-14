@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/orders")
 @CrossOrigin(maxAge = 3600, origins = "*")
-public class OrderController {
+public class    OrderController {
 
     OrdersService ordersService;
     OrderMapper orderMapper;
