@@ -10,6 +10,7 @@
 - Spring JPA/Hibernate.
 - Spring Security with JWT.
 - Lombok.
+- Cloudinary for upload Image.
 ## Front-End:
 - ReactJS.
 - React Hooks.
