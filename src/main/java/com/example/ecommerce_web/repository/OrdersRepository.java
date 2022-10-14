@@ -16,6 +16,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Integer>{
             "ord.orderId, usr.userName, 0.0f, ord.createDate, ord.updateDate, usr.userName, ord.orderState) " +
             "from Orders ord " +
             "join ord.users usr " +
-            "where lower(usr.userName) like %:search%")
+            "where lower(usr.userName) like %:search% " +
+            "order by ord.orderId asc")
     Page<ManageOrderRespondDTO> getPageManageOrders(Pageable pageable, String search);
 }

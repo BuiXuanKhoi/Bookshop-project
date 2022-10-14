@@ -44,7 +44,9 @@ public class AuthorServiceImpl implements AuthorService {
         final int PAGE_SIZE = 10;
         search = search.toLowerCase();
         Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        return this.authorRepository.getPageAuthor(pageable, search);
+        Page<AuthorRespondDTO> pageAuthorNotBook =  this.authorRepository.getPageAuthorNotBooks(pageable, search);
+        if (!pageAuthorNotBook.hasContent()) throw new ResourceNotFoundException("Page is empty !!!");
+        return pageAuthorNotBook;
     }
 
 

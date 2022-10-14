@@ -83,7 +83,7 @@ public class JwtUtils {
         }
         catch (Exception e)
         {
-            return false;
+            request.setAttribute("undifined", e.getMessage());
         }
         return false;
     }

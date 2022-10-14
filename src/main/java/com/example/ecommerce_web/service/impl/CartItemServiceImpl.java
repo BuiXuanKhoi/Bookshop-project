@@ -47,12 +47,15 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem add(CartItemRequestDTO cartItemRequestDTO) {
         int bookId = cartItemRequestDTO.getBookId();
+        int bookQuantity = bookService.getById(bookId).getQuantity();
+        int cartQuantity = cartItemRequestDTO.getQuantity();
         String userName = userLocal.getLocalUserName();
         Users users = userService.findByUserName(userName);
         CartItem cartItem = cartItemMapper.fromDTO(cartItemRequestDTO);
         cartItem.setUsers(users);
 
         if(isExistCartItem(bookId)) throw new ConstraintViolateException("Cannot Add To Cart Due To Already Existed Cart Item !!!");
+        if(bookQuantity < cartQuantity) throw new ConstraintViolateException("Cannot add to cart due to out of stock !!!");
 
         return this.cartItemRepository.save(cartItem);
     }
@@ -60,7 +63,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     private boolean isExistCartItem(int bookId){
         Books books = bookService.getById(bookId);
-        return this.cartItemRepository.existsByBooks(books);
+        Users users = userService.findLocalUser();
+        return this.cartItemRepository.existsByBooksAndUsers(books, users);
     }
 
 
@@ -84,7 +88,11 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItem update(int cartId, int addedQuantity) {
         CartItem cartItem = findById(cartId);
         int existedQuantity = cartItem.getQuantity();
-        cartItem.setQuantity(existedQuantity + addedQuantity);
+        int bookQuantity = cartItem.getBooks().getQuantity();
+        int cartQuantity = existedQuantity + addedQuantity;
+
+        if(bookQuantity < cartQuantity) throw new ConstraintViolateException("Cannot update cart due to out of stock!!!");
+        cartItem.setQuantity(cartQuantity);
         return this.cartItemRepository.save(cartItem);
     }
     @Override

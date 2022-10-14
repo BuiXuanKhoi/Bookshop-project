@@ -18,4 +18,12 @@ public interface AuthorRepository extends JpaRepository<Author, Integer>{
             "from Author aut " +
             "where lower(aut.authorName) like %:search%")
     Page<AuthorRespondDTO> getPageAuthor(Pageable pageable, String search);
+
+
+    @Query(value = "" +
+            "select new com.example.ecommerce_web.model.dto.respond.AuthorRespondDTO(" +
+            "aut.authorID, aut.authorName) from Author aut " +
+            "where aut.authorID not in (select bkd.authors.authorID from Books bkd) " +
+            "and lower(aut.authorName) like %:search% ")
+    Page<AuthorRespondDTO> getPageAuthorNotBooks(Pageable pageable, String search);
 }

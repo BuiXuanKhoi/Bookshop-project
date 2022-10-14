@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.service.impl;
 
 import com.example.ecommerce_web.constant.BookState;
+import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.BookMapper;
 import com.example.ecommerce_web.model.dto.request.BookRequestDTO;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -84,6 +86,15 @@ public class BookServiceImpl implements BookService {
         return listBookFeature;
     }
 
+    @Override
+    public Page<BookFeatureRespondDTO> getPageManageBook(String searchCode, int page) {
+        final int PAGE_SIZE = 20;
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        Page<BookFeatureRespondDTO> pageManageBook = bookRepository.getPageManageBook(pageable, searchCode);
+        if (!pageManageBook.hasContent()) throw new ResourceNotFoundException("This Page Is Empty !!!");
+        return pageManageBook;
+    }
+
 
     @Override
     public Books add(BookRequestDTO bookRequestDTO) {
@@ -131,6 +142,22 @@ public class BookServiceImpl implements BookService {
                     .findAny()
                     .orElseThrow(
                         () -> new ResourceNotFoundException("Don't have cart item exist with this book !"));
+    }
+
+    @Override
+    public Books checkout(int bookId, int minusQuantity) {
+        Books books = getById(bookId);
+        int oldQuantity = books.getQuantity();
+
+        if(oldQuantity == minusQuantity){
+            books.setBookState(BookState.OUT_OF_STOCK);
+        }
+        else if (oldQuantity < minusQuantity){
+            throw new ConstraintViolateException("Cannot add to order due to out of stock books !!!");
+        }
+
+        books.setQuantity(oldQuantity - minusQuantity);
+        return this.bookRepository.save(books);
     }
 
     @Override

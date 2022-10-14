@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface BookService {
     Page<BookFeatureRespondDTO> getPage(String searchCode, String filter, String mode, int page, String authors);
+    Page<BookFeatureRespondDTO> getPageManageBook(String searchCode, int page);
     Books getById(int bookId);
     Books add(BookRequestDTO bookRequestDTO);
     Books update(int bookId, ModifyBookRequestDTO modifyBookRequestDTO);
@@ -22,4 +23,5 @@ public interface BookService {
     List<Books> findTopOnSale();
     void delete(int bookId);
     CartItem getCartItemByBook(int bookId);
+    Books checkout(int bookId, int minusQuantity);
 }

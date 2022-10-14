@@ -143,11 +143,13 @@ public class BookServiceTest {
     @Test
     void testWhenDelete_thenReturnStatusOk_ifIdExist(){
         Books books = mock(Books.class);
-        Books actual = bookService.getById(1);
-        System.out.println(actual.getBookId());
-        assertEquals(actual, books);
+        when(bookRepository.findById(1)).thenReturn(Optional.of(books));
         bookRepository.delete(books);
         verify(bookRepository, times(1)).delete(books);
+    }
+
+    void whenFindTopPopular_thenReturnTopPopular(){
+
     }
 
 
