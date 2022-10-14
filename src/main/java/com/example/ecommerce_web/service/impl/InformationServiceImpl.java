@@ -53,7 +53,7 @@ public class InformationServiceImpl implements InformationService {
     public Information getById(int id) {
         return this.informationRepository.findById(id)
                                          .orElseThrow(
-                                                 () -> new ResourceNotFoundException("Information not exist with ID: " + id));
+                                                 () -> new ResourceNotFoundException("Information not exists with ID: " + id));
     }
 
     @Override
