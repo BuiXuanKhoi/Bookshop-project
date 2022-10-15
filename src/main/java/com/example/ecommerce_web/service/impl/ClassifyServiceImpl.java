@@ -6,6 +6,7 @@ import com.example.ecommerce_web.model.entities.Category;
 import com.example.ecommerce_web.model.entities.Classify;
 import com.example.ecommerce_web.repository.CategoryRepository;
 import com.example.ecommerce_web.repository.ClassifyRepository;
+import com.example.ecommerce_web.service.CategoryService;
 import com.example.ecommerce_web.service.ClassifyService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +17,18 @@ import org.springframework.stereotype.Service;
 public class ClassifyServiceImpl implements ClassifyService {
 
     private final ClassifyRepository classifyRepository;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ClassifyServiceImpl(ClassifyRepository classifyRepository, CategoryRepository categoryRepository){
+    public ClassifyServiceImpl(ClassifyRepository classifyRepository, CategoryService categoryService){
         this.classifyRepository = classifyRepository;
-        this.categoryRepository = categoryRepository;
+        this.categoryService = categoryService;
     }
 
 
     @Override
     public Classify createClassify(int categoryId) {
-        Category category = this.categoryRepository.findById(categoryId)
-                                                   .orElseThrow(
-                                            () -> new ResourceNotFoundException("Not Found Category With ID: " + categoryId));
-
+        Category category = categoryService.findById(categoryId);
         Classify classify = new Classify(0,null, category);
         return this.classifyRepository.save(classify) ;
     }
