@@ -156,38 +156,12 @@ public class BookServiceTest {
 
     @Test
     void whenFindTopPopular_thenReturnTopPopular(){
-        List<Books> books = List.of(
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class)
-        );
+        List<Books> books = mock(List.class);
+        Stream<Books> booksStream = mock(Stream.class);
+        Stream<Books> sortedBooks = mock(Stream.class);
+        Stream<Books> streamTopPopularBooks = mock(Stream.class);
+        List<Books> topPopularBooks = mock(List.class);
 
-        Stream<Books> booksStream = Stream.of(
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class)
-        );
-
-        Stream<Books> sortedBooks = Stream.of(
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class)
-        );
-
-        List<Books> topPopularBooks = List.of(
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class)
-        );
-
-        Stream<Books> streamTopPopularBooks = Stream.of(
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class), mock(Books.class),
-                mock(Books.class),mock(Books.class)
-        );
 
         when(bookRepository.findAll()).thenReturn(books);
         when(books.stream()).thenReturn(booksStream);
