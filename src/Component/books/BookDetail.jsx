@@ -60,7 +60,6 @@ export default function BookDetail(){
         bookState: ''
     })
 
-
     const closeSucessModal = () => {
         setQuantity(0);
         setIsOpenSuccess(false);
@@ -99,28 +98,23 @@ export default function BookDetail(){
 
     const [isFeedback, setIsFeedback] = useState(false);
 
-
-    const getCarItem = () => {
-
+    const getCartItem = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id +  '/cart', config )
             .then((res) => {
                 setCartId(res.data.cartItemsID) ;
                 openWarningModal();
-            }).catch((err) => {
-
+            })
+            .catch((err) => {
                 console.log(err)
-
                 if(err.response.data.statusCode === 404){
                     addBookCart();
                 }
-                console.log(err);
         })
 
     }
 
 
     const updateCart = () => {
-        console.log(cartId)
         axios.put('https://ecommerce-web0903.herokuapp.com/api/carts/' + cartId + '?quantity=' + quantity, null,
             config)
             .then((res) => {
@@ -168,22 +162,25 @@ export default function BookDetail(){
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id + '/feedbacks')
             .then((res) => {
                 setBookFeedback(res.data)
-
-            }).catch((err) => console.log(err))
+            })
+            .catch((err) => console.log(err))
     }
 
     const getBookDetail = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/' + bookId.id)
             .then((res) => {
-                console.log(res.data)
                 setBookDetail(res.data);
-            }).catch((err) => setIsFeedback(false))
+            })
+            .catch((error) => {
+                console.log(error)
+                setIsFeedback(false)})
     }
 
     const closeSession = () => {
         removeCookies('book-token');
         navigate('/login');
     }
+
     const displayButton = (state) =>{
         if(state ==="UNAVAILABLE"){
             return(
@@ -193,7 +190,7 @@ export default function BookDetail(){
         }
         else if(state==="OUT_OF_STOCK"){
             return(
-                <Button disabled={true} style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
+                <Button disabled={true} style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCartItem}>
                     <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
                         Stock out
                     </p>
@@ -202,7 +199,7 @@ export default function BookDetail(){
         }
         else{
             return(
-                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCarItem}>
+                <Button style={{background:"#CFD2CF",paddingBottom:"10%",width:"100%"}} onClick={getCartItem}>
                     <p className={"positionForChar"} style={{fontWeight:"bolder",fontSize:"1.5vw",marginBottom:"50%"}}>
                         Add to Cart
                     </p>
@@ -305,9 +302,10 @@ export default function BookDetail(){
                 <span>Add {bookDetail.bookName} To Cart Success. </span>
         </Modal>
 
-            <Row style={{paddingTop:"10%",fontFamily:"Arial"}}>
+            <Row style={{paddingTop:"10%"}}>
 
                 {bookDescription()}
+
                 <Row className={"customerReviewPost"}>
                     <Col span={24}>
                         <Row style={{background:"#F6F6F6"}}>
@@ -315,13 +313,13 @@ export default function BookDetail(){
                                 <p className="positionForChar" style={{fontSize:"2vw",fontWeight:"bolder"}}> ${bookDetail.bookPrice }</p>
                             </Col>
                         </Row>
+
                         {/*--------------------------------------------------------------------------------*/}
                         <Row>
                             <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}>
 
                             </Col>
                         </Row>
-
                         {/*--------------------------------------------------------------------------------*/}
                         <Row style={{marginTop:"20%"}}>
                             <Col span={20} offset={2}>
@@ -333,7 +331,8 @@ export default function BookDetail(){
                             <Col span={20} offset={2}>
                                 <Row style={{background:"#CFD2CF"}}>
                                     <Col span={10} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
-                                        <Button style={{background:"#CFD2CF"}} onClick={handleLessQuantity} icon={<MinusOutlined />}></Button>
+                                        <Button style={{background:"#CFD2CF"}} onClick={handleLessQuantity} icon={<MinusOutlined />}>
+                                        </Button>
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={4} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",textAlign:"center"}}>
@@ -341,10 +340,10 @@ export default function BookDetail(){
                                     </Col>
                                     {/*--------------------------------------------------------------------------------*/}
                                     <Col span={10} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                                        <Button style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}></Button>
+                                        <Button style={{background:"#CFD2CF"}} onClick={handleAddQuantity} icon={<PlusOutlined />}>
+                                        </Button>
                                     </Col>
                                 </Row>
-
                             </Col>
                         </Row>
                         {/*--------------------------------------------------------------------------------*/}
@@ -355,9 +354,7 @@ export default function BookDetail(){
                         </Row>
                     </Col>
                 </Row>
-
             </Row>
-
 
             <Row style={{marginTop:"3%"}}>
                 <FeedbackTable bookID={bookId.id} config={config}/>

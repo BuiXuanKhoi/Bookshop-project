@@ -3,13 +3,14 @@ import React, {useEffect, useState} from "react";
 export default function OrderItem ({bookName,imageLink,price,quantity}) {
     const [sum,setSum] = useState(0);
     let save = 0
-    const calculateCost = (quantity,price)=>{
+    const calculateCostForEachOrderItem = (quantity,price)=>{
          save = Math.round(quantity*price*100)/100;
          setSum(save);
     }
     useEffect(()=>{
-        calculateCost(quantity,price)
-    },[quantity,price])
+        calculateCostForEachOrderItem(quantity,price)
+    },[quantity])
+
     return (
         <>
             <div className={"flex-box"}>

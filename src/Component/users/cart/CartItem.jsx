@@ -9,7 +9,8 @@ export default function CartItem ({item,emptyList,config,setQuantityFlag}) {
             {/*---------------------------Line--------------------------------*/}
             <Col span={24}>
                 <Row>
-                    <Col span={24} style={{borderStyle: "ridge", borderColor: "#F6F6F6"}}></Col>
+                    <Col span={24} style={{borderStyle: "ridge", borderColor: "#F6F6F6"}}>
+                    </Col>
                 </Row>
                 {/*---------------------------Cart item--------------------------------*/}
                 <Row style={{paddingBlock: "4%"}}>

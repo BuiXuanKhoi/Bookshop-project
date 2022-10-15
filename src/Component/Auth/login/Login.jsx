@@ -12,23 +12,15 @@ import {useNavigate} from "react-router";
 import {SecurityContext} from "../../../App";
 export default function Login(){
 
-
     const[loginData, setLoginData] = useState({
         userName: "",
         password: "",
     });
-
     const [security, setSecurity] = useContext(SecurityContext);
-
-
     const {register, handleSubmit} = useForm();
     const[cookies, setCookies] = useCookies(['book-token']);
-
     const isInit = useRef(false);
     const navigate = useNavigate();
-
-
-
 
     const afterSubmit = (values) =>{
 
@@ -43,10 +35,7 @@ export default function Login(){
             title: "Error Login",
             content: mess
         })
-
     }
-
-
 
     const successPopup = (mes) => {
         Modal.success({
@@ -55,9 +44,6 @@ export default function Login(){
         })
         navigate('/');
     }
-
-
-
 
     const login = () =>{
         axios.post('https://ecommerce-web0903.herokuapp.com/api/auth/login',loginData,null)
@@ -111,7 +97,6 @@ export default function Login(){
                         <label htmlFor="login password">
                             <svg className="icon">
                                 <use href="#icon-lock">
-
                                 </use>
                             </svg>
                             <span className="hidden">Password</span></label>

@@ -47,7 +47,6 @@ export default function OrderHistory ({element}) {
     return (
         <Row key={element.orderId} style={{background: "white", display: "flex", justifyContent: "center", marginTop: "4%"}}>
             <Col span={23}>
-
                 {/*--------------------------------------------------------------------------------*/}
                 <Row className={"row-container"} style={{marginBottom:"0"}}>
                     <div style={{width: "100%", marginTop: "3%"}}>
