@@ -39,7 +39,8 @@ public class CartItemServiceImpl implements CartItemService {
         this.bookService = bookService;
     }
 
-    private CartItem findById(int id){
+    @Override
+    public CartItem findById(int id){
         return this.cartItemRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Not Found Cart Item With ID: " + id));
     }

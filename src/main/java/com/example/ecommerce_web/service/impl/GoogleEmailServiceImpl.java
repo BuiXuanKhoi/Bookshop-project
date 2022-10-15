@@ -42,7 +42,5 @@ public class GoogleEmailServiceImpl implements EmailService {
 //            javaMailSender.send(mailMessage);
 
             return ResponseEntity.ok(new MessageRespond(HttpStatus.OK.value(), "Email Sent Success !!!"));
-
-
     }
 }
