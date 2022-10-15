@@ -27,7 +27,8 @@ export default function ManageBookTable(){
         bookPrice : 0.0,
         ratingPoint : 0.0,
         imageLink : '',
-        authorName : ''
+        authorName : '',
+        bookState: ''
     }])
 
     const [bookDetail, setBookDetail] = useState({
@@ -36,10 +37,11 @@ export default function ManageBookTable(){
         bookPrice : 0.0,
         ratingPoint : 0.0,
         imageLink : '',
-        authorName : ''
+        authorName : '',
+        bookState : '',
     })
     const getBookPage = () => {
-        axios.get('https://ecommerce-web0903.herokuapp.com/api/books?page=' + page + '&searchCode=' + search  + '&mode=' + mode, authorize)
+        axios.get('https://ecommerce-web0903.herokuapp.com/api/books/manage?page=' + page + '&search=' + search , authorize)
             .then((res) => {
                 console.log(res);
                 setTotalElements(res.data.totalElements);
@@ -178,11 +180,11 @@ export default function ManageBookTable(){
                                 </>
                             </td>
                             <td>
-
                                 <Button className="btn-style" onClick={() => showDeleteConfirm(book.bookId)}>
                                     <FontAwesomeIcon icon={faTrash}/>
                                 </Button>
                             </td>
+                            <td onClick={() => handleFind(book)}>{book.bookState}</td>
                         </tr>
                     ))
                 }

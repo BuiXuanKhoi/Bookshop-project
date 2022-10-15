@@ -4,7 +4,7 @@ import {ArrowRightOutlined} from "@ant-design/icons";
 import '../book/table/ManageBookTable.css'
 import axios from "axios";
 
-export default function OrderListUser ({item,listOfOrderState,config}) {
+export default function OrderListUser ({item, openModalOrderDetail, listOfOrderState, setOrderItems, config}) {
 
     const [changeOrderState,setChangeOrderState] = useState(item.orderState);
     const flagChange = useRef(false);
@@ -21,7 +21,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
 
     useEffect(()=>{
         if(flagChange.current){
-            sendAPI();
+            nextOrderState();
         }
         else{
             flagChange.current= true;
@@ -31,7 +31,7 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
         }
     },[changeOrderState])
 
-    const sendAPI = () =>{
+    const nextOrderState = () =>{
         axios.put("https://ecommerce-web0903.herokuapp.com/api/orders/"+item.orderId,null,config)
             .then(()=>{
                 if(changeOrderState === listOfOrderState[listOfOrderState.length-1]){
@@ -46,14 +46,20 @@ export default function OrderListUser ({item,listOfOrderState,config}) {
             })
     }
 
+    const handleClickOrderDetail = (item) => {
+        setOrderItems(item);
+        openModalOrderDetail();
+    }
+
+
     return (
         <>
             <tr className="book-table-row-container">
                 <td style={{border: "0.5px solid black"}}>{item.orderId}</td>
                 <td style={{border: "0.5px solid black"}}>{item.userName}</td>
                 <td style={{border: "0.5px solid black"}} >$ {item.totalPrice}</td>
-                <td style={{border: "0.5px solid black"}}>
-                    <Col span={24}>
+                <td style={{border: "0.5px solid black"}} onClick={() => {handleClickOrderDetail(item.orderItems)}} className="book-table-column-container">
+                    <Col  span={24}>
                         {item.orderItems.map((element)=>
                             <Row className={"row-container"}>
                                 <div className={"flex-box"} >

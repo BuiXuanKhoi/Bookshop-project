@@ -12,9 +12,11 @@ import { components } from "react-select";
 export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen}){
 
     const state = useRef(false);
+    const formData = new FormData();
+    const [imageDetail, setImageDetail] = useState("");
     const [bookRegister, setBookRegister] = useState({});
     const [listCategory, setListCategory] = useState([]);
-    let optionList = [];
+    const [optionList, setOptionList] = useState([]);
     let categoryChosenList=[]
     const { Option } = Select;
     let authorChosenList = []
@@ -69,11 +71,21 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
     },[listCategory]);
 
     useEffect(()=>{
-        createBook()
+        if(state.current){
+            formData.append("data", JSON.stringify(bookRegister))
+            formData.append("image", imageDetail);
+        }else {
+            state.current = true;
+        }
     },[bookRegister]);
 
+    useEffect(() => {
+        createBook();
+    },[formData])
+
     const createBook = () => {
-        axios.post('https://ecommerce-web0903.herokuapp.com/api/books', bookRegister, config)
+        console.log(formData);
+        axios.post('https://ecommerce-web0903.herokuapp.com/api/books', formData, config)
             .then((res) => {
                 handleSuccessAdd();
                 setIsOpen(false);
@@ -95,6 +107,10 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             number = item.value;
             categoryChosenList.push(number)
         })
+    }
+
+    const uploadImage = (event) => {
+        setImageDetail(event.target.files[0]);
     }
 
     return(
@@ -141,14 +157,6 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
             >
                 <TextArea defaultValue={""} rows={5} cols={10} placeholder="Write the book's description"/>
             </Form.Item>
-
-            <Form.Item
-                name="imageLink"
-                label="Book Images"
-            >
-                <TextArea defaultValue={""} rows={1} cols={10} placeholder="Insert book images"/>
-            </Form.Item>
-
             <Form.Item
                 name="quantity"
                 label="Book Quantity"
@@ -211,6 +219,13 @@ export default function TabBook({formItemLayout, form, config,isOpen,setIsOpen})
                     )}
                 </Select>
             </Form.Item>
+            <Form.Item
+                name="image"
+                label="Upload Image"
+            >
+                <input onChange={event => uploadImage(event)} type="file" placeholder="Input book image"/>
+            </Form.Item>
         </Form>
+
     )
 }
