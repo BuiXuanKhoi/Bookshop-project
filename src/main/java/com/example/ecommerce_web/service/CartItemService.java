@@ -15,4 +15,5 @@ public interface CartItemService {
     void delete(int cartItemId);
     CartItem update(int cartId, int addedQuantity);
     CartItem change(int cartId, int decreaseQuantity);
+    CartItem findById(int id);
 }
