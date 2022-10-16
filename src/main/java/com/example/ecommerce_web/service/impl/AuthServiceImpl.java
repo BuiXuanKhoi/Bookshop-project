@@ -97,13 +97,11 @@ public class AuthServiceImpl implements AuthService {
                                                      .collect(Collectors.toList()).get(0);
 
 
-        String refreshToken = refreshTokenService.createByUserName(users.getUserName()).getToken();
 
         return LoginRespondDTO.builder()
                               .role(roleName)
                               .token(jwt)
                               .expires(new Date(expirationTime))
-                              .refreshToken(refreshToken)
                               .userId(userDetail.getUserId())
                               .userName(userDetail.getUsername())
                               .tokenType("Bearer")
