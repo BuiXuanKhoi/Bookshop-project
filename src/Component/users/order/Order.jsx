@@ -23,7 +23,6 @@ export default function Order() {
         axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage", config)
             .then((res) => {
                 setOrderList(res.data);
-                console.log(res.data)
             })
             .catch((error) => {
                 console.log(error);
@@ -37,9 +36,7 @@ export default function Order() {
         <Row style={{background:"gray",paddingTop:"10%",borderStyle:"ridge"}}>
             <Col span={24} style={{borderStyle:"ridge"}}>
                 {   orderList.map((element) =>
-                    (
-                        <OrderHistory element={element}/>
-                    )
+                    (<OrderHistory element={element}/>)
                 )}
             </Col>
         </Row>

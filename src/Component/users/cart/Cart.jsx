@@ -12,18 +12,17 @@ import CartTotal from "./CartTotal";
 
 export default function Cart(){
     const [loginData,setLoginData] = useContext(SecurityContext);
-    const [cartId, setCartId] = useState(0);
     const [total,setTotal] = useState(0);
+
     const config = {
         headers: {Authorization:'Bearer ' + loginData.token}
     }
-
     const [quantityFlag, setQuantityFlag] = useState(0);
     const copyCartList = useRef([]);
     const [emptyList,setEmptyList] = useState(false);
-    const [cartList,setCartList] = useState([{}]);
-    const [cartListUse,setCartListUse] = useState()
+    const [cartList,setCartList] = useState([]);
     const flagForRegister = useRef(true);
+
     const getCartItem = () =>{
         axios.get("https://ecommerce-web0903.herokuapp.com/api/carts",config)
             .then((res)=>{
@@ -33,18 +32,19 @@ export default function Cart(){
                     copyCartList.current = res.data;
                     flagForRegister.current= false;
                     }
-                }
-            )
+                })
             .catch((error)=>{
-                if(error.response.data.message=="List is Empty !!!"){
+                if(error.response.data.message == "List is Empty !!!"){
                     setEmptyList(true);
                 }
             })
     }
-    const calculateTotal = () =>{
+
+    const calculateTotalCost = () =>{
         let listCost = cartList.map(item=>item.price*item.quantity);
         setTotal(listCost.reduce((a,b)=>a+b,0));
     }
+
     useEffect(()=> {
         getCartItem();
     },[])
@@ -54,7 +54,7 @@ export default function Cart(){
     },[quantityFlag])
 
     useEffect(() => {
-        calculateTotal();
+        calculateTotalCost();
     },[cartList])
 
     return (
@@ -63,9 +63,6 @@ export default function Cart(){
                 <Col span={24}>
                     <Row>
                         <Col>
-                            <Row>
-
-                            </Row>
                             <Row>
                                 <Col span={24} style={{borderStyle:"ridge",borderColor:"#F6F6F6"}}> </Col>
                             </Row>

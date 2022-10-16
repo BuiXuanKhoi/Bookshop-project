@@ -24,21 +24,27 @@ const customerReview = (props) =>{
         props.setDefaultPageSize(values.key);
         props.setShowNumber(values.key);
     }
-    const handleOnClickSearch5 = () =>{
+
+    const handleOnClickSearch5Star = () =>{
         props.setFilter(5);
     }
-    const handleOnClickSearch4 = () => {
+
+    const handleOnClickSearch4Star = () => {
         props.setFilter(4);
     }
-    const handleOnClickSearch3 = () => {
+
+    const handleOnClickSearch3Star = () => {
         props.setFilter(3);
     }
-    const handleOnClickSearch2 = () => {
+
+    const handleOnClickSearch2Star = () => {
         props.setFilter(2);
     }
-    const handleOnClickSearch1 = () => {
+
+    const handleOnClickSearch1Star = () => {
         props.setFilter(1);
     }
+
     const menu = (
         <Menu
             onClick={handleOnClickSort}
@@ -136,23 +142,23 @@ const customerReview = (props) =>{
                             </p>
                             <div style={{display:"inline-block" ,marginLeft:"2%"}}>
 
-                                <a onClick={handleOnClickSearch5} value={"5"}  className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch5Star} value={"5"}  className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     5 star ({fiveStar}) |
                                 </a>
 
-                                <a onClick={handleOnClickSearch4} value={"4"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch4Star} value={"4"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     4 star ({fourStar})|
                                 </a>
 
-                                <a onClick={handleOnClickSearch3} value={"3"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch3Star} value={"3"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     3 star ({threeStar}) |
                                 </a>
 
-                                <a onClick={handleOnClickSearch2} value={"2"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch2Star} value={"2"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     2 star ({twoStar}) |
                                 </a>
 
-                                <a onClick={handleOnClickSearch1} value={"1"} className={"positionForChar"} style={{textDecoration:"underline"}}>
+                                <a onClick={handleOnClickSearch1Star} value={"1"} className={"positionForChar"} style={{textDecoration:"underline"}}>
                                     1 star ({oneStar}) |
                                 </a>
                             </div>
@@ -182,7 +188,6 @@ const customerReview = (props) =>{
                         </Dropdown>
                     </Col>
                 </Row>
-
             </Col>
     );
 }
@@ -224,7 +229,6 @@ const reviewTitle = (ratingPoint, comment, title,userName, createdDay) => {
     );
 }
 
-
 export default function FeedbackTable ({bookID,config}) {
     const [page,setPage] = useState(0);
     const [size,setSize] = useState(10);
@@ -251,11 +255,11 @@ export default function FeedbackTable ({bookID,config}) {
             })
     }
 
-    const handleOnChange = (m) => {
+    const handleOnChangePages = (m) => {
         setPage(m - 1);
     }
 
-    const getFeebackQuantityList = () => {
+    const getFeedbackQuantityList = () => {
         axios.get("https://ecommerce-web0903.herokuapp.com/api/books/"+bookID+"/feedbacks/rate")
             .then((res) =>{
                 setFeedbackRatingList(res.data)
@@ -270,7 +274,7 @@ export default function FeedbackTable ({bookID,config}) {
     },[page,mode,size,filter]);
 
     useEffect(()=>{
-        getFeebackQuantityList();
+        getFeedbackQuantityList();
     },[])
 
     return (
@@ -290,7 +294,7 @@ export default function FeedbackTable ({bookID,config}) {
                         {/*--------------------------------------------------------------------------------*/}
                         <Row>
                             <Col span={24} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-                                <Pagination onChange={handleOnChange} defaultCurrent={currentPage} pageSize={defaultPageSize} style={{marginTop:"5%"}} total={totalElements}/>
+                                <Pagination onChange={handleOnChangePages} defaultCurrent={currentPage} pageSize={defaultPageSize} style={{marginTop:"5%"}} total={totalElements}/>
                             </Col>
                         </Row>
                     </Col>

@@ -11,7 +11,6 @@ export default function BookTable({emptyList,cartList,config,setQuantityFlag}){
         return(
             <Col span={24}>
                 {/*---------------------------Header--------------------------------*/}
-
                 <Row>
                     <Col span={10} offset={1} >
                         <p className={"positionForChar2"} style={{marginLeft:"7%"}}>
@@ -36,8 +35,10 @@ export default function BookTable({emptyList,cartList,config,setQuantityFlag}){
                         </p>
                     </Col>
                 </Row>
+
                 <Row>
-                    <Col span={24} style={{borderStyle: "ridge", borderColor: "#F6F6F6"}}></Col>
+                    <Col span={24} style={{borderStyle: "ridge", borderColor: "#F6F6F6"}}>
+                    </Col>
                 </Row>
                 <Row>
                     <Col span={24} style={{justifyContent:"center",display:"flex",textAlign:"center"}}>
@@ -51,13 +52,13 @@ export default function BookTable({emptyList,cartList,config,setQuantityFlag}){
         return (
             <Col span={24}>
                 {/*---------------------------Header--------------------------------*/}
-
                 <Row>
                     <Col span={10} offset={1}>
                         <p className={"positionForChar2"} style={{marginLeft: "7%"}}>
                             Product
                         </p>
                     </Col>
+
                     <Col span={4}>
                         <p className={"positionForChar2"}>
                             Price
@@ -80,7 +81,6 @@ export default function BookTable({emptyList,cartList,config,setQuantityFlag}){
                 {cartList.map((item) =>
                     <CartItem item={item} emptyList={emptyList} config={config} setQuantityFlag={setQuantityFlag}/>
                 )}
-
             </Col>
         );
     }

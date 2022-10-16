@@ -2,8 +2,6 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {Row, Col, Form, Button, Input, Pagination, Modal} from "antd";
 import '../book/table/ManageBookTable.css'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {ArrowRightOutlined} from "@ant-design/icons";
 import axios from "axios";
 import {SecurityContext} from "../../../../App";
 import OrderListUser from "./OrderListUser";
@@ -11,6 +9,7 @@ import {getCookie} from "react-use-cookie";
 import './ModalOrderDetail.css';
 
 export default function ManageOrder () {
+
     const [orderList,setOrderList] = useState([]);
     const state = useRef(false);
     const config = {
@@ -22,6 +21,7 @@ export default function ManageOrder () {
         "PREPARED","PACKAGED","DELIVERED","RECEIVED","COMPLETED"
     ]
 
+    const flagChange = useRef(false);
     const [currentPage,setCurrentPage] = useState(0);
     const [pageSize, setPageSize] = useState(0);
     const [orderItems, setOrderItems] = useState([{
@@ -32,10 +32,11 @@ export default function ManageOrder () {
         quantity : 0
     }]);
     const [totalElements, setTotalElements] = useState(0);
+    const [userName,setUserName] = useState('');
     const [isOpenOrderDetail, setIsOpenOrderDetail] = useState(false);
 
-    const handleOrderList = () =>{
-        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage"+"?page="+currentPage,config)
+    const getOrderList = () =>{
+        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage"+"?page="+currentPage+"&search="+userName,config)
             .then((res) =>{
                 setOrderList(res.data.listManageOrder);
                 setPageSize(res.data.pageSize);
@@ -57,29 +58,24 @@ export default function ManageOrder () {
     },[orderItems])
 
     useEffect(()=>{
-        handleOrderList();
+        getOrderList();
     },[currentPage])
 
-    const handleOnChange = (res) =>{
+    useEffect(()=>{
+        if(flagChange.current){
+            getOrderList();
+        }
+        else{
+            flagChange.current = true;
+        }
+    },[userName])
+
+    const handleOnChangePages = (res) =>{
         setCurrentPage(res-1)
     }
 
     const handleSubmitSearch = (values) =>{
-        requestListUserName(values.userName)
-    }
-
-    const requestListUserName = (userName) => {
-        console.log(userName)
-        axios.get("https://ecommerce-web0903.herokuapp.com/api/orders/manage"+"?page="+currentPage+"&search="+userName,config)
-            .then((res)=>{
-                setOrderList(res.data.listManageOrder);
-                setPageSize(res.data.pageSize);
-                setCurrentPage(res.data.currentPage);
-                setTotalElements(res.data.totalElements);
-            })
-            .catch((error) =>{
-                console.log(error);
-            })
+        setUserName(values.userName)
     }
 
 
@@ -90,6 +86,7 @@ export default function ManageOrder () {
     const closeModalOrderDetail = () => {
         setIsOpenOrderDetail(false);
     }
+
 
     return (
         <div style={{paddingTop:"10%"}}>
@@ -167,7 +164,7 @@ export default function ManageOrder () {
                                     )}
                                     </tbody>
                                 </table>
-                                <Pagination style={{marginTop:"3%",marginLeft:"40%"}} total={totalElements} current={currentPage+1} pageSize={pageSize} onChange={handleOnChange}/>
+                                <Pagination style={{marginTop:"3%",marginLeft:"40%"}} total={totalElements} current={currentPage+1} pageSize={pageSize} onChange={handleOnChangePages}/>
                             </div>
                         </Col>
                     </Row>

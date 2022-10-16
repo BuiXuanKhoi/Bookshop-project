@@ -34,20 +34,20 @@ export default function ReviewSubmit ({bookID,config}) {
     }
 
     const handleSubmitReview = (values) => {
-
         setReviewSubmitting({
             title : values.title,
             comment : values.description,
             ratingPoint : ratingPoint,
         })
     }
+
     const handleAuthenticationError = () =>{
         Modal.error({
             title:"Error",
             content: " You must login first before submitting the feedback"
         })
-
     }
+
     useEffect(()=>{
         if(state.current){
             handleSendReview();
@@ -60,23 +60,22 @@ export default function ReviewSubmit ({bookID,config}) {
         Modal.success({
             content: 'Succeeded in submitting your review',
         });
-
         window.location.reload();
     }
+
     const handleError = () => {
         Modal.error({
             title: 'Error',
             content: 'Can not submit two feedbacks for one book',
         });
     };
+
     return (
         <Row className={"customerReviewPost"}>
             <Col span={24}>
                 <Form title={"feedback"}
                       form = {form}
-                      onFinish={
-                          handleSubmitReview
-                      }
+                      onFinish={handleSubmitReview}
                 >
                     <Row >
                         <p className="positionForChar" style={{marginLeft:"2%",fontSize:"2vw",fontWeight:"bolder"}}> Write a Review</p>

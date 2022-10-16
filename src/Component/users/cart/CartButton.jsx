@@ -17,11 +17,11 @@ export default function CartButton({emptyList,cartItemID, quantity, config, setQ
 
     useEffect(() => {
         setQuantity(cartItemQuantity)
-        changeQuantity();
+        changeCartItemQuantity();
         setQuantityFlag(cartItemQuantity)
     },[cartItemQuantity])
 
-    const changeQuantity = () =>{
+    const changeCartItemQuantity = () =>{
         axios.put("https://ecommerce-web0903.herokuapp.com/api/carts/"+cartItemID+"/change?quantity="+cartItemQuantity,null,config)
             .then((res)=>{
                 console.log(res);
@@ -35,7 +35,8 @@ export default function CartButton({emptyList,cartItemID, quantity, config, setQ
         return(
             <Row style={{background:"#CFD2CF",marginTop:"87%"}}>
                 <Col span={11} style={{borderColor:"#CFD2CF",alignItems:"center",display:"flex"}}>
-                    <Button onClick={decreaseBookQuantity}  style={{background:"#CFD2CF"}} icon={<MinusOutlined />}></Button>
+                    <Button onClick={decreaseBookQuantity}  style={{background:"#CFD2CF"}} icon={<MinusOutlined />}>
+                    </Button>
                 </Col>
                 {/*--------------------------------------------------------------------------------*/}
                 <Col span={2} style={{borderColor:"#CFD2CF",justifyContent:"center",display:"flex",alignItems:"center",textAlign:"center"}}>
@@ -43,7 +44,8 @@ export default function CartButton({emptyList,cartItemID, quantity, config, setQ
                 </Col>
                 {/*--------------------------------------------------------------------------------*/}
                 <Col span={11} style={{borderColor:"#CFD2CF",justifyContent:"right",alignItems:"center",display:"flex"}}>
-                    <Button onClick={increaseBookQuantity} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}></Button>
+                    <Button onClick={increaseBookQuantity} style={{background:"#CFD2CF"}} icon={<PlusOutlined />}>
+                    </Button>
                 </Col>
             </Row>
         );

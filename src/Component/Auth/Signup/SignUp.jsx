@@ -9,11 +9,10 @@ import {FacebookFilled} from "@ant-design/icons"
 import {LinkedinFilled} from "@ant-design/icons";
 import {useNavigate} from "react-router";
 
-
 const {Option} = Select;
 const dateFormatList = 'DD/MM/YYYY';
 
-const SignUp = () =>{
+export default function SignUp () {
     const [form] = Form.useForm();
     let role = 'CUSTOMER';
     const isInit = useRef(false);
@@ -42,24 +41,20 @@ const SignUp = () =>{
             title: "Signup Success: ",
             content: mes
         })
-
         navigate('/login');
     }
 
-
-
     useEffect(() =>{
-        if(isInit.current)
-        {
-            PostAPI();
-        }else
-        {
+        if(isInit.current) {
+            signUp();
+        }
+        else {
             isInit.current = true;
         }
     },[user])
 
 
-    const Send = (values) =>{
+    const handleSubmitUser = (values) =>{
         setUser({
             userName: values.userName,
             dateOfBirth: values.dateOfBirth.format(dateFormatList),
@@ -70,11 +65,9 @@ const SignUp = () =>{
             email: values.email,
             role: role,
         })
-
-        console.log(values);
     }
 
-    const PostAPI = () =>{
+    const signUp = () =>{
 
         axios
             .post("https://ecommerce-web0903.herokuapp.com/api/auth/signup",user)
@@ -86,9 +79,6 @@ const SignUp = () =>{
                 }
             });
     }
-
-
-
 
     const formItemLayout = {
         labelCol:{
@@ -122,7 +112,6 @@ const SignUp = () =>{
         },
     };
 
-
     return (
         <>
             <div className={"first-box"}>
@@ -146,7 +135,7 @@ const SignUp = () =>{
                 <Form {...formItemLayout}
                       form={form}
                       name="register"
-                      onFinish={(values)=>Send(values)}
+                      onFinish={handleSubmitUser}
 
                       >
                     <Form.Item name={"userName"}
@@ -226,8 +215,6 @@ const SignUp = () =>{
                         <Input/>
                     </Form.Item>
 
-
-
                     <Form.Item name={"location"}
                                label={"Location"}
                                initialValue={"HCM"}
@@ -273,4 +260,3 @@ const SignUp = () =>{
 
     );
 }
-export default SignUp;

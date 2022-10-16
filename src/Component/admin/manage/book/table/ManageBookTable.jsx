@@ -1,4 +1,4 @@
- import React, {useEffect, useState} from "react";
+ import React, {useEffect, useRef, useState} from "react";
 import './ManageBookTable.css'
 import {Button, Drawer, Pagination, Modal, Row, Col, Input, Form} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,6 +21,8 @@ export default function ManageBookTable(){
     const [totalElements, setTotalElements] = useState(0);
     const [isOpenDetail, setIsOpenDetail] = useState(false);
     const [openEditBook, setOpenEditBook] = useState(false);
+    const [editFlag,setEditFlag] = useState(false);
+    const flagInit = useRef(false);
     const [books, setBooks] = useState([{
         bookId : 0,
         bookName: '',
@@ -43,23 +45,25 @@ export default function ManageBookTable(){
     const getBookPage = () => {
         axios.get('https://ecommerce-web0903.herokuapp.com/api/books/manage?page=' + page + '&search=' + search , authorize)
             .then((res) => {
-                console.log(res);
                 setTotalElements(res.data.totalElements);
                 setBooks(res.data.content);
             })
             .catch((err) => {
-                console.log("Error")
                 console.log(err)})
     }
 
     useEffect(() => {
         getBookPage();
-    },[])
-
-    useEffect(() => {
-        getBookPage();
     },[page,search])
 
+    useEffect(()=>{
+        if(flagInit){
+            getBookPage()
+        }
+        else {
+            flagInit.current=true;
+        }
+    },[editFlag])
     const handleFind = (book) => {
         setBookDetail(book);
         openBookDetailModal();
@@ -70,10 +74,11 @@ export default function ManageBookTable(){
         setOpenEditBook(true);
         setBookID(bookid);
     }
+
     const closeEdit = () =>{
         setOpenEditBook(false);
     }
-    const handleDelete = (bookId) => {
+    const handleDeleteBook = (bookId) => {
         axios.delete("https://ecommerce-web0903.herokuapp.com/api/books/"+bookId,authorize)
             .then((res) => {
                 Modal.success({
@@ -104,15 +109,17 @@ export default function ManageBookTable(){
             okType: 'danger',
             cancelText: 'Cancel',
             onOk() {
-                handleDelete(bookId)
+                handleDeleteBook(bookId)
             },
             onCancel() {
             },
         });
     };
-    const handleSearchingEvent = (values) => {
+
+    const handleSearchingBook = (values) => {
         setSearch(values.bookName);
     }
+
     return(
         <div>
             <Modal
@@ -137,7 +144,7 @@ export default function ManageBookTable(){
                 <Col span={24}>
                     <Form
                         name={"Search"}
-                        onFinish={handleSearchingEvent}
+                        onFinish={handleSearchingBook}
                         form={form}
                     >
                         <Row>
@@ -188,7 +195,7 @@ export default function ManageBookTable(){
                         </tr>
                     ))
                 }
-                    <EditBook setOpenEditBook={setOpenEditBook} open={openEditBook} closeEdit = {closeEdit} bookId={bookID}/>
+                    <EditBook setOpenEditBook={setOpenEditBook} open={openEditBook} closeEdit = {closeEdit} bookId={bookID} setEditFlag={setEditFlag} editFlag={editFlag}/>
                 </tbody>
             </table>
 

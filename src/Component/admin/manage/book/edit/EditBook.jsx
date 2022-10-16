@@ -5,7 +5,7 @@ import {SecurityContext} from "../../../../../App";
 import {Option} from "antd/es/mentions";
 import TextArea from "antd/es/input/TextArea";
 import axios from "axios";
-export default function EditBook ({setOpenEditBook,open,closeEdit,bookId}) {
+export default function EditBook ({setOpenEditBook,open,closeEdit,bookId,setEditFlag,editFlag}) {
     const [form] = Form.useForm();
     const [security, setSecurity] = useContext(SecurityContext);
     const [bookDetail,setBookDetail] = useState({});
@@ -49,7 +49,7 @@ export default function EditBook ({setOpenEditBook,open,closeEdit,bookId}) {
     }
     useEffect(()=>{
         getBookByID();
-    },[bookId])
+    },[bookId,editFlag])
 
     const handleSubmit = (values) => {
         setBookUpdate({
@@ -69,7 +69,6 @@ export default function EditBook ({setOpenEditBook,open,closeEdit,bookId}) {
         axios.put("https://ecommerce-web0903.herokuapp.com/api/books/"+bookId,bookUpdate,config)
             .then((res)=>{
                 handleSuccessUpdate();
-                setOpenEditBook(true);
             })
             .catch((error) =>{
                 console.log(error)
@@ -79,6 +78,13 @@ export default function EditBook ({setOpenEditBook,open,closeEdit,bookId}) {
         Modal.success({
             content: " Updated Book information successfully !!!"
         })
+        setOpenEditBook(false);
+        if(editFlag == true){
+            setEditFlag(false);
+        }
+        else {
+            setEditFlag(true);
+        }
     }
     return (
         <Drawer

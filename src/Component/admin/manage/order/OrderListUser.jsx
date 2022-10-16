@@ -4,37 +4,36 @@ import {ArrowRightOutlined} from "@ant-design/icons";
 import '../book/table/ManageBookTable.css'
 import axios from "axios";
 
-export default function OrderListUser ({item, openModalOrderDetail, listOfOrderState, setOrderItems, config}) {
-
-    const [changeOrderState,setChangeOrderState] = useState(item.orderState);
+export default function OrderListUser ({item,listOfOrderState,config, openModalOrderDetail, setOrderItems}) {
+    const [currentOrderState,setCurrentOrderState] = useState(item.orderState);
     const flagChange = useRef(false);
     const [disableButton, setDisableButton] = useState(false);
 
-    const handleChangeOrderState = () =>{
+    const increaseOrderState = () =>{
         for (const element of listOfOrderState ){
-            if(changeOrderState === element ){
+            if(currentOrderState == element ){
                 let i = listOfOrderState.indexOf(element);
-                setChangeOrderState(listOfOrderState[i+1]);
+                setCurrentOrderState(listOfOrderState[i+1]);
             }
         }
     }
 
     useEffect(()=>{
         if(flagChange.current){
-            nextOrderState();
+            changeOrderStateRequest();
         }
         else{
             flagChange.current= true;
-            if(changeOrderState === listOfOrderState[listOfOrderState.length-1]){
+            if(currentOrderState == listOfOrderState[listOfOrderState.length-1]){
                 setDisableButton(true)
             }
         }
-    },[changeOrderState])
+    },[currentOrderState])
 
-    const nextOrderState = () =>{
+    const changeOrderStateRequest = () =>{
         axios.put("https://ecommerce-web0903.herokuapp.com/api/orders/"+item.orderId,null,config)
             .then(()=>{
-                if(changeOrderState === listOfOrderState[listOfOrderState.length-1]){
+                if(currentOrderState == listOfOrderState[listOfOrderState.length-1]){
                     setDisableButton(true)
                 }
                 else{
@@ -73,9 +72,9 @@ export default function OrderListUser ({item, openModalOrderDetail, listOfOrderS
                 </td>
                 <td style={{border: "0.5px solid black"}}>{item.updateDate}</td>
                 <td style={{border: "0.5px solid black"}}>{item.updateBy}</td>
-                <td style={{border: "0.5px solid black"}}>{changeOrderState}</td>
+                <td style={{border: "0.5px solid black"}}>{currentOrderState}</td>
                 <td>
-                    <Button  disabled={disableButton} onClick={handleChangeOrderState} className="btn-style" size={"large"} icon={<ArrowRightOutlined className={"button"}/>}>
+                    <Button  disabled={disableButton} onClick={increaseOrderState} className="btn-style" size={"large"} icon={<ArrowRightOutlined className={"button"}/>}>
                     </Button>
                 </td>
             </tr>

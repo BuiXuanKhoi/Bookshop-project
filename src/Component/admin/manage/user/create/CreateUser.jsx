@@ -155,7 +155,7 @@ export default function ({isOpen, close}){
                 </Form.Item>
                 <Form.Item
                     name="phoneNumber"
-                    label="Phone Number"
+                    label="Phone Number:"
                     rules={[
                         {
                             required: true,
