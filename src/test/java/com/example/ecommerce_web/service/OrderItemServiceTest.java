@@ -99,7 +99,7 @@ public class OrderItemServiceTest {
          verify(orderItemsList).forEach(
                  orderItems -> {
                      orderItems.setOrders(orders);
-                     verify(orderItemsRepository).save(orderItems);
+                     verify(orderItemsRepository, times(orderItemsList.size())).save(orderItems);
                  }
          );
 
