@@ -19,7 +19,9 @@
 - Postman.
 - JUnit for Unit Test.
 
+# Web Routes Diagram : 
 
+![alt text for screen readers](https://github.com/BuiXuanKhoi/Bookshop-project/blob/master/image/Bookshop%20Routes.jpg "Bookshop Web Routes Diagram")
 
 # Feature
 - Almost the data has been pagination to make optimize APIs.
