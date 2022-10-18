@@ -11,6 +11,7 @@
 - Spring Security with JWT.
 - Lombok.
 - Cloudinary for upload Image.
+- Swagger for API Documents
 ## Front-End:
 - ReactJS.
 - React Hooks.
