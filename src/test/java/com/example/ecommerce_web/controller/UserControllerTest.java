@@ -1,28 +1,18 @@
 package com.example.ecommerce_web.controller;
 
+import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.model.dto.request.ChangePasswordRequestDTO;
 import com.example.ecommerce_web.model.dto.request.ModifyUserRequestDTO;
 import com.example.ecommerce_web.model.dto.respond.InformationRespondDTO;
-import com.example.ecommerce_web.model.dto.respond.UserRespondDTO;
 import com.example.ecommerce_web.model.entities.Information;
-import com.example.ecommerce_web.model.entities.Users;
 import com.example.ecommerce_web.repository.InformationRepository;
 import com.example.ecommerce_web.security.service.UserLocal;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.example.ecommerce_web.mapper.InformationMapper;
@@ -34,22 +24,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.runner.RunWith;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import javax.swing.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
-import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -65,6 +52,8 @@ public class UserControllerTest {
     InformationRepository informationRepository;
     Authentication authentication;
     SecurityContext securityContext;
+    SimpleGrantedAuthority admin;
+    SimpleGrantedAuthority customer;
 
     @Autowired
     private MockMvc mvc;
@@ -77,15 +66,17 @@ public class UserControllerTest {
         informationMapper = mock(InformationMapper.class);
         informationService = mock(InformationService.class);
         userLocal = mock(UserLocal.class);
-        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         informationRepository = mock(InformationRepository.class);
         authentication = mock(Authentication.class);
         securityContext = mock(SecurityContext.class);
+        admin = new SimpleGrantedAuthority("ADMIN");
+        customer = new SimpleGrantedAuthority("CUSTOMER");
     }
 
     @Test
     public void whenSendRequestToModifyUserInformation_returnUserWithNewInformation () throws Exception {
-
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         String userName = "thanhnghi";
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         Information information = mock(Information.class);
@@ -120,6 +111,7 @@ public class UserControllerTest {
         String userName = "thanhnghi";
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         Information information = mock(Information.class);
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         ObjectMapper objectMapper = new ObjectMapper();
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
@@ -152,12 +144,13 @@ public class UserControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String userName = "khoiprovip";
 
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         when(authentication.getName()).thenReturn(userName);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
 
         ChangePasswordRequestDTO changePasswordRequestDTO = ChangePasswordRequestDTO.builder()
-                                                                                    .oldPassword("khoi123456esc")
+                                                                                    .oldPassword("khoi13")
                                                                                     .newPassword("khoi12").build();
 
         mvc.perform(MockMvcRequestBuilders.put("/api/users/password")
@@ -173,7 +166,7 @@ public class UserControllerTest {
     public void whenSendRequestToChangePassword_throwValidatedError_ifTheNumberOfCharInNewOrOldPasswordIsNotBetween6To30 () throws Exception {
         String userName = "khoi3";
         ObjectMapper objectMapper = new ObjectMapper();
-
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(userName);
         SecurityContextHolder.setContext(securityContext);
@@ -188,7 +181,7 @@ public class UserControllerTest {
                                             .content(objectMapper.writeValueAsString(changePasswordRequestDTO))
         )
                 .andExpect(status().isBadRequest())
-                .andExpect(content().json("{'message':'Validate Error !!!','validateMessage':{'newPassword':'New Password must be around 6 and 15 characters'}}"))
+                .andExpect(content().json("{'message':'Validate Error !!!','validateMessage':{'newPassword':'New Password must be around 6 and 30 characters'}}"))
                 .andDo(print());
     }
 
@@ -197,6 +190,7 @@ public class UserControllerTest {
         String userName = "khoi3";
         ObjectMapper objectMapper = new ObjectMapper();
 
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(userName);
         SecurityContextHolder.setContext(securityContext);
@@ -215,15 +209,82 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
-//    public void whenSendRequestToChangePassword_throwResourceNotFoundException_ifOldPasswordIsWrong ()  throws Exception {
-//        Authentication authentication = mock(Authentication.class);
-//
-//    }
+    @Test
+    public void whenSendRequestToChangePassword_throwResourceNotFoundException_ifOldPasswordIsWrong ()  throws Exception {
+        String userName = "khoi3";
+        ObjectMapper objectMapper = new ObjectMapper();
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(userName);
+        SecurityContextHolder.setContext(securityContext);
+
+        ChangePasswordRequestDTO changePasswordRequestDTO = ChangePasswordRequestDTO.builder()
+                                                                                    .oldPassword("khoi3@0112")
+                                                                                    .newPassword("khoi123456")
+                                                                                    .build();
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/password")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(objectMapper.writeValueAsString(changePasswordRequestDTO))
+        )
+                .andExpect(status().isNotFound())
+                .andExpect(content().json("{'message':'Password is wrong !!!!'}"))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
+                .andDo(print());
+    }
+
+    @Test
+    public void whenBlockingUser_thenReturnStatementThatBlockingUserSuccess () throws  Exception {
+        int userId = 28;
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/"+userId)
+                                            .with(user("lfsdfdlfsd").authorities(admin))
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'message':'Block User Successfully !!!!'}"))
+                .andDo(print());
+    }
+
+    @Test
+    public void whenBlockingUser_throwsForbiddenError_ifItIsNotAdmin () throws  Exception {
+        int userId = 28;
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/"+userId)
+                .with(user("tuan2").authorities(customer))
+        )
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+
+    @Test
+    public void whenUnBlockingUser_thenReturnStatementThatUnBlockUser () throws  Exception {
+        int userId = 28;
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/"+userId+"/state")
+                                            .with(user("lfsdfdlfsd").authorities(admin))
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().json("{'message':'User has been unblocked !!!'}"))
+                .andDo(print());
+    }
+
+    @Test
+    public void whenUnBlockingUser_throwsForbiddenError_IfItIsNotAnAdmin () throws  Exception {
+        int userId = 28;
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/"+userId+"/state")
+                .with(user("tuan2").authorities(customer))
+        )
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+
     @Test
     public void whenSendRequestToGetInformation_returnInformationDetail () throws Exception {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         String userName = "khoiprovip";
         Information information = mock(Information.class);
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         when(authentication.getName()).thenReturn(userName);
         when(securityContext.getAuthentication()).thenReturn(authentication);
@@ -241,7 +302,7 @@ public class UserControllerTest {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         String userName = "khoiip";
         Information information = mock(Information.class);
-
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         when(authentication.getName()).thenReturn(userName);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
@@ -253,6 +314,30 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(content().json("{'message':'Not Found User With Name: khoiip'}"))
                 .andDo(print());
+    }
 
+    @Test
+    public void whenSendRequestToGetUserList_throwsForbiddenError_IfItIsNotAnAdmin () throws Exception{
+        String page = "1";
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/users")
+                                            .param("page",page)
+                                            .with(user("tuan2").authorities(customer))
+        )
+                .andExpect(status().isForbidden())
+                .andDo(print());
+    }
+
+    @Test
+    public void whenSendRequestToGetUserList_thenReturnPageUserWithSizeIs10 () throws Exception{
+        String page = "1";
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/users")
+                .param("page",page)
+                .with(user("lfsdfdlfsd").authorities(admin))
+        )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size").value(10))
+                .andDo(print());
     }
 }
