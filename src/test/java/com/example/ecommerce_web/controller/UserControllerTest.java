@@ -63,6 +63,9 @@ public class UserControllerTest {
     InformationService informationService;
     UserLocal userLocal;
     InformationRepository informationRepository;
+    Authentication authentication;
+    SecurityContext securityContext;
+
     @Autowired
     private MockMvc mvc;
 
@@ -76,6 +79,8 @@ public class UserControllerTest {
         userLocal = mock(UserLocal.class);
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         informationRepository = mock(InformationRepository.class);
+        authentication = mock(Authentication.class);
+        securityContext = mock(SecurityContext.class);
     }
 
     @Test
@@ -85,8 +90,6 @@ public class UserControllerTest {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         Information information = mock(Information.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(userName);
@@ -118,13 +121,11 @@ public class UserControllerTest {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
         Information information = mock(Information.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        SecurityContext securityContext = mock(SecurityContext.class);
-        Authentication authentication = mock(Authentication.class);
-
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn(userName);
         SecurityContextHolder.setContext(securityContext);
+
         ModifyUserRequestDTO modifyUserRequestDTO = ModifyUserRequestDTO.builder()
                 .dateOfBirth(null)
                 .firstName("Martin")
@@ -148,8 +149,6 @@ public class UserControllerTest {
 
     @Test
     public void whenSendRequestToChangePassword_returnNewPasswordAndSuccessInform () throws Exception {
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
         ObjectMapper objectMapper = new ObjectMapper();
         String userName = "khoiprovip";
 
@@ -158,22 +157,71 @@ public class UserControllerTest {
         SecurityContextHolder.setContext(securityContext);
 
         ChangePasswordRequestDTO changePasswordRequestDTO = ChangePasswordRequestDTO.builder()
-                                                                                    .oldPassword("khoiprovip@10112000")
-                                                                                    .newPassword("khoi123456esc").build();
+                                                                                    .oldPassword("khoi123456esc")
+                                                                                    .newPassword("khoi12").build();
 
         mvc.perform(MockMvcRequestBuilders.put("/api/users/password")
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(objectMapper.writeValueAsString(changePasswordRequestDTO))
         )
                 .andExpect(status().isOk())
+                .andExpect(content().json("{'message':'Your password has been updated !!!'}"))
                 .andDo(print());
     }
 
     @Test
+    public void whenSendRequestToChangePassword_throwValidatedError_ifTheNumberOfCharInNewOrOldPasswordIsNotBetween6To30 () throws Exception {
+        String userName = "khoi3";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(userName);
+        SecurityContextHolder.setContext(securityContext);
+
+        ChangePasswordRequestDTO changePasswordRequestDTO = ChangePasswordRequestDTO.builder()
+                                                                                    .oldPassword("khoi3@01122000")
+                                                                                    .newPassword("khoi")
+                                                                                    .build();
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/password")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(objectMapper.writeValueAsString(changePasswordRequestDTO))
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{'message':'Validate Error !!!','validateMessage':{'newPassword':'New Password must be around 6 and 15 characters'}}"))
+                .andDo(print());
+    }
+
+    @Test
+    public void whenSendRequestToChangePassword_throwValidatedError_ifNewPasswordOrOldPasswordIsNull () throws Exception {
+        String userName = "khoi3";
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getName()).thenReturn(userName);
+        SecurityContextHolder.setContext(securityContext);
+
+        ChangePasswordRequestDTO changePasswordRequestDTO = ChangePasswordRequestDTO.builder()
+                .oldPassword("khoi3@01122000")
+                .newPassword("")
+                .build();
+
+        mvc.perform(MockMvcRequestBuilders.put("/api/users/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(changePasswordRequestDTO))
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json("{'message':'Validate Error !!!','validateMessage':{'newPassword':'New Password must not be empty'}}"))
+                .andDo(print());
+    }
+
+//    public void whenSendRequestToChangePassword_throwResourceNotFoundException_ifOldPasswordIsWrong ()  throws Exception {
+//        Authentication authentication = mock(Authentication.class);
+//
+//    }
+    @Test
     public void whenSendRequestToGetInformation_returnInformationDetail () throws Exception {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
         String userName = "khoiprovip";
         Information information = mock(Information.class);
 
@@ -188,12 +236,9 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
     @Test
     public void whenSendRequestToGetInformation_throwUserNotFound_ifUserNameIsWrong () throws Exception {
         InformationRespondDTO informationRespondDTO = mock(InformationRespondDTO.class);
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
         String userName = "khoiip";
         Information information = mock(Information.class);
 

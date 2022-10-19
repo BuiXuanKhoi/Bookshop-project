@@ -20,7 +20,7 @@ public class ChangePasswordRequestDTO {
     @NotNull(message = "Old password is required")
     private String oldPassword;
 
-    @Length(min = 6, max = 30, message = "New Password must be around 6 and 15 characters")
+    @Length(min = 6, max = 30, message = "New Password must be around 6 and 30 characters")
     @NotEmpty(message = "New Password must not be empty")
     @NotNull(message = "New Password is required")
     private String newPassword;
