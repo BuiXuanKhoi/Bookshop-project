@@ -1,5 +1,6 @@
 package com.example.ecommerce_web.service;
 
+import com.example.ecommerce_web.constant.BookState;
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
 import com.example.ecommerce_web.exceptions.ResourceNotFoundException;
 import com.example.ecommerce_web.mapper.CartItemMapper;
@@ -15,6 +16,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.configuration.IMockitoConfiguration;
+
+import javax.swing.text.html.Option;
+
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
@@ -158,32 +162,47 @@ public class CartItemServiceTest {
     }
 
     @Test
+    void whenDeleteCartItem_thenThrowResourceNotFoundException_ifCartItemNotExist(){
+        int cartItemId = 3;
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.empty());
+        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> cartItemServiceImpl.delete(cartItemId));
+
+        assertThat(exception.getMessage(), is("Not Found Cart Item With ID: " + cartItemId));
+    }
+
+    @Test
     void whenDeleteCartItem_returnCartItemHasBeenDeleted (){
         int cartItemId = 3;
+        CartItem cartItem = mock(CartItem.class);
+
+        when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(cartItem));
         cartItemRepository.deleteByCartId(cartItemId);
         verify(cartItemRepository).deleteByCartId(cartItemId);
     }
 
     @Test
     void whenUpdateCartItem_returnNewCartItem (){
-        int cartId = 3;
+        int cartId = 10;
         int addedQuantity = 4;
         CartItem cartItem = mock(CartItem.class);
         Books books = mock(Books.class);
-        int bookQuantity = 4;
+        int bookQuantity = 24;
         int existedQuantity = 3;
-        int cartQuantity = bookQuantity+existedQuantity;
+        CartItem savedCartItem = mock(CartItem.class);
+        int cartQuantity = 14;
 
         when(cartItemRepository.findById(cartId)).thenReturn(Optional.of(cartItem));
         when(cartItem.getQuantity()).thenReturn(existedQuantity);
         when(cartItem.getBooks()).thenReturn(books);
         when(books.getQuantity()).thenReturn(bookQuantity);
 
-        cartItem.setQuantity(cartQuantity);
-        verify(cartItem).setQuantity(cartQuantity);
 
-        cartItemRepository.save(cartItem);
-        verify(cartItemRepository).save(cartItem);
+        cartItem.setQuantity(cartQuantity);
+        verify(cartItem, times(1)).setQuantity(cartQuantity);
+
+        when(cartItemRepository.save(cartItem)).thenReturn(savedCartItem);
+        assertThat(cartItemServiceImpl.update(cartId, addedQuantity), is(savedCartItem));
     }
 
     @Test
@@ -207,15 +226,43 @@ public class CartItemServiceTest {
     }
 
     @Test
-    void whenDecreaseCartItemQuantity_returnCartItemAfterDecrease () {
+    void whenUpdateCartItem_throwResourceNotFoundException_ifCartNotExist(){
+        int cartId = 1000;
+        int addedQuantity = 100;
+        when(cartItemRepository.findById(cartId)).thenReturn(Optional.empty());
+        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> cartItemServiceImpl.update(cartId, addedQuantity));
+
+        assertThat(exception.getMessage(), is("Not Found Cart Item With ID: " + cartId));
+
+    }
+
+    @Test
+    void whenChangeCartItemQuantity_returnCartItemAfterChange () {
         int cartId = 3;
         int decreaseQuantity = 2;
         CartItem cartItem = mock(CartItem.class);
+        CartItem savedCartItem = mock(CartItem.class);
 
         when(cartItemRepository.findById(cartId)).thenReturn(Optional.of(cartItem));
 
         cartItem.setQuantity(decreaseQuantity);
         verify(cartItem).setQuantity(decreaseQuantity);
+        when(cartItemRepository.save(cartItem)).thenReturn(savedCartItem);
+        assertThat(cartItemServiceImpl.change(cartId, decreaseQuantity), is(savedCartItem));
+
+    }
+
+    @Test
+    void whenChangeQuantityCartItemQuantity_thenThrowResourceNotFoundException_ifCartItemNotExist(){
+        int cartId = 10000;
+        int changeQuantity = 100;
+
+        when(cartItemRepository.findById(cartId)).thenReturn(Optional.empty());
+        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
+                () -> cartItemServiceImpl.change(cartId, changeQuantity));
+
+        assertThat(exception.getMessage(), is("Not Found Cart Item With ID: " + cartId));
     }
 
 }

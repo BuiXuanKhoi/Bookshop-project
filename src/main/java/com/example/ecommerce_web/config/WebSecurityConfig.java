@@ -83,7 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/api/users/password").hasAnyAuthority("CUSTOMER","ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/orders/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/api/books").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/api/books/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/api/carts").hasAuthority("CUSTOMER")
                 .antMatchers(HttpMethod.POST, "/api/categories").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/books").hasAuthority("ADMIN")
@@ -92,7 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/auth/token").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/carts/**").hasAnyAuthority("CUSTOMER", "ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/api/books").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/api/books/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/auth/logout").hasAnyAuthority("CUSTOMER", "ADMIN")
                 .antMatchers(HttpMethod.POST,"/api/authors").hasAuthority("ADMIN")
                 .anyRequest().authenticated();

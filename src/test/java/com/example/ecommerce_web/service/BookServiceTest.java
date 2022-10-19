@@ -48,6 +48,7 @@ public class BookServiceTest {
     BookMapper bookMapper;
     UserService userService;
     CloudinaryService cloudinaryService;
+    ClassifyRepository classifyRepository;
 
 
 
@@ -63,10 +64,11 @@ public class BookServiceTest {
         userService = mock(UserService.class);
         classifyService = mock(ClassifyService.class);
         cloudinaryService = mock(CloudinaryService.class);
+        classifyRepository = mock(ClassifyRepository.class);
 
         bookService = new BookServiceImpl(bookRepository, authorService,
                 authorRepository,
-                userLocal, categoryRepository, classifyService, bookMapper, userService, cloudinaryService);
+                userLocal, categoryRepository, classifyService, bookMapper, userService, cloudinaryService, classifyRepository);
 
     }
 

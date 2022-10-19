@@ -1,6 +1,6 @@
 ### The BE code place in the master branch and the FE code place in the Ecommerce-book-frontend branch
 
-# Technologies in use:
+# Technologies used in project:
 
 
 ## Back-End : 
@@ -11,6 +11,7 @@
 - Spring Security with JWT.
 - Lombok.
 - Cloudinary for upload Image.
+- Swagger for API Documents
 ## Front-End:
 - ReactJS.
 - React Hooks.
@@ -19,7 +20,9 @@
 - Postman.
 - JUnit for Unit Test.
 
+# Web Routes Diagram : 
 
+![alt text for screen readers](https://github.com/BuiXuanKhoi/Bookshop-project/blob/master/image/Bookshop%20Routes.jpg "Bookshop Web Routes Diagram")
 
 # Feature
 - Almost the data has been pagination to make optimize APIs.

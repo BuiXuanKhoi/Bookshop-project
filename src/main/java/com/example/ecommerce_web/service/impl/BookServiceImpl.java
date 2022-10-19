@@ -41,6 +41,7 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+    private final ClassifyRepository classifyRepository;
 
 
     @Autowired
@@ -48,7 +49,8 @@ public class BookServiceImpl implements BookService {
             , AuthorService authorService
             , AuthorRepository authorRepository, UserLocal userLocal,
                            CategoryRepository categoryRepository,
-                           ClassifyService classifyService, BookMapper bookMapper, UserService userService, CloudinaryService cloudinaryService) {
+                           ClassifyService classifyService, BookMapper bookMapper, UserService userService,
+                           CloudinaryService cloudinaryService, ClassifyRepository classifyRepository) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.authorRepository = authorRepository;
@@ -58,6 +60,7 @@ public class BookServiceImpl implements BookService {
         this.bookMapper = bookMapper;
         this.userService = userService;
         this.cloudinaryService = cloudinaryService;
+        this.classifyRepository = classifyRepository;
     }
 
     @Override
@@ -123,7 +126,10 @@ public class BookServiceImpl implements BookService {
         books.setBookState(BookState.AVAILABLE);
         books.setImageLink(imageLink);
         Books savedBook = this.bookRepository.save(books);
-        classifyList.forEach(classify -> classifyService.updateClassifyWithBook(classify, savedBook));
+        classifyList.forEach(classify -> {
+            classify.setBooks(books);
+            this.classifyRepository.save(classify);
+        });
 
         return savedBook;
     }

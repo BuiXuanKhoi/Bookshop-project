@@ -32,11 +32,4 @@ public class ClassifyServiceImpl implements ClassifyService {
         Classify classify = new Classify(0,null, category);
         return this.classifyRepository.save(classify) ;
     }
-
-    @Override
-    @Modifying
-    public void updateClassifyWithBook(Classify classify, Books books) {
-            classify.setBooks(books);
-            this.classifyRepository.save(classify);
-    }
 }
