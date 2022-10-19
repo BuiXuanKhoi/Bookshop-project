@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
-    BookService bookService;
+    BookService  bookService;
     FeedbackService feedbackService;
     CategoryService categoryService;
     BookMapper bookMapper;

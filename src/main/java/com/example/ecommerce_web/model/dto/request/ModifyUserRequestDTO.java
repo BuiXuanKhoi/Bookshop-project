@@ -7,10 +7,10 @@ import java.util.Date;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyUserRequestDTO {
-
 
     @NotNull(message = "date of birth is required")
     private Date dateOfBirth;
@@ -28,7 +28,7 @@ public class ModifyUserRequestDTO {
     @NotEmpty(message = "Address must not be empty")
     private String address;
 
-    @Size(min = 11, max = 11, message = "Phone number must has at least 11 characters and no more")
+    @Size(min = 10, max = 11, message = "Phone number must has at least 11 characters and no more")
     @NotNull(message = "phone number is required")
     @NotEmpty(message = "phone number must not be empty")
     private String phoneNumber;

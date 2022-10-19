@@ -157,8 +157,6 @@ public class BookController {
         return this.feedbackService.getPageByBook(page, size, mode, filter, id);
     }
 
-
-
     @GetMapping("/{id}")
     public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){
         Books books =  this.bookService.getById(bookId);

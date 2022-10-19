@@ -32,7 +32,6 @@ public class InformationServiceImpl implements InformationService {
         this.informationMapper = informationMapper;
     }
 
-
     @Override
     public Information update(ModifyUserRequestDTO modifyUserRequestDTO) {
         String userName = userLocal.getLocalUserName();
@@ -40,8 +39,6 @@ public class InformationServiceImpl implements InformationService {
         Information information = informationMapper.toExistedInformation(modifyUserRequestDTO, users.getInformation());
         return this.informationRepository.save(information);
     }
-
-
     @Override
     public Information createInformationByExistedUser(UserRequestDTO userRequestDTO, Users users) {
         Information information = informationMapper.fromUserRequest(userRequestDTO);
