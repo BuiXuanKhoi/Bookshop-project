@@ -26,4 +26,6 @@ public interface AuthorRepository extends JpaRepository<Author, Integer>{
             "where aut.authorID not in (select bkd.authors.authorID from Books bkd) " +
             "and lower(aut.authorName) like %:search% ")
     Page<AuthorRespondDTO> getPageAuthorNotBooks(Pageable pageable, String search);
+
+    boolean existsByAuthorName(String authorName);
 }

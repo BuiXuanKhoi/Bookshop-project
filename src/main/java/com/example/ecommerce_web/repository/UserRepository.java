@@ -33,4 +33,6 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     @Modifying
     void deleteByUserName(String userName);
 
+    boolean existsByUserName(String userName);
+
 }

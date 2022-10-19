@@ -1,6 +1,8 @@
 package com.example.ecommerce_web.model.dto.request;
 
 import com.example.ecommerce_web.exceptions.ConstraintViolateException;
+import com.example.ecommerce_web.validator.UniqueField;
+import com.example.ecommerce_web.validator.Validator;
 import lombok.*;
 
 import javax.validation.constraints.*;

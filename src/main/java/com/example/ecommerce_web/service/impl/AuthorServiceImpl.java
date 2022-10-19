@@ -35,7 +35,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> findAll() {
-        List<Author> listAuthor = this.authorRepository.findAll();
+        List<Author> listAuthor =  this.authorRepository.findAll();
         return ListValidator.ofList(listAuthor).ifNotEmpty();
     }
 

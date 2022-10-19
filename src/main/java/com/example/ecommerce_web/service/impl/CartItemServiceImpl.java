@@ -61,7 +61,6 @@ public class CartItemServiceImpl implements CartItemService {
         return this.cartItemRepository.save(cartItem);
     }
 
-
     private boolean isExistCartItem(int bookId){
         Books books = bookService.getById(bookId);
         Users users = userService.findLocalUser();

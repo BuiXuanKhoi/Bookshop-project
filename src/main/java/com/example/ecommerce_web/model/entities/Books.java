@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.model.entities;
 
 import com.example.ecommerce_web.constant.BookState;
+import com.example.ecommerce_web.validator.UniqueField;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -65,8 +66,9 @@ public class Books {
     @Column(name = "description", length = 10000)
     private String description;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="author_id")
+    @JoinColumn(name="author_id", unique = true)
     private Author authors;
 
     @Column(name = "quantity")

@@ -1,5 +1,7 @@
 package com.example.ecommerce_web.model.dto.request;
 
+import com.example.ecommerce_web.validator.UniqueField;
+import com.example.ecommerce_web.validator.Validator;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -12,6 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserRequestDTO {
 
+
+    @UniqueField(entity = Validator.USER, message = "Username existed !!!")
     @NotNull(message = "username cannot be null")
     @NotBlank(message = "username cannot be blank")
     private String userName;

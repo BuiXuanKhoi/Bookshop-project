@@ -18,7 +18,7 @@ public enum Role {
 
     public static Role getRole(String roleName){
         return Arrays.stream(values())
-                     .filter(role1 -> role1.role.equals(roleName))
+                     .filter(roles -> roles.role.equals(roleName))
                      .findAny()
                      .orElseThrow(() -> new ResourceNotFoundException("Role Not Available !!!"));
 
