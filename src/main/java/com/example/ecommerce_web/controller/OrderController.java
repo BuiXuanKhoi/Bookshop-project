@@ -50,9 +50,10 @@ public class    OrderController {
 
     @GetMapping("/manage")
     public PageManageOrder getPageManageOrder(
-            @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(name = "page", defaultValue = "0", required = false) String page,
             @RequestParam(name = "search", defaultValue = "%", required = false) String search
     ){
-        return this.ordersService.getPageForManage(page, search);
+        int pageOrder = Integer.getInteger(page);
+        return this.ordersService.getPageForManage(pageOrder, search);
     }
 }
