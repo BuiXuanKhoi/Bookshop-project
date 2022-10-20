@@ -53,7 +53,7 @@ public class    OrderController {
             @RequestParam(name = "page", defaultValue = "0", required = false) String page,
             @RequestParam(name = "search", defaultValue = "%", required = false) String search
     ){
-        int pageOrder = Integer.getInteger(page);
+        int pageOrder = Integer.parseInt(page);
         return this.ordersService.getPageForManage(pageOrder, search);
     }
 }
