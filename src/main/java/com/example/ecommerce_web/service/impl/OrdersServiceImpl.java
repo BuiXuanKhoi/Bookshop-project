@@ -85,7 +85,7 @@ public class OrdersServiceImpl implements OrdersService {
         search = search.toLowerCase();
         Page<ManageOrderRespondDTO> manageOrderPage = ordersRepository.getPageManageOrders(pageable, search);
         List<ManageOrderRespondDTO> listManageOrder = manageOrderPage.getContent();
-        if(listManageOrder.isEmpty()) throw new ResourceNotFoundException("Page is empty !!!");
+        if(listManageOrder.isEmpty()) throw new ResourceNotFoundException("UserName is not found!!!");
 
         return PageManageOrder.builder()
                               .listManageOrder(
