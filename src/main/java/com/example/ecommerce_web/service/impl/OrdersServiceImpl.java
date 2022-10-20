@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -84,7 +85,7 @@ public class OrdersServiceImpl implements OrdersService {
         search = search.toLowerCase();
         Page<ManageOrderRespondDTO> manageOrderPage = ordersRepository.getPageManageOrders(pageable, search);
         List<ManageOrderRespondDTO> listManageOrder = manageOrderPage.getContent();
-
+        if(listManageOrder.isEmpty()) throw new ResourceNotFoundException("Page is empty !!!");
 
         return PageManageOrder.builder()
                               .listManageOrder(

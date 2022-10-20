@@ -155,14 +155,28 @@ public class OrderControllerTest {
     @Test
     public void whenSendRequestGetOrderPage_returnOrderPageBasedOnPageAndSearch () throws Exception {
         String pages = "0";
-        String searchName = "tuan2";
+        String searchName = "%";
 
-        mvc.perform(MockMvcRequestBuilders.put("/api/orders/manage")
-                .param("page",String.valueOf(pages))
+        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
+                                            .param("page",pages)
+                                            .param("search",searchName)
+                                            .with(user("lfsdfdlfsd").authorities(admin))
+        )
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void whenSendRequestGetOrderPage_throwsNotFoundError_ifUserDoesNotExist () throws Exception {
+        String pages = "0";
+        String searchName = "12637841683476";
+
+        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
+                .param("page",pages)
                 .param("search",searchName)
                 .with(user("lfsdfdlfsd").authorities(admin))
         )
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andDo(print());
     }
 }
