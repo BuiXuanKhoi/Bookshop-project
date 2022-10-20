@@ -16,6 +16,7 @@ import com.example.ecommerce_web.service.FeedbackService;
 import com.example.ecommerce_web.validator.ListValidator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -157,12 +158,27 @@ public class BookController {
         return this.feedbackService.getPageByBook(page, size, mode, filter, id);
     }
 
+
+
+    @Operation(
+            summary = "Get Book Detail By ID",
+            description ="When enter book ID as an path of the url. The API will return the book detail \n" +
+                    "In case of the API return 404 status code, it means that the books with this ID not exist in database. " +
+                    "The respond will contains fields such as : book name. image link, book price ,... "
+    )
     @GetMapping("/{id}")
     public BookRespondDTO getBookDetail(@PathVariable("id") int bookId){
         Books books =  this.bookService.getById(bookId);
         return bookMapper.toDTO(books);
     }
 
+    @Operation(
+            summary = "Get Cart item by ID",
+            description = "" +
+                    "When enter ID as an path variable to the URL. The Server will search for the cart item by the ID entered. \n" +
+                    "In case of the API returrns 404 status code, it means that the cart item with this ID not exist." +
+                    "Else, the Server will returns the Cart Item as JSON value."
+    )
     @GetMapping("/{id}/cart")
     public CartItemRespondDTO getCartItemExistByBook(@PathVariable int id){
         CartItem cartItem = this.bookService.getCartItemByBook(id);

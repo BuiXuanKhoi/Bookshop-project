@@ -110,7 +110,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> unblock(int userID){
-
         Users users = findById(userID);
 
         users.setUserState(UserState.UNBLOCK);
@@ -127,10 +126,10 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(page,10);
         Page<UserRespondDTO> userList = this.userRepository.getPage(pageable);
 
-        if(userList.hasContent()){
-            return userList;
+        if(!userList.hasContent()){
+            throw new ResourceNotFoundException("Not found user !!!");
         }
-        throw new ResourceNotFoundException("Not found user !!!");
+        return userList;
     }
 
     @Override
@@ -141,12 +140,6 @@ public class UserServiceImpl implements UserService {
         String password = generatePassword(userName, dateOfBirth);
         Role role = Role.getRole(roleName);
 
-        Optional<Users> usersOptional = this.userRepository.findByUserName(userName);
-
-        if(usersOptional.isPresent()){
-            throw new ConstraintViolateException("User name already exist !!!!");
-        }
-        
         return Users.builder()
                     .userName(userName)
                     .password(password)

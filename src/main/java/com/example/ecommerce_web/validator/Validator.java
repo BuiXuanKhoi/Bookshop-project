@@ -1,4 +1,9 @@
 package com.example.ecommerce_web.validator;
 
-public interface Validator<T> {
+public enum Validator {
+    BOOK,
+    BOOK_REQUEST,
+    AUTHOR,
+    CATEGORY,
+    USER
 }

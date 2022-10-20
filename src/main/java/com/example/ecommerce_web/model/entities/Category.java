@@ -1,5 +1,7 @@
 package com.example.ecommerce_web.model.entities;
 
+import com.example.ecommerce_web.validator.UniqueField;
+import com.example.ecommerce_web.validator.Validator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -23,7 +25,8 @@ public class Category {
     @Column(name = "category_id")
     private int categoryId;
 
-    @Column(name = "category_name")
+    @UniqueField(entity = Validator.CATEGORY, message = "Category Already Exist")
+    @Column(name = "category_name", unique = true)
     @NotNull(message = "category name must not be null")
     @NotEmpty(message = "category name is required")
     private String categoryName;

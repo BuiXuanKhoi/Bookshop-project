@@ -2,6 +2,7 @@ package com.example.ecommerce_web.repository;
 
 import com.example.ecommerce_web.model.dto.respond.BookFeatureRespondDTO;
 import com.example.ecommerce_web.model.dto.respond.BookRespondDTO;
+import com.example.ecommerce_web.model.entities.Author;
 import com.example.ecommerce_web.model.entities.Books;
 import com.example.ecommerce_web.model.entities.Classify;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,14 @@ public interface BookRepository extends JpaRepository<Books, Integer> {
             "join bkk.authors aut " +
             "where bkk.bookName like %:search%")
     Page<BookFeatureRespondDTO> getPageManageBook(Pageable pageable, String search);
+
+
+    boolean existsByAuthors(Author author);
+
+    boolean existsByBookName(String bookName);
+
+    @Query(value = "select * from books where author_id = :authorId", nativeQuery = true)
+    Books getByAuthorId(int authorId);
 }
 
 

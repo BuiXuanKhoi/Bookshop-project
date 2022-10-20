@@ -1,6 +1,7 @@
 package com.example.ecommerce_web.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.ecommerce_web.validator.UniqueField;
+import com.example.ecommerce_web.validator.Validator;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,8 @@ public class Author {
     @Column(name = "author_id")
     private int authorID;
 
-    @Column(name = "author_name")
+    @UniqueField( entity = Validator.AUTHOR, message = "Author name already existed")
+    @Column(name = "author_name", unique = true)
     @NotEmpty(message = "author name is required")
     @NotNull(message = "author name must not be null")
     private String authorName;

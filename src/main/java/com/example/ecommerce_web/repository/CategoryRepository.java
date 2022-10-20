@@ -18,4 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category,Integer> {
             "from Category ctg " +
             "where lower(ctg.categoryName)  like %:search%")
     Page<CategoryRespondDTO> getPage(Pageable pageable, String search);
+
+    boolean existsByCategoryName(String categoryName);
 }
