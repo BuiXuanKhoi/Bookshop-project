@@ -6,24 +6,30 @@ resources:
       branch: master
 jobs:
 
-
+  - name: print-directory
+    plan: 
+      - get: source-code
+        trigger: true
+      -  task: print
+         config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: busybox }
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+               ls 
 
   - name: build
     plan:
       - get: source-code
         trigger: true
-      - task: build
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: maven
-              tag: 3-eclipse-temurin-17-alpine
-          inputs:
-            - name: source-code
-          run:
-            path: source-code/ci/build.sh
+      - file: source-code/ci/tasks/maven-package.yml
+        task: package
+        
 
 
   # - name: deploy
