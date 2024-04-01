@@ -12,6 +12,9 @@ import com.example.ecommerce_web.repository.*;
 import com.example.ecommerce_web.security.service.UserLocal;
 import com.example.ecommerce_web.service.*;
 import com.example.ecommerce_web.validator.ListValidator;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
@@ -42,6 +46,7 @@ public class BookServiceImpl implements BookService {
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
     private final ClassifyRepository classifyRepository;
+    private final Logger logger;
 
 
     @Autowired
@@ -61,6 +66,7 @@ public class BookServiceImpl implements BookService {
         this.userService = userService;
         this.cloudinaryService = cloudinaryService;
         this.classifyRepository = classifyRepository;
+        this.logger = LoggerFactory.getLogger(BookServiceImpl.class);
     }
 
     @Override
@@ -73,6 +79,7 @@ public class BookServiceImpl implements BookService {
     public List<Books> findAll() {
         List<Books> listBookRecommend = this.bookRepository.findAll();
         ListValidator<Books> listBookValid = ListValidator.ofList(listBookRecommend);
+        logger.debug(listBookValid.toString());
         return listBookValid.ifNotEmpty();
     }
 

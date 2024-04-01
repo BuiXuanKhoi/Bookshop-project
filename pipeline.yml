@@ -1,0 +1,46 @@
+resources:
+  - name: source-code
+    type: git
+    source:
+      uri: https://github.com/BuiXuanKhoi/Bookshop-project.git
+      branch: master
+jobs:
+
+
+
+  - name: build
+    plan:
+      - get: source-code
+        trigger: true
+      - task: build
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: maven
+              tag: 3-eclipse-temurin-17-alpine
+          inputs:
+            - name: source-code
+          run:
+            path: source-code/ci/build.sh
+
+
+  # - name: deploy
+  #   plan:
+  #     - get: source-code
+  #       trigger: true
+  #     - task: deploy
+  #       config:
+  #         platform: linux
+  #         image_resource:
+  #           type: docker-image
+  #           source:
+  #             repository: ubuntu
+  #         inputs:
+  #           - name: source-code
+  #         run:
+  #           path: source-code/ci/deploy.sh
+
+
+
