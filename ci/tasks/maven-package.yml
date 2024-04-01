@@ -15,5 +15,4 @@ run:
         - -f
         - source-code/pom.xml
         - clean
-        - install
-        - -DskipTests
+        - package

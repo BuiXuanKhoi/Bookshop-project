@@ -3,32 +3,26 @@ resources:
     type: git
     source:
       uri: https://github.com/BuiXuanKhoi/Bookshop-project.git
-      branch: master
+      branch: test-deploy
 jobs:
 
-  - name: print-directory
-    plan: 
-      - get: source-code
-        trigger: true
-      -  task: print
-         config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source: { repository: busybox }
-          run:
-            path: sh
-            args:
-              - -exc
-              - |
-               ls 
 
-  - name: build
+  - name: test
     plan:
       - get: source-code
         trigger: true
+      - file: source-code/ci/tasks/maven-test.yml
+        task: mvn-test
+
+  - name: package
+    plan:
+      - get: source-code
+        passed: 
+          - test
+        trigger: true
       - file: source-code/ci/tasks/maven-package.yml
-        task: package
+        task: mvn-package
+    serial: true
         
 
 
