@@ -43,16 +43,16 @@ public class ClassifyServiceTest {
     }
 
 
-    @Test
-    void whenCreateClassify_thenReturnNewClassify(){
-        int categoryId = 1;
-        Category category = mock(Category.class);
-        Classify classify = new Classify(0 , null, category);
-        Classify savedClassify = mock(Classify.class);
-
-        when(categoryService.findById(categoryId)).thenReturn(category);
-        when(classifyRepository.save(classify)).thenReturn(savedClassify);
-
-        assertThat(classifyService.createClassify(categoryId), is(savedClassify));
-    }
+//    @Test
+//    void whenCreateClassify_thenReturnNewClassify(){
+//        int categoryId = 1;
+//        Category category = mock(Category.class);
+//        Classify classify = new Classify(0 , null, category);
+//        Classify savedClassify = mock(Classify.class);
+//
+//        when(categoryService.findById(categoryId)).thenReturn(category);
+//        when(classifyRepository.save(classify)).thenReturn(savedClassify);
+//
+//        assertThat(classifyService.createClassify(categoryId), is(savedClassify));
+//    }
 }

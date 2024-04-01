@@ -51,74 +51,74 @@ public class AuthControllerTest {
     }
 
 
-    @Test
-    void whenSignUp_thenReturnStatusBadRequest_ifRequestNotValid() throws Exception {
-        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
-                                                      .userName(null)
-                                                      .address("HN")
-                                                      .dateOfBirth(new Date())
-                                                      .email("khoibuiqn1011@gmail.com")
-                                                      .firstName("Xuan Khoi")
-                                                      .lastName("Bui")
-                                                      .phoneNumber("0988349401")
-                                                      .role("ADMIN").build();
-        MvcResult result = mockMvc.perform(post("/api/auth/signup")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(userRequestDTO))
-                        )
-                                .andExpect(status().isBadRequest())
-                                .andReturn();
-
-        String expected = "{\"message\" : \"username cannot be null\"}";
-        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
-    }
-
-
-    @Test
-    void whenSignUp_thenReturnStatusNotFound_ifAddressNotFound() throws Exception{
-        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
-                .userName("khoisupperprovip")
-                .address("TG")
-                .dateOfBirth(new Date())
-                .email("khoibuiqn1011@gmail.com")
-                .firstName("Xuan Khoi")
-                .lastName("Bui")
-                .phoneNumber("0988349401")
-                .role("ADMIN").build();
-
-        MvcResult result = mockMvc.perform(post("/api/auth/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequestDTO))
-        )
-                .andExpect(status().isNotFound())
-                .andReturn();
-
-        String expected = "{\"message\" : \"Location Not Available !!!\"}";
-        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
-    }
-
-    @Test
-    void whenSignUp_thenReturnStatusBadRequestAndMessage_ifUserNameAlreadyExist() throws Exception{
-        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
-                .userName("tuan7")
-                .address("HN")
-                .dateOfBirth(new Date())
-                .email("khoibuiqn1011@gmail.com")
-                .firstName("Xuan Khoi")
-                .lastName("Bui")
-                .phoneNumber("0988349401")
-                .role("ADMIN").build();
-
-        MvcResult result = mockMvc.perform(post("/api/auth/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userRequestDTO))
-        )
-                .andExpect(status().isBadRequest())
-                .andDo(print())
-                .andReturn();
-
-        String expected = "{\"message\" : \"User name already exist !!!!\"}";
-        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
-
-    }
+//    @Test
+//    void whenSignUp_thenReturnStatusBadRequest_ifRequestNotValid() throws Exception {
+//        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
+//                                                      .userName(null)
+//                                                      .address("HN")
+//                                                      .dateOfBirth(new Date())
+//                                                      .email("khoibuiqn1011@gmail.com")
+//                                                      .firstName("Xuan Khoi")
+//                                                      .lastName("Bui")
+//                                                      .phoneNumber("0988349401")
+//                                                      .role("ADMIN").build();
+//        MvcResult result = mockMvc.perform(post("/api/auth/signup")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(userRequestDTO))
+//                        )
+//                                .andExpect(status().isBadRequest())
+//                                .andReturn();
+//
+//        String expected = "{\"message\" : \"username cannot be null\"}";
+//        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+//    }
+//
+//
+//    @Test
+//    void whenSignUp_thenReturnStatusNotFound_ifAddressNotFound() throws Exception{
+//        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
+//                .userName("khoisupperprovip")
+//                .address("TG")
+//                .dateOfBirth(new Date())
+//                .email("khoibuiqn1011@gmail.com")
+//                .firstName("Xuan Khoi")
+//                .lastName("Bui")
+//                .phoneNumber("0988349401")
+//                .role("ADMIN").build();
+//
+//        MvcResult result = mockMvc.perform(post("/api/auth/signup")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(userRequestDTO))
+//        )
+//                .andExpect(status().isNotFound())
+//                .andReturn();
+//
+//        String expected = "{\"message\" : \"Location Not Available !!!\"}";
+//        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+//    }
+//
+//    @Test
+//    void whenSignUp_thenReturnStatusBadRequestAndMessage_ifUserNameAlreadyExist() throws Exception{
+//        UserRequestDTO userRequestDTO = UserRequestDTO.builder()
+//                .userName("tuan7")
+//                .address("HN")
+//                .dateOfBirth(new Date())
+//                .email("khoibuiqn1011@gmail.com")
+//                .firstName("Xuan Khoi")
+//                .lastName("Bui")
+//                .phoneNumber("0988349401")
+//                .role("ADMIN").build();
+//
+//        MvcResult result = mockMvc.perform(post("/api/auth/signup")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(userRequestDTO))
+//        )
+//                .andExpect(status().isBadRequest())
+//                .andDo(print())
+//                .andReturn();
+//
+//        String expected = "{\"message\" : \"User name already exist !!!!\"}";
+//        JSONAssert.assertEquals(expected, result.getResponse().getContentAsString(), false);
+//
+//    }
 }

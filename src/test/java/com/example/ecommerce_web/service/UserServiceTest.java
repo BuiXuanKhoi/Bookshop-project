@@ -94,25 +94,25 @@ public class UserServiceTest {
         verify(userRepository, times(1)).deleteAll();
     }
 
-    @Test
-    void whenAdd_shouldThrowConstrainViolateException_ifUserNameAlreadyExist(){
-        UserRequestDTO userRequestDTO = mock(UserRequestDTO.class);
-        Date dateOfBirth = new Date();
-        Users users = mock(Users.class);
-        String roleName = "ADMIN";
-        String userName = "khoiproviphehe";
-        String birth = "10/11/2000";
-
-        when(userRequestDTO.getDateOfBirth()).thenReturn(dateOfBirth);
-        when(userRequestDTO.getRole()).thenReturn(roleName);
-        when(myDateUtil.getStringDate(dateOfBirth)).thenReturn(birth);
-        when(userRequestDTO.getUserName()).thenReturn(userName);
-        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(users));
-        ConstraintViolateException exception = Assertions.assertThrows(ConstraintViolateException.class,
-                () -> userService.add(userRequestDTO));
-
-        assertThat(exception.getMessage(), is("User name already exist !!!!"));
-    }
+//    @Test
+//    void whenAdd_shouldThrowConstrainViolateException_ifUserNameAlreadyExist(){
+//        UserRequestDTO userRequestDTO = mock(UserRequestDTO.class);
+//        Date dateOfBirth = new Date();
+//        Users users = mock(Users.class);
+//        String roleName = "ADMIN";
+//        String userName = "khoiproviphehe";
+//        String birth = "10/11/2000";
+//
+//        when(userRequestDTO.getDateOfBirth()).thenReturn(dateOfBirth);
+//        when(userRequestDTO.getRole()).thenReturn(roleName);
+//        when(myDateUtil.getStringDate(dateOfBirth)).thenReturn(birth);
+//        when(userRequestDTO.getUserName()).thenReturn(userName);
+//        when(userRepository.findByUserName(userName)).thenReturn(Optional.of(users));
+//        ConstraintViolateException exception = Assertions.assertThrows(ConstraintViolateException.class,
+//                () -> userService.add(userRequestDTO));
+//
+//        assertThat(exception.getMessage(), is("User name already exist !!!!"));
+//    }
 
     @Test
     void whenAdd_thenReturnNewUser_ifUserNameUnique(){

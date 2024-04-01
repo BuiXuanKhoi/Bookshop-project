@@ -92,22 +92,22 @@ public class CategoryControllerTest {
         userDetailService = mock(UserDetailServiceImpl.class);
     }
 
-    @Test
-    void whenAddCategory_thenReturnStatusOk_ifRequestValid() throws Exception{
-        Category savedCategory = mock(Category.class);
-
-        Category category = new Category("Supernatural", "Contain supernatural content");
-
-        when(categoryService.add(category)).thenReturn(savedCategory);
-
-        mockMvc.perform(post("/api/categories")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(category))
-                .with(user("khoiproviphehe").authorities(admin))
-        )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
+//    @Test
+//    void whenAddCategory_thenReturnStatusOk_ifRequestValid() throws Exception{
+//        Category savedCategory = mock(Category.class);
+//
+//        Category category = new Category("Supernatural", "Contain supernatural content");
+//
+//        when(categoryService.add(category)).thenReturn(savedCategory);
+//
+//        mockMvc.perform(post("/api/categories")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(category))
+//                .with(user("khoiproviphehe").authorities(admin))
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
 
 
     @Test

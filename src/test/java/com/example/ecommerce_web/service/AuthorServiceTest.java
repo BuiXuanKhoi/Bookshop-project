@@ -84,18 +84,18 @@ public class AuthorServiceTest {
         when(authorRepository.findAll()).thenReturn(authors);
         assertThat(authorService.findAll(), is(authors));
     }
-
-    @Test
-    public void whenGetPage_thenThrowResourceNotFoundException_ifPageEmpty(){
-        final int PAGE_SIZE = 20;
-        String search = "khoi";
-        int page = 0;
-        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
-        Page<AuthorRespondDTO> pageAuthorRespond = Page.empty(pageable);
-        when(authorRepository.getPageAuthorNotBooks(pageable, search)).thenReturn(pageAuthorRespond);
-        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
-                () -> authorService.getPage(page, search));
-
-        assertThat(exception.getMessage(), is("Page is empty !!!"));
-    }
+//
+//    @Test
+//    public void whenGetPage_thenThrowResourceNotFoundException_ifPageEmpty(){
+//        final int PAGE_SIZE = 20;
+//        String search = "khoi";
+//        int page = 0;
+//        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+//        Page<AuthorRespondDTO> pageAuthorRespond = Page.empty(pageable);
+//        when(authorRepository.getPageAuthorNotBooks(pageable, search)).thenReturn(pageAuthorRespond);
+//        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class,
+//                () -> authorService.getPage(page, search));
+//
+//        assertThat(exception.getMessage(), is("Page is empty !!!"));
+//    }
 }

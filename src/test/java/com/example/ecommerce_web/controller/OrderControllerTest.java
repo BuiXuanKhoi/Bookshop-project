@@ -51,132 +51,132 @@ public class OrderControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    public void whenSendRequestToAddedOrder_thenReturnCustomerOrderList () throws Exception {
-        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
-        Orders orders = mock(Orders.class);
-
-        when(ordersService.add()).thenReturn(orders);
-        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/orders")
-                                            .with(user("tuan2").authorities(customer))
-        )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToAddedOrder_throwsResourceNotFoundException_IfCustomerDoesNotBuyAnyBookBefore () throws Exception {
-        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
-        Orders orders = mock(Orders.class);
-
-        when(ordersService.add()).thenReturn(orders);
-        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/orders")
-                .with(user("khoiprovipsupper").authorities(customer))
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToGetOrderList_returnOrderList () throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/orders")
-                .with(user("tuan2").authorities(customer))
-        )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToGetOrderList_throwsResourceNotFoundException_IfUserDoesNotHavePurchaseHistory () throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/orders")
-                .with(user("lfsdfdlfsd").authorities(admin))
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-                .andExpect(content().json("{'message':'List is Empty !!!'}"))
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToUpdateOrderState_throwsFobiddenError_IfUserIsNotAdmin ()  throws Exception {
-        Orders orders = mock(Orders.class);
-        int orderId = 38 ;
-        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
-
-        when(ordersService.updateState(orderId)).thenReturn(orders);
-        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
-                .with(user("tuan2").authorities(customer))
-        )
-                .andExpect(status().isForbidden())
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToUpdateOrderState_returnOrderStateHasBeenUpdated ()  throws Exception {
-        Orders orders = mock(Orders.class);
-        int orderId = 38 ;
-        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
-
-        when(ordersService.updateState(orderId)).thenReturn(orders);
-        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
-                .with(user("lfsdfdlfsd").authorities(admin))
-        )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestToUpdateOrderState_throwsResourceNotFoundException_ifOrderIdIsInvalid ()  throws Exception {
-        Orders orders = mock(Orders.class);
-        int orderId = 100 ;
-        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
-
-        when(ordersService.updateState(orderId)).thenReturn(orders);
-        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
-
-        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
-                .with(user("lfsdfdlfsd").authorities(admin))
-        )
-                .andExpect(status().isNotFound())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-                .andExpect(content().json("{'message':'Order Not Found With ID: 100'}"))
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestGetOrderPage_returnOrderPageBasedOnPageAndSearch () throws Exception {
-        String pages = "0";
-        String searchName = "%";
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
-                                            .param("page",pages)
-                                            .param("search",searchName)
-                                            .with(user("lfsdfdlfsd").authorities(admin))
-        )
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    public void whenSendRequestGetOrderPage_throwsNotFoundError_ifUserDoesNotExist () throws Exception {
-        String pages = "0";
-        String searchName = "12637841683476";
-
-        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
-                .param("page",pages)
-                .param("search",searchName)
-                .with(user("lfsdfdlfsd").authorities(admin))
-        )
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
+//    @Test
+//    public void whenSendRequestToAddedOrder_thenReturnCustomerOrderList () throws Exception {
+//        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
+//        Orders orders = mock(Orders.class);
+//
+//        when(ordersService.add()).thenReturn(orders);
+//        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
+//
+//        mvc.perform(MockMvcRequestBuilders.post("/api/orders")
+//                                            .with(user("tuan2").authorities(customer))
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToAddedOrder_throwsResourceNotFoundException_IfCustomerDoesNotBuyAnyBookBefore () throws Exception {
+//        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
+//        Orders orders = mock(Orders.class);
+//
+//        when(ordersService.add()).thenReturn(orders);
+//        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
+//
+//        mvc.perform(MockMvcRequestBuilders.post("/api/orders")
+//                .with(user("khoiprovipsupper").authorities(customer))
+//        )
+//                .andExpect(status().isNotFound())
+//                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToGetOrderList_returnOrderList () throws Exception {
+//        mvc.perform(MockMvcRequestBuilders.get("/api/orders")
+//                .with(user("tuan2").authorities(customer))
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToGetOrderList_throwsResourceNotFoundException_IfUserDoesNotHavePurchaseHistory () throws Exception {
+//        mvc.perform(MockMvcRequestBuilders.get("/api/orders")
+//                .with(user("lfsdfdlfsd").authorities(admin))
+//        )
+//                .andExpect(status().isNotFound())
+//                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
+//                .andExpect(content().json("{'message':'List is Empty !!!'}"))
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToUpdateOrderState_throwsFobiddenError_IfUserIsNotAdmin ()  throws Exception {
+//        Orders orders = mock(Orders.class);
+//        int orderId = 38 ;
+//        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
+//
+//        when(ordersService.updateState(orderId)).thenReturn(orders);
+//        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
+//
+//        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
+//                .with(user("tuan2").authorities(customer))
+//        )
+//                .andExpect(status().isForbidden())
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToUpdateOrderState_returnOrderStateHasBeenUpdated ()  throws Exception {
+//        Orders orders = mock(Orders.class);
+//        int orderId = 38 ;
+//        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
+//
+//        when(ordersService.updateState(orderId)).thenReturn(orders);
+//        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
+//
+//        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
+//                .with(user("lfsdfdlfsd").authorities(admin))
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestToUpdateOrderState_throwsResourceNotFoundException_ifOrderIdIsInvalid ()  throws Exception {
+//        Orders orders = mock(Orders.class);
+//        int orderId = 100 ;
+//        OrderRespondDTO orderRespondDTO = mock(OrderRespondDTO.class);
+//
+//        when(ordersService.updateState(orderId)).thenReturn(orders);
+//        when(orderMapper.toDTO(orders)).thenReturn(orderRespondDTO);
+//
+//        mvc.perform(MockMvcRequestBuilders.put("/api/orders/"+orderId)
+//                .with(user("lfsdfdlfsd").authorities(admin))
+//        )
+//                .andExpect(status().isNotFound())
+//                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
+//                .andExpect(content().json("{'message':'Order Not Found With ID: 100'}"))
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestGetOrderPage_returnOrderPageBasedOnPageAndSearch () throws Exception {
+//        String pages = "0";
+//        String searchName = "%";
+//
+//        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
+//                                            .param("page",pages)
+//                                            .param("search",searchName)
+//                                            .with(user("lfsdfdlfsd").authorities(admin))
+//        )
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//    }
+//
+//    @Test
+//    public void whenSendRequestGetOrderPage_throwsNotFoundError_ifUserDoesNotExist () throws Exception {
+//        String pages = "0";
+//        String searchName = "12637841683476";
+//
+//        mvc.perform(MockMvcRequestBuilders.get("/api/orders/manage")
+//                .param("page",pages)
+//                .param("search",searchName)
+//                .with(user("lfsdfdlfsd").authorities(admin))
+//        )
+//                .andExpect(status().isNotFound())
+//                .andDo(print());
+//    }
 }

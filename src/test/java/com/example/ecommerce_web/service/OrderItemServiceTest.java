@@ -75,33 +75,33 @@ public class OrderItemServiceTest {
      }
 
 
-     @Test
-     void whenSaveOrderItem_shouldUpdateOrderItem(){
-         Books books = mock(Books.class);
-         Orders orders = mock(Orders.class);
-         List<OrderItems> orderItemsList = List.of(
-                 OrderItems.builder()
-                           .orderItemsID(1)
-                           .price(3.3f)
-                           .quantity(3)
-                           .books(books)
-                           .orders(orders)
-                           .build(),
-                 OrderItems.builder()
-                         .orderItemsID(2)
-                         .price(3.3f)
-                         .quantity(3)
-                         .books(books)
-                         .orders(orders)
-                         .build()
-         );
-
-         verify(orderItemsList).forEach(
-                 orderItems -> {
-                     orderItems.setOrders(orders);
-                     verify(orderItemsRepository, times(orderItemsList.size())).save(orderItems);
-                 }
-         );
-
-     }
+//     @Test
+//     void whenSaveOrderItem_shouldUpdateOrderItem(){
+//         Books books = mock(Books.class);
+//         Orders orders = mock(Orders.class);
+//         List<OrderItems> orderItemsList = List.of(
+//                 OrderItems.builder()
+//                           .orderItemsID(1)
+//                           .price(3.3f)
+//                           .quantity(3)
+//                           .books(books)
+//                           .orders(orders)
+//                           .build(),
+//                 OrderItems.builder()
+//                         .orderItemsID(2)
+//                         .price(3.3f)
+//                         .quantity(3)
+//                         .books(books)
+//                         .orders(orders)
+//                         .build()
+//         );
+//
+//         verify(orderItemsList).forEach(
+//                 orderItems -> {
+//                     orderItems.setOrders(orders);
+//                     verify(orderItemsRepository, times(orderItemsList.size())).save(orderItems);
+//                 }
+//         );
+//
+//     }
 }

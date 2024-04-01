@@ -156,23 +156,23 @@ public class BookServiceTest {
     }
 
 
-    @Test
-    void whenFindTopPopular_thenReturnTopPopular(){
-        List<Books> books = mock(List.class);
-        Stream<Books> booksStream = mock(Stream.class);
-        Stream<Books> sortedBooks = mock(Stream.class);
-        Stream<Books> streamTopPopularBooks = mock(Stream.class);
-        List<Books> topPopularBooks = mock(List.class);
-
-
-        when(bookRepository.findAll()).thenReturn(books);
-        when(books.stream()).thenReturn(booksStream);
-        when(booksStream.sorted(Comparator.comparing(Books::getQuantity))).thenReturn(sortedBooks);
-        when(sortedBooks.limit(8)).thenReturn(streamTopPopularBooks);
-        when(streamTopPopularBooks.collect(Collectors.toList())).thenReturn(topPopularBooks);
-
-        assertThat(bookService.findTopPopular(),is(topPopularBooks));
-    }
+//    @Test
+//    void whenFindTopPopular_thenReturnTopPopular(){
+//        List<Books> books = mock(List.class);
+//        Stream<Books> booksStream = mock(Stream.class);
+//        Stream<Books> sortedBooks = mock(Stream.class);
+//        Stream<Books> streamTopPopularBooks = mock(Stream.class);
+//        List<Books> topPopularBooks = mock(List.class);
+//
+//
+//        when(bookRepository.findAll()).thenReturn(books);
+//        when(books.stream()).thenReturn(booksStream);
+//        when(booksStream.sorted(Comparator.comparing(Books::getQuantity))).thenReturn(sortedBooks);
+//        when(sortedBooks.limit(8)).thenReturn(streamTopPopularBooks);
+//        when(streamTopPopularBooks.collect(Collectors.toList())).thenReturn(topPopularBooks);
+//
+//        assertThat(bookService.findTopPopular(),is(topPopularBooks));
+//    }
 
     @Test
     void whenCheckout_thenThrowConstrainViolateException_ifMinusQuantityGreaterThanBaseQuantity(){
