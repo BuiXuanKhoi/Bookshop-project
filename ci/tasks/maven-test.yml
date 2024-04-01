@@ -16,3 +16,5 @@ run:
     - source-code/pom.xml
     - clean
     - test
+outputs:
+  - name: tested-source-code
