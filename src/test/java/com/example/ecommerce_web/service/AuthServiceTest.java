@@ -57,10 +57,10 @@ public class AuthServiceTest {
                 userService, informationService, refreshTokenService, EXPIRATION);
     }
 
-    @Test
-    void alwayWrongTest(){
-        Assert.assertTrue(1 == 10);
-    }
+//    @Test
+//    void alwayWrongTest(){
+//        Assert.assertTrue(1 == 10);
+//    }
 
 
     @Test

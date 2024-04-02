@@ -14,6 +14,7 @@ run:
     path: 'sh'
     args:
         - -exc
-        - cd source-code
-        - cp -r maven-cache/.m2 ..
-        - mvn clean package
+        - |
+         cd source-code
+         cp -r maven-cache/.m2 ..
+         mvn clean package
