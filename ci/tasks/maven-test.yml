@@ -18,6 +18,7 @@ run:
     - -exc
     - |
       cd source-code
-      mvn clean test
+      mvn clean tests
+      dir  
       cd ..
       mv source-code/.m2 maven-cache

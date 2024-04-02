@@ -16,5 +16,6 @@ run:
         - -exc
         - |
          cd source-code
+         dir
          cp -r maven-cache/.m2 ..
          mvn clean package
