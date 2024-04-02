@@ -6,6 +6,7 @@ import com.example.ecommerce_web.service.AuthService;
 import com.example.ecommerce_web.service.RefreshTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.catalina.security.SecurityConfig;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

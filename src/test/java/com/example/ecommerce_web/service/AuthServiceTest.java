@@ -10,6 +10,7 @@ import com.example.ecommerce_web.repository.InformationRepository;
 import com.example.ecommerce_web.repository.UserRepository;
 import com.example.ecommerce_web.security.jwt.JwtUtils;
 import com.example.ecommerce_web.service.impl.AuthServiceImpl;
+import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +55,11 @@ public class AuthServiceTest {
         EXPIRATION = 86_400_000;
         authService = new AuthServiceImpl(userRepository, informationRepository, jwtUtils, encoder, authenticationManager,
                 userService, informationService, refreshTokenService, EXPIRATION);
+    }
+
+    @Test
+    void alwayWrongTest(){
+        Assert.assertTrue(1 == 10);
     }
 
 
