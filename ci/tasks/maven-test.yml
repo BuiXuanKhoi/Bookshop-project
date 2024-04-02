@@ -9,12 +9,15 @@ image_resource:
 inputs:
   - name: source-code
 
-run:
-  path: 'mvn'
-  args:
-    - -f
-    - source-code/pom.xml
-    - clean
-    - test
 outputs:
-  - name: tested-source-code
+  - name: maven-cache
+
+run:
+  path: 'sh'
+  args:
+    - -exc
+    - |
+      cd source-code
+      mvn clean test
+      cd ..
+      mv source-code/.m2 maven-cache

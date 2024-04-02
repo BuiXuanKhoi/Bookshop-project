@@ -8,11 +8,12 @@ image_resource:
 
 inputs:
     - name: source-code
+    - name: maven-cache
 
 run:
-    path: 'mvn'
+    path: 'sh'
     args:
-        - -f
-        - source-code/pom.xml
-        - clean
-        - package
+        - -exc
+        - cd source-code
+        - cp -r maven-cache/.m2 ..
+        - mvn clean package
